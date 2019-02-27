@@ -1,0 +1,24 @@
+version: '3.1'
+
+# Use root/example as user/password credentials
+# To rebuild: docker-compose up --build
+services:
+
+    backend:
+        #build: .
+        image: ${IMAGE}:${TAG}
+        container_name: piipitin-backend
+        env_file:
+            - .env
+        environment:
+            - VIRTUAL_HOST=piipitin.biomi.org
+        ports:
+            - 90:80
+        volumes:
+            - ./env:/var/env
+
+networks:
+  default:
+    external:
+      name: dwproxy_default
+

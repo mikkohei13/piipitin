@@ -1,0 +1,8 @@
+www/html/vendor/*
+www/html/app/src/settings.php
+local-data/*
+
+env/.env-mysql
+
+*~
+readme.html
