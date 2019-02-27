@@ -1,8 +1,9 @@
-www/html/vendor/*
-www/html/app/src/settings.php
-local-data/*
+www/data/*
+www/logs/*
 
-env/.env-mysql
+www/config/env.php
+www/config/php.prod.ini
+
+readme.private.md
 
 *~
-readme.html
