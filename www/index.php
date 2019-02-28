@@ -10,7 +10,7 @@ require_once "lajifi.php";
 
 $url = buildListQuery(LAJIFI_TOKEN);
 $dataJSON = getDataFromLajifi($url);
-buildDocumentList($dataJSON, "http://tun.fi/JX.987433"); // debug ABBA
+$documentListJSON = buildDocumentList($dataJSON, "http://tun.fi/JX.987433");
 
 //header('Content-type: application/json'); echo $dataJSON;
 
