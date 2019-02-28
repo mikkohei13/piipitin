@@ -65,6 +65,7 @@ function buildListQuery($token) {
 }
 
 // Build and return query URL for an aggregate.
+/*
 function buildAggregateQuery($token, $date) {
 
     // Date has to be in format 2018-12-24
@@ -72,34 +73,73 @@ function buildAggregateQuery($token, $date) {
 
     return $url;
 }
+*/
 
-// Build and return an array of documents with their basic data
-// TODO: move latestid handling away from here (one task per function)
-function buildDocumentList($json) {
-
-    $arr = json_decode($json, TRUE);
-//    echo "<pre>"; print_r ($arr); echo "</pre>"; // debug
+// Removes handled elements based on documentId
+function filterHandledUnits($dataArr) {
 
     $latestId = getLatestId(LATESTID_FILENAME);
     $newestId = FALSE;
+    $dataArrFiltered = Array();
 
-    $data = Array();
-    foreach($arr['results'] as $i => $element) {
+    // todo: move removin metadata elsewhere
+    foreach($dataArr['results'] as $i => $element) {
 
-        if ($element['document']['documentId'] == $latestId) {
+        $documentId = $element['document']['documentId'];
+
+        // Pick only the first id
+        if ($newestId === FALSE) {
+            $newestId = $documentId;
+        }
+
+        if ($documentId == $latestId) {
             logger("lajifi.log", "info", ("Break after finding handled document id " . $element['document']['documentId']));
             break;
         }
+
+        $dataArrFiltered[$i] = $element;
+
+    }
+
+    // Set latest id only if you really have one
+    if ($newestId !== FALSE) {
+        setLatestId(LATESTID_FILENAME, $newestId);
+    }
+    
+    return $dataArrFiltered;
+}
+
+function getLatestId($filename) {
+
+    // Allow overriding
+    if (isset($_GET["debugLatestId"])) {
+        return $_GET["debugLatestId"];
+    }
+
+    $fileContents = file_get_contents("data/" . $filename);
+    return trim($fileContents);
+}
+
+function setLatestId($filename, $id) {
+    return file_put_contents("data/" . $filename, $id);
+}
+
+
+
+// Build and return an array of documents with their basic data
+// TODO: move latestid handling away from here (one task per function)
+function buildDocumentList($dataArr) {
+
+//    echo "<pre>"; print_r ($dataArr); echo "</pre>"; // debug
+    $dataArr = filterHandledUnits($dataArr);
+
+    $data = Array();
+    foreach($dataArr as $i => $element) {
 
         // Shorthands
         $doc = $element['document'];
         $gat = $element['gathering'];
         $uni = $element['unit'];
-
-        // Pick only the first id
-        if ($newestId === FALSE) {
-            $newestId = $doc['documentId'];
-        }
 
         // Basic data can be overwritten per gathering, since it cannot vary
         $locality = $gat['country'] . ", " . $gat['biogeographicalProvince'] . ", " . $gat['municipality'] . ", " . $gat['locality'];
@@ -119,31 +159,11 @@ function buildDocumentList($json) {
         $data[$doc['documentId']][$gat['gatheringId']]['team'] = $team;
     }
 
-    // Set latest id only if you really have one
-    if ($newestId !== FALSE) {
-        setLatestId(LATESTID_FILENAME, $newestId);
-    }
-
     echo "<pre style='color: green;'>"; print_r ($data); echo "\n\n"; echo "</pre>"; // debug
 
     logger("lajifi.log", "info", ("Handled " . count($data) . " documents"));
 
     return $data;
-}
-
-function getLatestId($filename) {
-
-    // Allow overriding
-    if (isset($_GET["debugLatestId"])) {
-        return $_GET["debugLatestId"];
-    }
-
-    $fileContents = file_get_contents("data/" . $filename);
-    return trim($fileContents);
-}
-
-function setLatestId($filename, $id) {
-    return file_put_contents("data/" . $filename, $id);
 }
 
 function formatMessageDataToPlaintext($docId, $data) {
@@ -157,7 +177,7 @@ function formatMessageDataToPlaintext($docId, $data) {
         $txt .= "- " . $gat['team'] . "\n";
     }
 
-    $txt .= "<" . $docId . ">";
+    $txt .= $docId;
 
 //    $txt = "<pre>\n" . $txt . "\n</pre>"; // debug, for displaying in browser
 

@@ -10,13 +10,16 @@ require_once "lajifi.php";
 
 $url = buildListQuery(LAJIFI_TOKEN);
 $dataJSON = getDataFromLajifi($url);
-$documentListJSON = buildDocumentList($dataJSON, "http://tun.fi/JX.987433");
+$daraArr = json_decode($dataJSON, TRUE);
+
+$documentListJSON = buildDocumentList($daraArr, "http://tun.fi/JX.987433");
 
 foreach ($documentListJSON as $documentId => $data) {
 
-   sendToTelegram(formatMessageDataToPlaintext($documentId, $data));
+//  sendToTelegram(formatMessageDataToPlaintext($documentId, $data)); // prod
 
-//  sendToTelegram(json_encode($data)); // debug
+  echo "<pre>" . formatMessageDataToPlaintext($documentId, $data) . "</pre>"; // debug to browser
+//  sendToTelegram(json_encode($data)); // debug to Telegram
 }
 
 //header('Content-type: application/json'); echo $dataJSON;

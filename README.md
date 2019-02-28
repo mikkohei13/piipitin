@@ -24,8 +24,11 @@ Tools for sending data from FinBIF systems to mobile devices
 
 Ping localhost for testing once every 60 seconds:
 
-  watch -n60 curl localhost:90
+   watch -n60 curl localhost:90
 
+For debug:
+
+   http://localhost:90/?debugLatestId=http://tun.fi/JX.987558
 
 
 Example queries to api.laji.fi
