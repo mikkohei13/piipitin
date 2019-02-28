@@ -1,13 +1,13 @@
 <?php
 //phpinfo();
 
-include "config/env.php";
+require_once "config/env.php";
+require_once "logger.php";
+require_once "telegram.php";
 
 $message = "Test message ÅÄÖåäö";
 
-$url = "https://api.telegram.org/bot" . TELEGRAM_BOT_TOKEN . "/sendMessage?chat_id=" . TELEGRAM_CHAT_ID . "&text=$message";
-
-$response = json_decode(file_get_contents($url), TRUE);
+$response = sendToTelegram($message);
 
 
 if ($response['ok']) {
@@ -18,7 +18,6 @@ else {
 }
 echo "<pre>";
 print_r($response);
-echo $url;
 
 
 

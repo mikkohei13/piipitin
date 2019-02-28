@@ -1,6 +1,6 @@
 {
-    "name": "piipitin",
-    "description": "Tool for sending data from FinBIF to mobile",
+    "name": "mikkohei13/piipitin",
+    "description": "Tool for sending data from FinBIF (laji.fi) to mobile",
     "keywords": ["biodiversity", "biodiversity informatics", "telegram", "im"],
     "homepage": "http://www.biomi.org/",
     "license": "MIT",
@@ -12,11 +12,11 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
-        "monolog/monolog": "^1.17"
+        "php": ">=5.5.0" //,
+//        "monolog/monolog": "^1.17"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4.8 < 6.0"
+//        "phpunit/phpunit": ">=4.8 < 6.0"
     },
     "autoload-dev": {
         "psr-4": {
@@ -27,7 +27,7 @@
         "process-timeout" : 0
     },
     "scripts": {
-        "start": "php -S localhost:8080 -t public index.php",
+        "start": "php -S localhost:90 -t public index.php",
         "test": "phpunit"
     }
 
