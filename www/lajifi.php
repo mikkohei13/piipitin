@@ -141,20 +141,25 @@ function buildDocumentList($json, $latestDocumentId) {
     $arr = json_decode($json, TRUE);
 //    echo "<pre>"; print_r ($arr); echo "</pre>"; // debug
 
+    $latestId = getLatestId(LATESTID_FILENAME);
+    $newestId = FALSE;
+
     $data = Array();
+    foreach($arr['results'] as $i => $element) {
 
-        // TODO: change document -> element
-        foreach($arr['results'] as $i => $document) {
-
-
-        if ($document['document']['documentId'] == $latestDocumentId) {
+        if ($element['document']['documentId'] == $latestId) {
             break;
         }
 
         // Shorthands
-        $doc = $document['document'];
-        $gat = $document['gathering'];
-        $uni = $document['unit'];
+        $doc = $element['document'];
+        $gat = $element['gathering'];
+        $uni = $element['unit'];
+
+        // Pick only the first id
+        if ($newestId === FALSE) {
+            $newestId = $doc['documentId'];
+        }
 
         // Basic data can be overwritten per gathering, since it cannot vary
         $locality = $gat['country'] . ", " . $gat['biogeographicalProvince'] . ", " . $gat['municipality'] . ", " . $gat['locality'];
@@ -167,15 +172,26 @@ function buildDocumentList($json, $latestDocumentId) {
         $team = trim($team, ", ");
 
         // Counting units
-        $data[$doc['documentId']][$gat['gatheringId']]['unitCOunt'] += 1;
+        @$data[$doc['documentId']][$gat['gatheringId']]['unitCOunt'] += 1; // Supress "Undefined index" errors 
 
         $data[$doc['documentId']][$gat['gatheringId']]['locality'] = $locality;
         $data[$doc['documentId']][$gat['gatheringId']]['date'] = $date;
         $data[$doc['documentId']][$gat['gatheringId']]['team'] = $team;
     }
 
+    // Set latest id only if you really have one
+    if ($newestId !== FALSE) {
+        setLatestId(LATESTID_FILENAME, $newestId);
+    }
+
     echo "<pre style='color: green;'>"; print_r ($data); echo "\n\n"; echo "</pre>"; // debug
+}
 
+function getLatestId($filename) {
+    $fileContents = file_get_contents("data/" . $filename);
+    return trim($fileContents);
+}
 
-
+function setLatestId($filename, $id) {
+    return file_put_contents("data/" . $filename, $id);
 }
