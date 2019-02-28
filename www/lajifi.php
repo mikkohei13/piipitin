@@ -83,7 +83,7 @@ function filterHandledUnits($dataArr) {
     $dataArrFiltered = Array();
 
     // todo: move removin metadata elsewhere
-    foreach($dataArr['results'] as $i => $element) {
+    foreach($dataArr as $i => $element) {
 
         $documentId = $element['document']['documentId'];
 

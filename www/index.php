@@ -10,9 +10,10 @@ require_once "lajifi.php";
 
 $url = buildListQuery(LAJIFI_TOKEN);
 $dataJSON = getDataFromLajifi($url);
-$daraArr = json_decode($dataJSON, TRUE);
+$dataArrWithMetadata = json_decode($dataJSON, TRUE);
+$dataArr = $dataArrWithMetadata['results'];
 
-$documentListJSON = buildDocumentList($daraArr, "http://tun.fi/JX.987433");
+$documentListJSON = buildDocumentList($dataArr, "http://tun.fi/JX.987433");
 
 foreach ($documentListJSON as $documentId => $data) {
 
