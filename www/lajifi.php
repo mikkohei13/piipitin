@@ -53,11 +53,13 @@ function buildListQuery($token) {
     // To show only fresh observations, add time filter. Now returns also old observations entred today.
 
     $collectionIdQname = "HR.1747";
-    $countryIdQname = "ML.206";
+    $countryIdQname = ""; // ML.206 = Suomi
     $date = date("Y-m-d");
-    $date = date("2019-02-20"); // debug
+//    $date = date("2019-02-20"); // debug
 
-    $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . $token;
+    $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . $token;
+
+//    echo "URL: " . $url; // debug
 
     return $url;
 }
