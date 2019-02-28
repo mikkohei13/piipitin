@@ -55,7 +55,7 @@ function buildListQuery($token) {
     $collectionIdQname = "HR.1747";
     $countryIdQname = ""; // ML.206 = Suomi
     $date = date("Y-m-d");
-//    $date = date("2019-02-20"); // debug
+//        $date = date("2019-02-28"); // debug
 
     $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . $token;
 
@@ -132,10 +132,33 @@ function buildDocumentList($json) {
 }
 
 function getLatestId($filename) {
+
+    // Allow overriding
+    if (isset($_GET["debugLatestId"])) {
+        return $_GET["debugLatestId"];
+    }
+
     $fileContents = file_get_contents("data/" . $filename);
     return trim($fileContents);
 }
 
 function setLatestId($filename, $id) {
     return file_put_contents("data/" . $filename, $id);
+}
+
+function formatMessageDataToPlaintext($docId, $data) {
+
+    $txt = "";
+
+    foreach ($data as $gatId => $gat) {
+        $txt .= trim($gat['locality'], ", ") . "\n";
+        $txt .= "- " . $gat['unitCount'] . " havainto(a)\n";
+        $txt .= "- " . $gat['date'] . "\n";
+        $txt .= "- " . $gat['team'] . "\n";
+    }
+
+    $txt .= "<" . $docId . ">";
+
+//    $txt = "<pre>\n" . $txt . "\n</pre>"; // debug
+    return $txt;
 }

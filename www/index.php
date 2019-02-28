@@ -13,7 +13,10 @@ $dataJSON = getDataFromLajifi($url);
 $documentListJSON = buildDocumentList($dataJSON, "http://tun.fi/JX.987433");
 
 foreach ($documentListJSON as $documentId => $data) {
-  sendToTelegram(json_encode($data));
+
+   sendToTelegram(formatMessageDataToPlaintext($documentId, $data));
+
+//  sendToTelegram(json_encode($data)); // debug
 }
 
 //header('Content-type: application/json'); echo $dataJSON;
