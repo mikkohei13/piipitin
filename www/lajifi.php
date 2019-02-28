@@ -159,6 +159,7 @@ function formatMessageDataToPlaintext($docId, $data) {
 
     $txt .= "<" . $docId . ">";
 
-//    $txt = "<pre>\n" . $txt . "\n</pre>"; // debug
-    return $txt;
+//    $txt = "<pre>\n" . $txt . "\n</pre>"; // debug, for displaying in browser
+
+    return substr($txt, 0, 1024); // Limit character count, just in case
 }
