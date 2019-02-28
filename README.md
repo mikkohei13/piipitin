@@ -22,6 +22,12 @@ Tools for sending data from FinBIF systems to mobile devices
 
 ## Notes
 
+Ping localhost for testing once every 60 seconds:
+
+  watch -n60 curl localhost:90
+
+
+
 Example queries to api.laji.fi
 
 

@@ -112,7 +112,7 @@ function buildDocumentList($json) {
         $team = trim($team, ", ");
 
         // Counting units
-        @$data[$doc['documentId']][$gat['gatheringId']]['unitCOunt'] += 1; // Supress "Undefined index" errors 
+        @$data[$doc['documentId']][$gat['gatheringId']]['unitCount'] += 1; // Supress "Undefined index" errors 
 
         $data[$doc['documentId']][$gat['gatheringId']]['locality'] = $locality;
         $data[$doc['documentId']][$gat['gatheringId']]['date'] = $date;
