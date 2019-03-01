@@ -5,10 +5,10 @@
 
 FROM php:7.1-apache
 
-WORKDIR /var/www/html/
+WORKDIR /var/www/
 
 # Todo: perhaps link this so could be modified? Now uses the ini file that was available during image building.
-COPY config/php.ini /usr/local/etc/php/
+COPY www/config/php.ini /usr/local/etc/php/
 
 # Add tools
 RUN apt-get update && \
