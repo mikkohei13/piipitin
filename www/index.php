@@ -10,7 +10,9 @@ require_once "lajifi.php";
 
 $url = buildListQuery(LAJIFI_TOKEN);
 $dataJSON = getDataFromLajifi($url);
-header('Content-type: application/json'); echo $dataJSON;
+buildDocumentList($dataJSON, "http://tun.fi/JX.987433"); // debug ABBA
+
+//header('Content-type: application/json'); echo $dataJSON;
 
 // Telegram
 /*

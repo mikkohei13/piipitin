@@ -95,7 +95,7 @@ function buildListQuery($token) {
     // Settings
     $orderBy = "document.firstLoadDate";
     $orderDirection = "DESC"; // DESC / ASC
-    $limit = 10;
+    $limit = 100;
 
     // Filters
     // To show only fresh observations, add time filter. Now returns also old observations entred today.
@@ -103,10 +103,9 @@ function buildListQuery($token) {
     $collectionIdQname = "HR.1747";
     $countryIdQname = "ML.206";
     $date = date("Y-m-d");
+    $date = date("2019-02-20"); // debug
 
-$url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=20&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . $token;
-
-//    $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&individualCountMin=1&qualityIssues=NO_ISSUES&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&access_token=" . $token;
+    $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . $token;
 
     return $url;
 }
@@ -120,3 +119,63 @@ function buildAggregateQuery($token, $date) {
     return $url;
 }
 
+
+function buildDocumentList($json, $latestDocumentId) {
+
+    /*
+    Target:
+
+    {
+        documentId: string
+        gatherings {
+            gatheringId
+            team: string
+            date: string
+            locality: string
+            unitCount: int
+        }
+    }
+
+    */
+
+    $arr = json_decode($json, TRUE);
+//    echo "<pre>"; print_r ($arr); echo "</pre>"; // debug
+
+    $data = Array();
+
+        // TODO: change document -> element
+        foreach($arr['results'] as $i => $document) {
+
+
+        if ($document['document']['documentId'] == $latestDocumentId) {
+            break;
+        }
+
+        // Shorthands
+        $doc = $document['document'];
+        $gat = $document['gathering'];
+        $uni = $document['unit'];
+
+        // Basic data can be overwritten per gathering, since it cannot vary
+        $locality = $gat['country'] . ", " . $gat['biogeographicalProvince'] . ", " . $gat['municipality'] . ", " . $gat['locality'];
+        $date = $gat['eventDate']['begin'];
+
+        $team = "";
+        foreach ($gat['team'] as $n => $name) {
+            $team = $team . ", " . $name;
+        }
+        $team = trim($team, ", ");
+
+        // Counting units
+        $data[$doc['documentId']][$gat['gatheringId']]['unitCOunt'] += 1;
+
+        $data[$doc['documentId']][$gat['gatheringId']]['locality'] = $locality;
+        $data[$doc['documentId']][$gat['gatheringId']]['date'] = $date;
+        $data[$doc['documentId']][$gat['gatheringId']]['team'] = $team;
+    }
+
+    echo "<pre style='color: green;'>"; print_r ($data); echo "\n\n"; echo "</pre>"; // debug
+
+
+
+}
