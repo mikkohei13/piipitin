@@ -16,19 +16,20 @@ Tools for sending data from FinBIF systems to mobile devices
 
 ## Todo
 
+- Prepare for api errors
 - To show only fresh observations, add time filter. Now returns also old observations entred today.
 - Docker: Do not run Composer as root/super user! See https://getcomposer.org/root for details
 
 
 ## Notes
 
-Ping localhost for testing once every 60 seconds:
+Ping localhost once every 10 minutes:
 
-   watch -n60 curl localhost:90
+   watch -n600 curl localhost:90?mode=documents
 
 For debug:
 
-   http://localhost:90/?debugLatestId=http://tun.fi/JX.987558
+   http://localhost:90/?debugLatestId=http://tun.fi/JX.987558&mode=documents
 
 
 Example queries to api.laji.fi

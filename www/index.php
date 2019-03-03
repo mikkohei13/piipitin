@@ -1,3 +1,4 @@
+<pre>
 <?php
 //phpinfo();
 
@@ -13,14 +14,27 @@ $dataJSON = getDataFromLajifi($url);
 $dataArrWithMetadata = json_decode($dataJSON, TRUE);
 $dataArr = $dataArrWithMetadata['results'];
 
-$documentListJSON = buildDocumentList($dataArr, "http://tun.fi/JX.987433");
+// Rarities
+// Todo: restrict to finnish species
+if ($_GET['mode'] == "rarities") {
+  $dataArr = addRarityScore($dataArr);
+  echo "\n\nHERE:\n"; print_r($dataArr); // debug
+}
 
-foreach ($documentListJSON as $documentId => $data) {
+// New documents
+elseif ($_GET['mode'] == "documents") {
+  $documentList = buildDocumentList($dataArr, "http://tun.fi/JX.987433");
 
-//  sendToTelegram(formatMessageDataToPlaintext($documentId, $data)); // prod
+  foreach ($documentList as $documentId => $data) {
+  //  sendToTelegram(formatMessageDataToPlaintext($documentId, $data)); // prod
 
-  echo "<pre>" . formatMessageDataToPlaintext($documentId, $data) . "</pre>"; // debug to browser
-//  sendToTelegram(json_encode($data)); // debug to Telegram
+    echo "<pre>" . formatMessageDataToPlaintext($documentId, $data) . "</pre>"; // debug to browser
+  //  sendToTelegram(json_encode($data)); // debug to Telegram
+  }
+}
+
+else {
+  echo "Error: Mode not set";
 }
 
 //header('Content-type: application/json'); echo $dataJSON;
