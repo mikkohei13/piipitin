@@ -250,7 +250,7 @@ function addRarityScore($dataArr) {
         if ($element['gathering']['conversions']['year'] == date("Y")) {
             $speciesObservationCount = 0;
             $rawDataArr = json_decode(getDataFromLajifi(buildSpeciesAggregateQuery_Year($element['unit']['linkings']['taxon']['id'], date("Y"))), TRUE);
-            echo "\n\nAggregate query data ".__LINE__.":\n"; print_r ($rawDataArr); //continue; // debug
+//            echo "\n\nAggregate query data ".__LINE__.":\n"; print_r ($rawDataArr); //continue; // debug
     
             $speciesObservationCount = $rawDataArr['results'][0]['count'];
             if (!isset($speciesObservationCount)) {

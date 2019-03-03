@@ -23,12 +23,12 @@ if ($_GET['mode'] == "rarities") {
 
 // New documents
 elseif ($_GET['mode'] == "documents") {
-  $documentList = buildDocumentList($dataArr, "http://tun.fi/JX.987433");
+  $documentList = buildDocumentList($dataArr);
 
   foreach ($documentList as $documentId => $data) {
-  //  sendToTelegram(formatMessageDataToPlaintext($documentId, $data)); // prod
+  sendToTelegram(formatMessageDataToPlaintext($documentId, $data)); // prod
 
-    echo "<pre>" . formatMessageDataToPlaintext($documentId, $data) . "</pre>"; // debug to browser
+  //  echo "<pre>" . formatMessageDataToPlaintext($documentId, $data) . "</pre>"; // debug to browser
   //  sendToTelegram(json_encode($data)); // debug to Telegram
   }
 }

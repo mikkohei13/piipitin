@@ -17,6 +17,8 @@ Tools for sending data from FinBIF systems to mobile devices
 ## Todo
 
 - Prepare for api errors
+- disable telegram 23:00-07:00
+- log messages publicly
 - To show only fresh observations, add time filter. Now returns also old observations entred today.
 - Docker: Do not run Composer as root/super user! See https://getcomposer.org/root for details
 
