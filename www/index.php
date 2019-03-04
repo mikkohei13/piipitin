@@ -9,20 +9,25 @@ require_once "lajifi.php";
 
 // Laji.fi
 
-$url = buildListQuery(LAJIFI_TOKEN);
-$dataJSON = getDataFromLajifi($url);
-$dataArrWithMetadata = json_decode($dataJSON, TRUE);
-$dataArr = $dataArrWithMetadata['results'];
-
 // Rarities
 // Todo: restrict to finnish species
 if ($_GET['mode'] == "rarities") {
+  $url = buildListQuery("ML.206");
+  $dataJSON = getDataFromLajifi($url);
+  $dataArrWithMetadata = json_decode($dataJSON, TRUE);
+  $dataArr = $dataArrWithMetadata['results'];
+
   $dataArr = addRarityScore($dataArr);
   echo "\n\nHERE:\n"; print_r($dataArr); // debug
 }
 
 // New documents
 elseif ($_GET['mode'] == "documents") {
+  $url = buildListQuery();
+  $dataJSON = getDataFromLajifi($url);
+  $dataArrWithMetadata = json_decode($dataJSON, TRUE);
+  $dataArr = $dataArrWithMetadata['results'];
+
   $documentList = buildDocumentList($dataArr);
 
   foreach ($documentList as $documentId => $data) {

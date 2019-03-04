@@ -16,6 +16,7 @@ Tools for sending data from FinBIF systems to mobile devices
 
 ## Todo
 
+- Filter AA's observations
 - Prepare for api errors
 - disable telegram 23:00-07:00
 - log messages publicly

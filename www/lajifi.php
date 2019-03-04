@@ -11,7 +11,7 @@ Build and return query URL for a list of units.
 
 https://api.laji.fi/v0/warehouse/query/list?selected=document.collectionId%2Cdocument.createdDate%2Cdocument.documentId%2Cdocument.editorUserIds%2Cdocument.firstLoadDate%2Cdocument.formId%2Cdocument.loadDate%2Cdocument.modifiedDate%2Cdocument.sourceId%2Cgathering.biogeographicalProvince%2Cgathering.conversions.wgs84CenterPoint.lat%2Cgathering.conversions.wgs84CenterPoint.lon%2Cgathering.country%2Cgathering.displayDateTime%2Cgathering.eventDate.begin%2Cgathering.gatheringId%2Cgathering.interpretations.coordinateAccuracy%2Cgathering.linkings.observers.fullName%2Cgathering.locality%2Cgathering.municipality%2Cgathering.team%2Cunit.linkings.taxon.finnish%2Cunit.linkings.taxon.scientificName%2Cunit.reportedTaxonId%2Cunit.taxonVerbatim%2Cunit.unitId&orderBy=document.firstLoadDate&pageSize=20&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&collectionId=HR.1747&individualCountMin=1&firstLoadedSameOrAfter=2019-02-28%20DESC&qualityIssues=NO_ISSUES&access_token=
 */
-function buildListQuery($token) {
+function buildListQuery($countryIdQname = "") {
 
     // Selected fields
     $selectedArr = Array(
@@ -60,11 +60,10 @@ function buildListQuery($token) {
     // To show only fresh observations, add time filter. Now returns also old observations entred today.
 
     $collectionIdQname = "HR.1747";
-    $countryIdQname = ""; // ML.206 = Suomi
     $date = date("Y-m-d");
 //        $date = date("2019-02-28"); // debug
 
-    $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . $token;
+    $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
 
     echo "URL built: " . $url . "\n"; // debug
 
@@ -73,10 +72,10 @@ function buildListQuery($token) {
 
 // Build and return query URL for an aggregate.
 /*
-function buildAggregateQuery($token, $date) {
+function buildAggregateQuery($date) {
 
     // Date has to be in format 2018-12-24
-    $url = "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=document.collectionId&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=100&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&individualCountMin=1&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . $token;
+    $url = "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=document.collectionId&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=100&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&individualCountMin=1&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
 
     return $url;
 }
@@ -206,6 +205,7 @@ function addRarityScore($dataArr) {
         }
 
         $rarityScore = 0;
+        $rarityTop = "";
 
         // --------------------------------------
         // Observations from Finland
@@ -218,12 +218,15 @@ function addRarityScore($dataArr) {
             $speciesObservationCount = 0; // Is this needed?
         }
 
-        $limit = 100; // prod
-        $limit = 1000; // debug
+        $limit = 51; // prod
+//        $limit = 501; // debug
         if ($speciesObservationCount < $limit)
         {
             $rarityScore += ($limit - $speciesObservationCount);
-            $dataArr[$i]['rarityScore']['finland'] = ($limit - $speciesObservationCount);
+            $dataArr[$i]['rarityScore']['finland'] = ($limit - $speciesObservationCount) . "/$limit";
+        }
+        if ($speciesObservationCount <= 1) {
+            $rarityTop .= "first from Finland, ";
         }
 
         // --------------------------------------
@@ -237,12 +240,15 @@ function addRarityScore($dataArr) {
             $speciesObservationCount = 0; // Is this needed?
         }
 
-        $limit = 10; // prod
-        $limit = 100; // debug
+        $limit = 11; // prod
+//        $limit = 101; // debug
         if ($speciesObservationCount < $limit)
         {
             $rarityScore += ($limit - $speciesObservationCount);
-            $dataArr[$i]['rarityScore']['biogeo'] = ($limit - $speciesObservationCount);
+            $dataArr[$i]['rarityScore']['biogeo'] = ($limit - $speciesObservationCount) . "/$limit";
+        }
+        if ($speciesObservationCount <= 1) {
+            $rarityTop .= "first from province, ";
         }
 
         // --------------------------------------
@@ -257,13 +263,16 @@ function addRarityScore($dataArr) {
                 $speciesObservationCount = 0; // Is this needed?
             }
     
-            $limit = 5; // prod
-            $limit = 10; // debug
+            $limit = 6; // prod
+//            $limit = 11; // debug
             if ($speciesObservationCount < $limit)
             {
                 $rarityScore += ($limit - $speciesObservationCount);
-                $dataArr[$i]['rarityScore']['year'] = ($limit - $speciesObservationCount);
+                $dataArr[$i]['rarityScore']['year'] = ($limit - $speciesObservationCount) . "/$limit";
             }    
+            if ($speciesObservationCount <= 1) {
+                $rarityTop .= "first this year, ";
+            }
         }
 
         // --------------------------------------
@@ -280,17 +289,43 @@ function addRarityScore($dataArr) {
                 $speciesObservationCount = 0; // Is this needed?
             }
 
-            $limit = 10; // prod
-            $limit = 100; // debug
+            $limit = 11; // prod
+//            $limit = 101; // debug
             if ($speciesObservationCount < $limit)
             {
                 $rarityScore += ($limit - $speciesObservationCount);
-                $dataArr[$i]['rarityScore']['phenology'] = ($limit - $speciesObservationCount);
+                $dataArr[$i]['rarityScore']['phenology'] = ($limit - $speciesObservationCount) . "/$limit";
             }
+            if ($speciesObservationCount <= 1) {
+                $rarityTop .= "first during this season, ";
+            }    
 
         }
 
+        // --------------------------------------
+        // Observations from the last decade
+        $speciesObservationCount = 0;
+        $rawDataArr = json_decode(getDataFromLajifi(buildSpeciesAggregateQuery_Decade($element['unit']['linkings']['taxon']['id'])), TRUE);
+//            echo "\n\nAggregate query data ".__LINE__.":\n"; print_r ($rawDataArr); //continue; // debug
+
+        $speciesObservationCount = $rawDataArr['results'][0]['count'];
+        if (!isset($speciesObservationCount)) {
+            $speciesObservationCount = 0; // Is this needed?
+        }
+
+        $limit = 11; // prod
+//            $limit = 51; // debug
+        if ($speciesObservationCount < $limit)
+        {
+            $rarityScore += ($limit - $speciesObservationCount);
+            $dataArr[$i]['rarityScore']['decade'] = ($limit - $speciesObservationCount) . "/$limit";
+        }    
+        if ($speciesObservationCount <= 1) {
+            $rarityTop .= "first during the last decade, ";
+        }
+
         $dataArr[$i]['rarityScore']['total'] = $rarityScore;
+        $dataArr[$i]['rarityScore']['top'] = trim($rarityTop, ", ");
     }
 
     return $dataArr;
@@ -301,11 +336,11 @@ function buildSpeciesAggregateQuery_Finland($taxonId) {
 }
 
 function buildSpeciesAggregateQuery_Area($taxonId, $areaName) {
-    return "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=unit.linkings.taxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2&page=1&cache=true&taxonId=" . $taxonId . "&useIdentificationAnnotations=true&includeSubTaxa=false&includeNonValidTaxa=true&area=" . urlencode($areaName) . "&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
+    return "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=unit.linkings.taxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2&page=1&cache=true&taxonId=" . $taxonId . "&useIdentificationAnnotations=true&includeSubTaxa=false&includeNonValidTaxa=true&countryId=ML.206&area=" . urlencode($areaName) . "&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
 }
 
 function buildSpeciesAggregateQuery_Year($taxonId, $year) {
-    return "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=unit.linkings.taxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2&page=1&cache=true&taxonId=" . $taxonId . "&useIdentificationAnnotations=true&includeSubTaxa=false&includeNonValidTaxa=true&time=" . $year . "&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
+    return "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=unit.linkings.taxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2&page=1&cache=true&taxonId=" . $taxonId . "&useIdentificationAnnotations=true&includeSubTaxa=false&includeNonValidTaxa=true&countryId=ML.206&time=" . $year . "&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
 }
 
 function buildSpeciesAggregateQuery_Phenology($taxonId, $dayOfYear, $radius) {
@@ -319,5 +354,24 @@ function buildSpeciesAggregateQuery_Phenology($taxonId, $dayOfYear, $radius) {
     }
     $dayParam = $dayBegin . "%2F" . $dayEnd;
 
-    return "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=unit.linkings.taxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2&page=1&cache=true&taxonId=" . $taxonId . "&useIdentificationAnnotations=true&includeSubTaxa=false&includeNonValidTaxa=true&dayOfYear=" . $dayParam . "&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
+    return "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=unit.linkings.taxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2&page=1&cache=true&taxonId=" . $taxonId . "&useIdentificationAnnotations=true&includeSubTaxa=false&includeNonValidTaxa=true&countryId=ML.206&dayOfYear=" . $dayParam . "&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
 }
+
+function buildSpeciesAggregateQuery_Decade($taxonId) {
+    $yearParam = (date("Y") - 10) . "%2F" . date("Y");
+
+    return "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=unit.linkings.taxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2&page=1&cache=true&taxonId=" . $taxonId . "&useIdentificationAnnotations=true&includeSubTaxa=false&includeNonValidTaxa=true&countryId=ML.206&time=" . $yearParam . "&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
+}
+
+/*
+            [rarityScore] => Array
+                (
+                    [finland] => 50/51
+                    [biogeo] => 10/11
+                    [year] => 5/6
+                    [phenology] => 10/11
+                    [decade] => 10/11
+                    [total] => 85
+                    [top] => first from Finland, first from province, first this year, first during this season, first during the last decade
+                )
+*/
