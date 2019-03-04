@@ -9,13 +9,12 @@ require_once "lajifi.php";
 
 if (isset($_GET['debug'])) {
   define("DEBUG", true);
+  echo "<strong style='color: red;'>DEBUG MODE</strong>\n\n";
 }
 else{
   define("DEBUG", false);
+  echo "<strong style='color: green;'>PRODUCTION MODE</strong>\n\n";
 }
-echo "CONTS: " . DEBUG;
-
-
 
 // Laji.fi
 

@@ -66,11 +66,12 @@ function buildListQuery($countryIdQname = "") {
 
     $collectionIdQname = "HR.1747";
     $date = date("Y-m-d");
-//        $date = date("2019-02-28"); // debug
 
     $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
 
-    echo "URL built: " . $url . "\n"; // debug
+    if (DEBUG) {
+        echo "URL built:\n</pre>" . $url . "<pre>\n"; // debug
+    }
 
     return $url;
 }
