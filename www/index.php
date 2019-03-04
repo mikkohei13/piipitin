@@ -7,12 +7,23 @@ require_once "logger.php";
 require_once "telegram.php";
 require_once "lajifi.php";
 
+if (isset($_GET['debug'])) {
+  define("DEBUG", true);
+}
+else{
+  define("DEBUG", false);
+}
+echo "CONTS: " . DEBUG;
+
+
+
 // Laji.fi
 
 // Rarities
 // Todo: restrict to finnish species
 if ($_GET['mode'] == "rarities") {
-  $url = buildListQuery("ML.206");
+  $url = buildListQuery("ML.206"); // Only Finnish
+
   $dataJSON = getDataFromLajifi($url);
   $dataArrWithMetadata = json_decode($dataJSON, TRUE);
   $dataArr = $dataArrWithMetadata['results'];
@@ -24,6 +35,7 @@ if ($_GET['mode'] == "rarities") {
 // New documents
 elseif ($_GET['mode'] == "documents") {
   $url = buildListQuery();
+
   $dataJSON = getDataFromLajifi($url);
   $dataArrWithMetadata = json_decode($dataJSON, TRUE);
   $dataArr = $dataArrWithMetadata['results'];
@@ -31,35 +43,18 @@ elseif ($_GET['mode'] == "documents") {
   $documentList = buildDocumentList($dataArr);
 
   foreach ($documentList as $documentId => $data) {
-  sendToTelegram(formatMessageDataToPlaintext($documentId, $data)); // prod
-
-  //  echo "<pre>" . formatMessageDataToPlaintext($documentId, $data) . "</pre>"; // debug to browser
-  //  sendToTelegram(json_encode($data)); // debug to Telegram
+    if (DEBUG) {
+      echo "<pre>" . formatMessageDataToPlaintext($documentId, $data) . "</pre>"; // debug to browser
+      //  sendToTelegram(json_encode($data)); // debug to Telegram
+    }
+    else {
+      sendToTelegram(formatMessageDataToPlaintext($documentId, $data));
+    }
   }
 }
 
 else {
-  echo "Error: Mode not set";
+  echo "Error: Mode not set correctly";
 }
-
-//header('Content-type: application/json'); echo $dataJSON;
-
-// Telegram
-/*
-$message = "Test message ÅÄÖåäö";
-
-$response = sendToTelegram($message);
-
-if ($response['ok']) {
-  echo "Success";
-}
-else {
-  echo "Failure";
-}
-echo "<pre>";
-print_r($response);
-*/
-
-
 
 

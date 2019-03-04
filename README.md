@@ -9,6 +9,14 @@ Tools for sending data from FinBIF systems to mobile devices
 
 ## Usage examples
 
+For production, ping localhost once every 10 minutes:
+
+  watch -n600 curl localhost:90?mode=documents
+
+For debug:
+
+  http://localhost:90/?mode=documents&debug=http://tun.fi/JX.987888
+
 
 ## Upgrade (UNTESTED)
 
@@ -25,14 +33,6 @@ Tools for sending data from FinBIF systems to mobile devices
 
 
 ## Notes
-
-Ping localhost once every 10 minutes:
-
-   watch -n600 curl localhost:90?mode=documents
-
-For debug:
-
-   http://localhost:90/?debugLatestId=http://tun.fi/JX.987558&mode=documents
 
 
 Example queries to api.laji.fi

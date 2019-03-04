@@ -53,8 +53,13 @@ function buildListQuery($countryIdQname = "") {
     // Settings
     $orderBy = "document.firstLoadDate";
     $orderDirection = "DESC"; // DESC / ASC
-    $limit = 100;
-    $limit = 10; // debug
+
+    if (DEBUG) {
+        $limit = 20;
+    }
+    else {
+        $limit = 100;
+    }
 
     // Filters
     // To show only fresh observations, add time filter. Now returns also old observations entred today.
@@ -117,8 +122,8 @@ function filterHandledUnits($dataArr) {
 function getLatestId($filename) {
 
     // Allow overriding
-    if (isset($_GET["debugLatestId"])) {
-        return $_GET["debugLatestId"];
+    if (!empty($_GET["debug"])) {
+        return $_GET["debug"];
     }
 
     $fileContents = file_get_contents("data/" . $filename);
