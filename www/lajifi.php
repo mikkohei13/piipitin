@@ -55,7 +55,7 @@ function buildListQuery($countryIdQname = "") {
     $orderDirection = "DESC"; // DESC / ASC
 
     if (DEBUG) {
-        $limit = 20;
+        $limit = 10;
     }
     else {
         $limit = 100;
@@ -195,6 +195,28 @@ function formatMessageDataToPlaintext($docId, $data) {
 }
 
 
+function addRarityScorePart(&$element, $functionName, $limit, $slug, $topLabel) { // Passing by reference!
+    $taxonId = $element['unit']['linkings']['taxon']['id'];
+
+    $url = $functionName($taxonId);
+    $rawDataArr = json_decode(getDataFromLajifi($url), TRUE);
+
+    $speciesObservationCount = $rawDataArr['results'][0]['count'];
+    if (!isset($speciesObservationCount)) {
+        $speciesObservationCount = 0; // Is this needed?
+    }
+
+    if ($speciesObservationCount < $limit)
+    {
+        $element['rarityScore2']['total'] += ($limit - $speciesObservationCount);
+        $element['rarityScore2'][$slug] = ($limit - $speciesObservationCount) . "/$limit";
+    }
+    if ($speciesObservationCount <= 1) {
+        $element['rarityScore2']['top'] .= $topLabel . ", ";
+    }
+    // No need to return, since $element was passed by reference
+}
+
 
 function addRarityScore($dataArr) {
 
@@ -213,6 +235,11 @@ function addRarityScore($dataArr) {
         $rarityScore = 0;
         $rarityTop = "";
 
+        // ABBA
+         // Passing dataArr by reference!
+        addRarityScorePart($dataArr[$i], "buildSpeciesAggregateQuery_Finland", 51, "finland", "Suomen ensimmäinen");
+
+        /*
         // --------------------------------------
         // Observations from Finland
         $speciesObservationCount = 0;
@@ -234,6 +261,7 @@ function addRarityScore($dataArr) {
         if ($speciesObservationCount <= 1) {
             $rarityTop .= "first from Finland, ";
         }
+        */
 
         // --------------------------------------
         // Observations from biogeo province
