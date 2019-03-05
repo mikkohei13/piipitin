@@ -1,5 +1,12 @@
 <pre>
 <?php
+/*
+Terms:
+- document: document-level data from api
+- gathering: gathering-level data from api
+- unit: unit-level data from api
+- element: document, gathering and unit combined together for each unit
+*/
 //phpinfo();
 
 require_once "config/env.php";
@@ -16,71 +23,83 @@ else{
   echo "<strong style='color: green;'>PRODUCTION MODE</strong>\n\n";
 }
 
-// Laji.fi
-
+// ---------------------------------------------------------------
 // Rarities
 // Todo: restrict to finnish species
 if ($_GET['mode'] == "rarities") {
   logger("lajifi.log", "info", "GET rarities");
+
+  // Settings
   $debugThreshold = 1;
   $threshold = 1;
 
+  // Get and filter data
   $url = buildListQuery("ML.206"); // Only Finnish
+  $elementsJSON = getDataFromLajifi($url);
+  $elementsArrWithMetadata = json_decode($elementsJSON, TRUE);
+  $elementsArr = $elementsArrWithMetadata['results'];
 
-  $dataJSON = getDataFromLajifi($url);
-  $dataArrWithMetadata = json_decode($dataJSON, TRUE);
-  $dataArr = $dataArrWithMetadata['results'];
+  // Add rarity scores to each unit
+  $elementsArr = addRarityScore($elementsArr);
+//  echo "\n\nHERE:\n"; print_r($elementsArr); // debug
 
-  $dataArr = addRarityScore($dataArr);
-//  echo "\n\nHERE:\n"; print_r($dataArr); // debug
+  if (DEBUG) { print_r($elementsArr); } // debug
 
-  if (DEBUG) { print_r($dataArr); } // debug
-
-  foreach ($dataArr as $i => $data) {
+  // Handle each element (= unit)
+  foreach ($elementsArr as $i => $element) {
     $scoreHelper = 0;
-    if (isset($data['rarityScore']['total'])) {
-      $scoreHelper = $data['rarityScore']['total'];
+    if (isset($element['rarityScore']['total'])) {
+      $scoreHelper = $element['rarityScore']['total'];
     }
+    logger("lajifi.log", "info", "Handled observation " . $element['unit']['unitId'] . " with rarityScore of " . $scoreHelper);
 
-    logger("lajifi.log", "info", "Handled observation " . $data['unit']['unitId'] . " with rarityScore of " . $scoreHelper);
+    // DEBUG
     if (DEBUG) {
       if ($scoreHelper >= $debugThreshold) {
-        echo formatRarityDataToPlaintext($data) . "\n\n";
+        echo formatRarityDataToPlaintext($element) . "\n\n";
       }
     }
+    // PROD
     else {
       if ($scoreHelper >= $threshold) {
         // send to telegram
-        sendToTelegram(formatRarityDataToPlaintext($data));
-        echo formatRarityDataToPlaintext($data) . "\n\n"; // debug
+        sendToTelegram(formatRarityDataToPlaintext($element));
+        echo formatRarityDataToPlaintext($element) . "\n\n"; // debug
       }
     }
   }
 }
 
+// ---------------------------------------------------------------
 // New documents
 elseif ($_GET['mode'] == "documents") {
   logger("lajifi.log", "info", "GET documents");
 
+  // Get and filter data
   $url = buildListQuery();
+  $elementsJSON = getDataFromLajifi($url);
+  $elementsArrWithMetadata = json_decode($elementsJSON, TRUE);
+  $elementsArr = $elementsArrWithMetadata['results'];
 
-  $dataJSON = getDataFromLajifi($url);
-  $dataArrWithMetadata = json_decode($dataJSON, TRUE);
-  $dataArr = $dataArrWithMetadata['results'];
+  // Create a list of documents
+  $documentsArr = buildDocumentList($elementsArr);
 
-  $documentList = buildDocumentList($dataArr);
-
-  foreach ($documentList as $documentId => $data) {
+  // Handle each document
+  foreach ($documentsArr as $documentId => $document) {
+    // DEBUG
     if (DEBUG) {
-      echo "<pre>" . formatMessageDataToPlaintext($documentId, $data) . "</pre>"; // debug to browser
-      //  sendToTelegram(json_encode($data)); // debug to Telegram
+      echo "<pre>" . formatMessageDataToPlaintext($documentId, $document) . "</pre>"; // debug to browser
+      //  sendToTelegram(json_encode($document)); // debug to Telegram
     }
+    // PROD
     else {
-      sendToTelegram(formatMessageDataToPlaintext($documentId, $data));
+      sendToTelegram(formatMessageDataToPlaintext($documentId, $document));
     }
   }
 }
 
+// ---------------------------------------------------------------
+// Other = warning
 else {
   logger("lajifi.log", "warning", "Mode not set correctly");
   echo "Warning: Mode not set correctly";
