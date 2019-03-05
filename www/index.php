@@ -21,6 +21,7 @@ else{
 // Rarities
 // Todo: restrict to finnish species
 if ($_GET['mode'] == "rarities") {
+  logger("lajifi.log", "info", "GET rarities");
   $debugThreshold = 1;
   $threshold = 1;
 
@@ -59,6 +60,8 @@ if ($_GET['mode'] == "rarities") {
 
 // New documents
 elseif ($_GET['mode'] == "documents") {
+  logger("lajifi.log", "info", "GET documents");
+
   $url = buildListQuery();
 
   $dataJSON = getDataFromLajifi($url);
@@ -79,7 +82,8 @@ elseif ($_GET['mode'] == "documents") {
 }
 
 else {
-  echo "Error: Mode not set correctly";
+  logger("lajifi.log", "warning", "Mode not set correctly");
+  echo "Warning: Mode not set correctly";
 }
 
 

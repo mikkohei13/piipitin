@@ -92,9 +92,9 @@ function buildAggregateQuery($date) {
 */
 
 // Removes handled elements based on documentId
-function filterHandledUnits($dataArr) {
+function filterHandledUnits($dataArr, $latestIdFilename) {
 
-    $latestId = getLatestId(LATESTID_FILENAME);
+    $latestId = getLatestId($latestIdFilename);
     $newestId = FALSE;
     $dataArrFiltered = Array();
 
@@ -118,7 +118,7 @@ function filterHandledUnits($dataArr) {
 
     // Set latest id only if you really have one
     if ($newestId !== FALSE) {
-        setLatestId(LATESTID_FILENAME, $newestId);
+        setLatestId($latestIdFilename, $newestId);
     }
     
     return $dataArrFiltered;
@@ -145,7 +145,7 @@ function setLatestId($filename, $id) {
 function buildDocumentList($dataArr) {
 
 //    echo "<pre>"; print_r ($dataArr); echo "</pre>"; // debug
-    $dataArr = filterHandledUnits($dataArr);
+    $dataArr = filterHandledUnits($dataArr, LATESTID_FILENAME_DOCUMENTS);
 
     $data = Array();
     foreach($dataArr as $i => $element) {
@@ -229,7 +229,7 @@ function addRarityScorePart(&$element, $url, $limit, $slug, $topLabel) { // Pass
 function addRarityScore($dataArr) {
 
     //    echo "<pre>"; print_r ($dataArr); echo "</pre>"; // debug
-    $dataArr = filterHandledUnits($dataArr);
+    $dataArr = filterHandledUnits($dataArr, LATESTID_FILENAME_RARITIES);
 
     $data = Array();
     foreach($dataArr as $i => $element) {
