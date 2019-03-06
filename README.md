@@ -25,6 +25,10 @@ For debug:
 
 ## Todo
 
+- use separate datafile for documents and rarities?
+- TODO's from comments
+- send rarity messages to Telegram
+- Improve naming, e.g. dataArr vs. documentList
 - Filter AA's observations
 - Prepare for api errors
 - disable telegram 23:00-07:00

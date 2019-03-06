@@ -48,6 +48,7 @@ function buildListQuery($countryIdQname = "") {
         "unit.linkings.taxon.qname",
         "unit.linkings.taxon.finnish",
         "unit.linkings.taxon.scientificName",
+        "unit.linkings.taxon.vernacularName",
         "unit.linkings.taxon.taxonRank",
         "unit.reportedTaxonId",
         "unit.taxonVerbatim",
@@ -320,3 +321,19 @@ function buildSpeciesAggregateQuery_Decade($taxonId) {
                     [top] => first from Finland, first from province, first this year, first during this season, first during the last decade
                 )
 */
+
+function formatRarityDataToPlaintext($element) {
+
+    $txt = "MIELENKIINTOINEN:\n";
+
+    $txt .= $element['rarityScore']['total'] . " pistettä:\n";
+    
+    $txt .= $element['unit']['linkings']['taxon']['vernacularName']['fi'] . " (" . $element['unit']['linkings']['taxon']['scientificName'] . ")\n";
+    $txt .= $element['gathering']['displayDateTime'] . "\n";
+    $txt .= $element['gathering']['biogeographicalProvince'] . ", " . $element['gathering']['municipality'] . ", " . $element['gathering']['locality'] . "\n\n";
+//    $txt .= $element['gathering']['team'] . "\n"; // TODO: Array to string, see above
+    $txt .= $element['document']['documentId'] . "\n";
+    $txt .= "Havaintoja: " . $element['rarityScore']['desc'];
+
+    return $txt;
+}

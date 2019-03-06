@@ -21,6 +21,9 @@ else{
 // Rarities
 // Todo: restrict to finnish species
 if ($_GET['mode'] == "rarities") {
+  $debugThreshold = 1;
+  $threshold = 1;
+
   $url = buildListQuery("ML.206"); // Only Finnish
 
   $dataJSON = getDataFromLajifi($url);
@@ -28,7 +31,21 @@ if ($_GET['mode'] == "rarities") {
   $dataArr = $dataArrWithMetadata['results'];
 
   $dataArr = addRarityScore($dataArr);
-  echo "\n\nHERE:\n"; print_r($dataArr); // debug
+//  echo "\n\nHERE:\n"; print_r($dataArr); // debug
+
+  foreach ($dataArr as $i => $data) {
+    if (DEBUG) {
+//      print_r($dataArr);
+      if ($data['rarityScore']['total'] >= $debugThreshold) { // TODO: makes notice
+        echo formatRarityDataToPlaintext($data) . "\n\n";
+      }
+    }
+    else {
+      if ($data['rarityScore']['total'] >= $threshold) {
+        echo formatRarityDataToPlaintext($data) . "\n\n";
+      }
+    }
+  }
 }
 
 // New documents
