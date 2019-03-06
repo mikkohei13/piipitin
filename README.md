@@ -16,6 +16,7 @@ For production, ping localhost once every 10 minutes:
 For debug:
 
   http://localhost:90/?mode=documents&debug=http://tun.fi/JX.987888
+  http://localhost:90/?mode=rarities&debug=http://tun.fi/JX.988066
 
 
 ## Upgrade (UNTESTED)
@@ -30,6 +31,10 @@ For debug:
 - log messages publicly
 - To show only fresh observations, add time filter. Now returns also old observations entred today.
 - Docker: Do not run Composer as root/super user! See https://getcomposer.org/root for details
+
+- prep for network problems, e.g. Warning:  file_get_contents(): php_network_getaddresses: getaddrinfo failed: Temporary failure in name resolution in /var/www/lajifi.php on line 5
+
+
 
 
 ## Notes

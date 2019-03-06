@@ -69,9 +69,7 @@ function buildListQuery($countryIdQname = "") {
 
     $url = "https://api.laji.fi/v0/warehouse/query/list?selected=" . $selected . "&orderBy=" . $orderBy . "%20" . $orderDirection . "&pageSize=" . $limit . "&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&collectionId=" . $collectionIdQname . "&countryId=" . $countryIdQname . "&firstLoadedSameOrAfter=" . $date . "&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
 
-    if (DEBUG) {
-        echo "URL built:\n</pre>" . $url . "<pre>\n"; // debug
-    }
+    echo "URL built:\n</pre>" . $url . "<pre>\n"; // debug
 
     return $url;
 }
@@ -195,10 +193,7 @@ function formatMessageDataToPlaintext($docId, $data) {
 }
 
 
-function addRarityScorePart(&$element, $functionName, $limit, $slug, $topLabel) { // Passing by reference!
-    $taxonId = $element['unit']['linkings']['taxon']['id'];
-
-    $url = $functionName($taxonId);
+function addRarityScorePart(&$element, $url, $limit, $slug, $topLabel) { // Passing by reference!
     $rawDataArr = json_decode(getDataFromLajifi($url), TRUE);
 
     $speciesObservationCount = $rawDataArr['results'][0]['count'];
@@ -214,7 +209,10 @@ function addRarityScorePart(&$element, $functionName, $limit, $slug, $topLabel) 
     if ($speciesObservationCount <= 1) {
         $element['rarityScore2']['top'] .= $topLabel . ", ";
     }
-    // No need to return, since $element was passed by reference
+    else {$element['rarityScore2']['debug'] = "debug";} // debug
+
+    // No need to return the result, since $element was passed by reference
+    return TRUE;
 }
 
 
@@ -237,7 +235,10 @@ function addRarityScore($dataArr) {
 
         // ABBA
          // Passing dataArr by reference!
-        addRarityScorePart($dataArr[$i], "buildSpeciesAggregateQuery_Finland", 51, "finland", "Suomen ensimmäinen");
+//        addRarityScorePart($dataArr[$i], "buildSpeciesAggregateQuery_Finland", 51, "finland", "Suomen ensimmäinen");
+
+        $url = buildSpeciesAggregateQuery_Finland($element['unit']['linkings']['taxon']['id']);
+        addRarityScorePart($dataArr[$i], $url, 51, "finland", "Suomen ensimmäinen");
 
         /*
         // --------------------------------------
