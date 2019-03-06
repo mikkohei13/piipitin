@@ -3,6 +3,11 @@
 // Get data from an api and return as JSON
 function getDataFromLajifi($url) {
     $responseJSON = file_get_contents($url);
+    if ($responseJSON === FALSE) {
+        $errorMessage = "Error fetching data from api.laji.fi";
+        logger("lajifi.log", "error", $errorMessage);
+        exit($errorMessage);
+    }
     return $responseJSON;
 }
 
@@ -203,13 +208,17 @@ function addRarityScorePart(&$element, $url, $limit, $slug, $topLabel) { // Pass
 
     if ($speciesObservationCount < $limit)
     {
-        $element['rarityScore2']['total'] += ($limit - $speciesObservationCount);
-        $element['rarityScore2'][$slug] = ($limit - $speciesObservationCount) . "/$limit";
+        $element['rarityScore']['total'] += ($limit - $speciesObservationCount);
+        $element['rarityScore'][$slug] = ($limit - $speciesObservationCount);
     }
+    
     if ($speciesObservationCount <= 1) {
-        $element['rarityScore2']['top'] .= $topLabel . ", ";
+        $element['rarityScore']['top'] .= $topLabel . ", ";
     }
-    else {$element['rarityScore2']['debug'] = "debug";} // debug
+
+    $element['rarityScore']['desc'] .= $slug . ": " . $speciesObservationCount . ", ";
+
+    //    else { $debugSlug = "debug" . $slug; $element['rarityScore'][$debugSlug] = "debug";} // debug
 
     // No need to return the result, since $element was passed by reference
     return TRUE;
@@ -230,137 +239,38 @@ function addRarityScore($dataArr) {
             continue;
         }
 
-        $rarityScore = 0;
-        $rarityTop = "";
-
-        // ABBA
-         // Passing dataArr by reference!
-//        addRarityScorePart($dataArr[$i], "buildSpeciesAggregateQuery_Finland", 51, "finland", "Suomen ensimmäinen");
-
+        // Passing dataArr by reference!
+        // Observations from Finland
         $url = buildSpeciesAggregateQuery_Finland($element['unit']['linkings']['taxon']['id']);
         addRarityScorePart($dataArr[$i], $url, 51, "finland", "Suomen ensimmäinen");
 
-        /*
-        // --------------------------------------
-        // Observations from Finland
-        $speciesObservationCount = 0;
-        $rawDataArr = json_decode(getDataFromLajifi(buildSpeciesAggregateQuery_Finland($element['unit']['linkings']['taxon']['id'])), TRUE);
-//        echo "\n\nAggregate query data:\n"; print_r ($rawDataArr); //continue; // debug
+        // Observations from biogeographical province
+        $url = buildSpeciesAggregateQuery_Area($element['unit']['linkings']['taxon']['id'], $element['gathering']['biogeographicalProvince']);
+        addRarityScorePart($dataArr[$i], $url, 11, "province", "eliömaakunnan ensimmäinen");
 
-        $speciesObservationCount = $rawDataArr['results'][0]['count'];
-        if (!isset($speciesObservationCount)) {
-            $speciesObservationCount = 0; // Is this needed?
-        }
-
-        $limit = 51; // prod
-//        $limit = 501; // debug
-        if ($speciesObservationCount < $limit)
-        {
-            $rarityScore += ($limit - $speciesObservationCount);
-            $dataArr[$i]['rarityScore']['finland'] = ($limit - $speciesObservationCount) . "/$limit";
-        }
-        if ($speciesObservationCount <= 1) {
-            $rarityTop .= "first from Finland, ";
-        }
-        */
-
-        // --------------------------------------
-        // Observations from biogeo province
-        $speciesObservationCount = 0;
-        $rawDataArr = json_decode(getDataFromLajifi(buildSpeciesAggregateQuery_Area($element['unit']['linkings']['taxon']['id'], $element['gathering']['biogeographicalProvince'])), TRUE);
-//        echo "\n\nAggregate query data:\n"; print_r ($rawDataArr); //continue; // debug
-
-        $speciesObservationCount = $rawDataArr['results'][0]['count'];
-        if (!isset($speciesObservationCount)) {
-            $speciesObservationCount = 0; // Is this needed?
-        }
-
-        $limit = 11; // prod
-//        $limit = 101; // debug
-        if ($speciesObservationCount < $limit)
-        {
-            $rarityScore += ($limit - $speciesObservationCount);
-            $dataArr[$i]['rarityScore']['biogeo'] = ($limit - $speciesObservationCount) . "/$limit";
-        }
-        if ($speciesObservationCount <= 1) {
-            $rarityTop .= "first from province, ";
-        }
-
-        // --------------------------------------
         // Observations from this year, only if obs is from this year also
         if ($element['gathering']['conversions']['year'] == date("Y")) {
-            $speciesObservationCount = 0;
-            $rawDataArr = json_decode(getDataFromLajifi(buildSpeciesAggregateQuery_Year($element['unit']['linkings']['taxon']['id'], date("Y"))), TRUE);
-//            echo "\n\nAggregate query data ".__LINE__.":\n"; print_r ($rawDataArr); //continue; // debug
-    
-            $speciesObservationCount = $rawDataArr['results'][0]['count'];
-            if (!isset($speciesObservationCount)) {
-                $speciesObservationCount = 0; // Is this needed?
-            }
-    
-            $limit = 6; // prod
-//            $limit = 11; // debug
-            if ($speciesObservationCount < $limit)
-            {
-                $rarityScore += ($limit - $speciesObservationCount);
-                $dataArr[$i]['rarityScore']['year'] = ($limit - $speciesObservationCount) . "/$limit";
-            }    
-            if ($speciesObservationCount <= 1) {
-                $rarityTop .= "first this year, ";
-            }
+            $url = buildSpeciesAggregateQuery_Year($element['unit']['linkings']['taxon']['id'], date("Y"));
+            addRarityScorePart($dataArr[$i], $url, 6, "year", "vuoden ensimmäinen");
         }
 
-        // --------------------------------------
         // Observations around day of year, only if date is exact
-        // todo: skip this is dead, indirect or not growing
+        // TODO: skip this is dead, indirect or not growing
         if ($element['gathering']['conversions']['dayOfYearBegin'] == $element['gathering']['conversions']['dayOfYearEnd']) {
-
-            $speciesObservationCount = 0;
-            $rawDataArr = json_decode(getDataFromLajifi(buildSpeciesAggregateQuery_Phenology($element['unit']['linkings']['taxon']['id'], $element['gathering']['conversions']['dayOfYearBegin'], 20)), TRUE);
-    //        echo "\n\nAggregate query data:\n"; print_r ($rawDataArr); //continue; // debug
-
-            $speciesObservationCount = $rawDataArr['results'][0]['count'];
-            if (!isset($speciesObservationCount)) {
-                $speciesObservationCount = 0; // Is this needed?
-            }
-
-            $limit = 11; // prod
-//            $limit = 101; // debug
-            if ($speciesObservationCount < $limit)
-            {
-                $rarityScore += ($limit - $speciesObservationCount);
-                $dataArr[$i]['rarityScore']['phenology'] = ($limit - $speciesObservationCount) . "/$limit";
-            }
-            if ($speciesObservationCount <= 1) {
-                $rarityTop .= "first during this season, ";
-            }    
-
+            $url = buildSpeciesAggregateQuery_Phenology($element['unit']['linkings']['taxon']['id'], $element['gathering']['conversions']['dayOfYearBegin'], 20);
+            addRarityScorePart($dataArr[$i], $url, 11, "season", "kauden ensimmäinen");
         }
 
-        // --------------------------------------
         // Observations from the last decade
-        $speciesObservationCount = 0;
-        $rawDataArr = json_decode(getDataFromLajifi(buildSpeciesAggregateQuery_Decade($element['unit']['linkings']['taxon']['id'])), TRUE);
-//            echo "\n\nAggregate query data ".__LINE__.":\n"; print_r ($rawDataArr); //continue; // debug
+        // TODO: only if during this decade
+        $url = buildSpeciesAggregateQuery_Decade($element['unit']['linkings']['taxon']['id']);
+        addRarityScorePart($dataArr[$i], $url, 11, "decade", "vuosikymmenen ensimmäinen");
 
-        $speciesObservationCount = $rawDataArr['results'][0]['count'];
-        if (!isset($speciesObservationCount)) {
-            $speciesObservationCount = 0; // Is this needed?
-        }
 
-        $limit = 11; // prod
-//            $limit = 51; // debug
-        if ($speciesObservationCount < $limit)
-        {
-            $rarityScore += ($limit - $speciesObservationCount);
-            $dataArr[$i]['rarityScore']['decade'] = ($limit - $speciesObservationCount) . "/$limit";
-        }    
-        if ($speciesObservationCount <= 1) {
-            $rarityTop .= "first during the last decade, ";
-        }
+        // Trim
+        trim($dataArr[$i]['rarityScore']['top'], ", ");
+        trim($dataArr[$i]['rarityScore']['desc'], ", ");
 
-        $dataArr[$i]['rarityScore']['total'] = $rarityScore;
-        $dataArr[$i]['rarityScore']['top'] = trim($rarityTop, ", ");
     }
 
     return $dataArr;
