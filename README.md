@@ -12,6 +12,7 @@ Tools for sending data from FinBIF systems to mobile devices
 For production, ping localhost once every 10 minutes:
 
   watch -n600 curl localhost:90?mode=documents
+  watch -n600 curl localhost:90/?mode=rarities
 
 For debug:
 
@@ -26,6 +27,7 @@ For debug:
 ## Todo
 
 - use separate datafile for documents and rarities?
+- api cache=true for list query ?
 - TODO's from comments
 - send rarity messages to Telegram
 - Improve naming, e.g. dataArr vs. documentList

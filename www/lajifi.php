@@ -64,7 +64,7 @@ function buildListQuery($countryIdQname = "") {
         $limit = 10;
     }
     else {
-        $limit = 100;
+        $limit = 50;
     }
 
     // Filters
@@ -209,15 +209,15 @@ function addRarityScorePart(&$element, $url, $limit, $slug, $topLabel) { // Pass
 
     if ($speciesObservationCount < $limit)
     {
-        $element['rarityScore']['total'] += ($limit - $speciesObservationCount);
-        $element['rarityScore'][$slug] = ($limit - $speciesObservationCount);
+        @$element['rarityScore']['total'] += ($limit - $speciesObservationCount); // @
+        @$element['rarityScore'][$slug] = ($limit - $speciesObservationCount); // @
     }
     
     if ($speciesObservationCount <= 1) {
-        $element['rarityScore']['top'] .= $topLabel . ", ";
+        @$element['rarityScore']['top'] .= $topLabel . ", "; // @
     }
 
-    $element['rarityScore']['desc'] .= $slug . ": " . $speciesObservationCount . ", ";
+    @$element['rarityScore']['desc'] .= $slug . ": " . $speciesObservationCount . ", "; // @
 
     //    else { $debugSlug = "debug" . $slug; $element['rarityScore'][$debugSlug] = "debug";} // debug
 
@@ -269,7 +269,7 @@ function addRarityScore($dataArr) {
 
 
         // Trim
-        trim($dataArr[$i]['rarityScore']['top'], ", ");
+        @trim($dataArr[$i]['rarityScore']['top'], ", "); // @
         trim($dataArr[$i]['rarityScore']['desc'], ", ");
 
     }

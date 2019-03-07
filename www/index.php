@@ -33,16 +33,25 @@ if ($_GET['mode'] == "rarities") {
   $dataArr = addRarityScore($dataArr);
 //  echo "\n\nHERE:\n"; print_r($dataArr); // debug
 
+  if (DEBUG) { print_r($dataArr); } // debug
+
   foreach ($dataArr as $i => $data) {
+    $scoreHelper = 0;
+    if (isset($data['rarityScore']['total'])) {
+      $scoreHelper = $data['rarityScore']['total'];
+    }
+
+    logger("lajifi.log", "info", "Handled observation " . $data['unit']['unitId'] . " with rarityScore of " . $scoreHelper);
     if (DEBUG) {
-//      print_r($dataArr);
-      if ($data['rarityScore']['total'] >= $debugThreshold) { // TODO: makes notice
+      if ($scoreHelper >= $debugThreshold) {
         echo formatRarityDataToPlaintext($data) . "\n\n";
       }
     }
     else {
-      if ($data['rarityScore']['total'] >= $threshold) {
-        echo formatRarityDataToPlaintext($data) . "\n\n";
+      if ($scoreHelper >= $threshold) {
+        // send to telegram
+        sendToTelegram(formatRarityDataToPlaintext($data));
+//        echo formatRarityDataToPlaintext($data) . "\n\n"; // debug
       }
     }
   }
