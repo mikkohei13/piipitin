@@ -5,10 +5,10 @@ require_once "nanodb.php";
 
 $db = new nanoDb("data/nanodb.json", 10);
 
-$record = Array();
-$record[date("Y-m-d")] = Array(Array("name", "Fungi"), Array("locality", "Latokaski"));
+$record = Array(Array("name", "Fungi"), Array("locality", "Latokaski"));
+$id = date("Y-m-d");
 
-$db->addRecord($record);
+$db->addRecord($id, $record);
 
 $allDataArr = $db->getAll();
 krsort($allDataArr);

@@ -13,6 +13,8 @@ require_once "config/env.php";
 require_once "logger.php";
 require_once "telegram.php";
 require_once "lajifi.php";
+require_once "nanodb.php";
+
 
 if (isset($_GET['debug'])) {
   define("DEBUG", true);
@@ -32,6 +34,7 @@ if ($_GET['mode'] == "rarities") {
   // Settings
   $debugThreshold = 1;
   $threshold = 1;
+  $db = new nanoDb(("data/" . DATAFILE_RARITIES), 100);
 
   // Get and filter data
   $url = buildListQuery("ML.206"); // Only Finnish
@@ -57,13 +60,21 @@ if ($_GET['mode'] == "rarities") {
     if (DEBUG) {
       if ($scoreHelper >= $debugThreshold) {
         echo formatRarityDataToPlaintext($element) . "\n\n";
+
+        // Save to datafile
+        // TODO: separate debug and prod datafiles
+        $db->addRecord($element['unit']['unitId'], $element);
       }
     }
     // PROD
     else {
       if ($scoreHelper >= $threshold) {
-        // send to telegram
+        // Send to telegram
         sendToTelegram(formatRarityDataToPlaintext($element));
+
+        // Save to datafile
+        $db->addRecord($element['unit']['unitId'], $element);
+
         echo formatRarityDataToPlaintext($element) . "\n\n"; // debug
       }
     }

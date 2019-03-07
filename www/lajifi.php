@@ -61,7 +61,7 @@ function buildListQuery($countryIdQname = "") {
     $orderDirection = "DESC"; // DESC / ASC
 
     if (DEBUG) {
-        $limit = 10;
+        $limit = 50;
     }
     else {
         $limit = 50;

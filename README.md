@@ -50,6 +50,17 @@ For debug:
 ## Notes
 
 
+Tarpeet tietokannalle
+
+- Säilyttää viimeiset 100 (tai 1000?) mielenkiintoista, poistaa loput entryjärjestyksessä
+- Lisää uusi, jos ei jo ole
+- Listaa kaikki entryjärjestyksessä
+
+- Json-tiedosto, jossa key:na entryaika yyyymmdd-hhmmss-unitId. Ei toimi, koska tällä ei voi hakea entryä tietämättä
+- 
+
+
+
 Example queries to api.laji.fi
 
 

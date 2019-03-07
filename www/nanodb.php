@@ -38,49 +38,41 @@ Class nanoDb
 
     // Return record
     if (isset($arr[$id])) {
-      echo "FOUND OLD";
       return $arr[$id];
     }
     else {
-
-      echo "NOT FOUND OLD";
-//      print_r ($arr);
-
       return FALSE;
     }
 
   }
 
-  public function addRecord($record) {
+  // On success returns number of bytes in db file,
+  // on failure returns FALSE
+  public function addRecord($id, $record) {
     // Validate record
-    if (!is_array($record) || count($record) != 1) {
-      echo "X. ";
+/*    if (!is_array($record)) {
       return FALSE;
     }
-
+*/
     // Checks if already exists
     // TODO? here datafile is read twice -> bad performance if more data...
-    $id = array_key_first($record);
+//    $id = array_key_first($record);
     if ($this->getById($id)) {
-      echo "Found record with id " . $id . ", so not adding it. ";
       return FALSE;
     }
-    echo "Adding record with id " . $id . ". ";
 
     // Get existing data
     $arr = $this->getAll();
 
     // Remove old data, if limit reached 
     $count = count($arr);
-    echo "Items in database before entry: " . $count . ". ";
     if ($count == $this->limit) {
       array_pop($arr);
     }
 
     // Add new record to the *end* of array
-    $id = array_key_first($record); 
-    $arr[$id] = $record[$id];
-//    array_unshift($arr, $record);
+//    $id = array_key_first($record); 
+    $arr[$id] = $record;
 
     // Save data
     $json = json_encode($arr);
@@ -89,6 +81,7 @@ Class nanoDb
 
 }
 
+// PHP 7 shim
 // http://php.net/manual/en/function.array-key-first.php
 if (!function_exists('array_key_first')) {
   /**
