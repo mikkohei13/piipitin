@@ -32,8 +32,8 @@ if ($_GET['mode'] == "rarities") {
   logger("lajifi.log", "info", "GET rarities");
 
   // Settings
-  $debugThreshold = 1;
-  $threshold = 1;
+  $debugThreshold = 0;
+  $threshold = 10;
   $db = new nanoDb(("data/" . DATAFILE_RARITIES), 100);
 
   // Get and filter data

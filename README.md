@@ -50,14 +50,18 @@ For debug:
 ## Notes
 
 
-Tarpeet tietokannalle
+rarityScores
 
-- Säilyttää viimeiset 100 (tai 1000?) mielenkiintoista, poistaa loput entryjärjestyksessä
-- Lisää uusi, jos ei jo ole
-- Listaa kaikki entryjärjestyksessä
+Käsittelee vain suomalaisia havaintoja.
 
-- Json-tiedosto, jossa key:na entryaika yyyymmdd-hhmmss-unitId. Ei toimi, koska tällä ei voi hakea entryä tietämättä
-- 
+- Suomen ensimmäinen: 40 pistettä. Yksi piste vähemmän jokaisesta seuraavasta havainnosta, eli 40. havainnosta saa enää yhden pisteen.
+- Eliömaakunnan ensimmäinen: 20 pistettä. Vähennys samoin kuin edellä.
+- Vuosikymmenen ensimmäinen: 20 pistettä. Vähennys samoin. Lasketaan vain kuluvan vuosikymmenen havainnoille.
+- Kauden ensimmäinen: 20 pistettä. Vähennys samoin. Kausi = +-30 päivää havaintopäivästä, huomioimatta vuosilukua. Lasketaan vain havaoinnoille, joilla on tarkka päivämäärä.
+- Vuoden ensimmäinen: 10 pistettä. Lasketaan vain kuluvan vuoden havainnoille.
+
+Mielenkiintoisen raja on 10 pistettä.
+
 
 
 
