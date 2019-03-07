@@ -235,7 +235,7 @@ function addRarityScore($dataArr) {
     foreach($dataArr as $i => $element) {
 
         // Remove and skipt non-species
-        if ($element['unit']['linkings']['taxon']['taxonRank'] != "http://tun.fi/MX.species") {
+        if ($element['unit']['linkings']['taxon']['taxonRank'] != "http://tun.fi/MX.species" || !isset($element['unit']['linkings']['taxon']['taxonRank'])) {
             unset($dataArr[$i]);
             continue;
         }
@@ -243,29 +243,29 @@ function addRarityScore($dataArr) {
         // Passing dataArr by reference!
         // Observations from Finland
         $url = buildSpeciesAggregateQuery_Finland($element['unit']['linkings']['taxon']['id']);
-        addRarityScorePart($dataArr[$i], $url, 51, "finland", "Suomen ensimmäinen");
+        addRarityScorePart($dataArr[$i], $url, 501, "finland", "Suomen ensimmäinen");
 
         // Observations from biogeographical province
         $url = buildSpeciesAggregateQuery_Area($element['unit']['linkings']['taxon']['id'], $element['gathering']['biogeographicalProvince']);
-        addRarityScorePart($dataArr[$i], $url, 11, "province", "eliömaakunnan ensimmäinen");
+        addRarityScorePart($dataArr[$i], $url, 101, "province", "eliömaakunnan ensimmäinen");
 
         // Observations from this year, only if obs is from this year also
         if ($element['gathering']['conversions']['year'] == date("Y")) {
             $url = buildSpeciesAggregateQuery_Year($element['unit']['linkings']['taxon']['id'], date("Y"));
-            addRarityScorePart($dataArr[$i], $url, 6, "year", "vuoden ensimmäinen");
+            addRarityScorePart($dataArr[$i], $url, 16, "year", "vuoden ensimmäinen");
         }
 
         // Observations around day of year, only if date is exact
         // TODO: skip this is dead, indirect or not growing
         if ($element['gathering']['conversions']['dayOfYearBegin'] == $element['gathering']['conversions']['dayOfYearEnd']) {
             $url = buildSpeciesAggregateQuery_Phenology($element['unit']['linkings']['taxon']['id'], $element['gathering']['conversions']['dayOfYearBegin'], 20);
-            addRarityScorePart($dataArr[$i], $url, 11, "season", "kauden ensimmäinen");
+            addRarityScorePart($dataArr[$i], $url, 101, "season", "kauden ensimmäinen");
         }
 
         // Observations from the last decade
         // TODO: only if during this decade
         $url = buildSpeciesAggregateQuery_Decade($element['unit']['linkings']['taxon']['id']);
-        addRarityScorePart($dataArr[$i], $url, 11, "decade", "vuosikymmenen ensimmäinen");
+        addRarityScorePart($dataArr[$i], $url, 101, "decade", "vuosikymmenen ensimmäinen");
 
 
         // Trim

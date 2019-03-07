@@ -51,7 +51,7 @@ if ($_GET['mode'] == "rarities") {
       if ($scoreHelper >= $threshold) {
         // send to telegram
         sendToTelegram(formatRarityDataToPlaintext($data));
-//        echo formatRarityDataToPlaintext($data) . "\n\n"; // debug
+        echo formatRarityDataToPlaintext($data) . "\n\n"; // debug
       }
     }
   }
