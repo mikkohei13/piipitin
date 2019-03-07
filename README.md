@@ -26,8 +26,10 @@ For debug:
 
 ## Todo
 
-- checktarkista ettei mennä pienempään eränumeroon kuin datafilkessa
-- check connection to api.laji.fi first and log error to telegram, then write data 
+- save to database
+- error throwing and cathing
+- tarkista ettei mennä pienempään eränumeroon kuin datafilkessa
+- check connection to api.laji.fi first and log error to telegram, only then write datafile 
 - use separate datafile for documents and rarities?
 - api cache=true for list query ?
 - TODO's from comments
