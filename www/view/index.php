@@ -16,8 +16,10 @@ $dataArr = json_decode($dataJson, TRUE);
 $observationCount = 0;
 
 foreach ($dataArr as $element) {
-  echo "<p>\n</strong>";
-  echo @$element['unit']['linkings']['taxon']['vernacularName']['fi'] . " (<em>";
+  echo "<p>\n";
+  echo $element['rarityScore']['total'] . " pistettä<br>\n";
+
+  echo "<strong>" . @$element['unit']['linkings']['taxon']['vernacularName']['fi'] . " (<em>";
   echo @$element['unit']['linkings']['taxon']['scientificName'] . "</em>)</strong><br>\n";
   echo @$element['gathering']['displayDateTime'] . "<br>\n";
   echo @$element['gathering']['biogeographicalProvince'] . ", ";
@@ -30,6 +32,7 @@ foreach ($dataArr as $element) {
     }
   }
   echo "<br>\n";
+  echo "Havaintoja: " . $element['rarityScore']['desc'] . "<br>\n";
 
   echo "<a href=\"" . $element['document']['documentId'] . "\">" . $element['document']['documentId'] . "</a>\n";
 
