@@ -54,6 +54,9 @@ if ($_GET['mode'] == "rarities") {
     if (isset($element['rarityScore']['total'])) {
       $scoreHelper = $element['rarityScore']['total'];
     }
+    else {
+      $scoreHelper = 0;
+    }
     logger("lajifi.log", "info", "Handled observation " . $element['unit']['unitId'] . " with rarityScore of " . $scoreHelper);
 
     // DEBUG

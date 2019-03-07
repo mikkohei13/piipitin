@@ -325,14 +325,25 @@ function buildSpeciesAggregateQuery_Decade($taxonId) {
 
 function formatRarityDataToPlaintext($element) {
 
-    $txt = "MIELENKIINTOINEN:\n";
+    $txt = "MIELENKIINTOINEN, ";
 
-    $txt .= $element['rarityScore']['total'] . " pistettä:\n";
+    $txt .= $element['rarityScore']['total'] . " pistettä\n";
     
     $txt .= $element['unit']['linkings']['taxon']['vernacularName']['fi'] . " (" . $element['unit']['linkings']['taxon']['scientificName'] . ")\n";
     $txt .= $element['gathering']['displayDateTime'] . "\n";
-    $txt .= $element['gathering']['biogeographicalProvince'] . ", " . $element['gathering']['municipality'] . ", " . $element['gathering']['locality'] . "\n\n";
-//    $txt .= $element['gathering']['team'] . "\n"; // TODO: Array to string, see above
+
+    $locality = $element['gathering']['biogeographicalProvince'] . ", " . $element['gathering']['municipality'] . ", " . $element['gathering']['locality'];
+    $txt .= trim($locality . "\n") . "\n";
+
+    if (isset($element['gathering']['team'])) {
+        $team = "";
+        foreach ($element['gathering']['team'] as $i => $name) {
+          $team .= $name . ", ";
+        }
+        $txt .= trim($team, ", ") . "\n";
+
+    }
+
     $txt .= $element['document']['documentId'] . "\n";
     $txt .= "Havaintoja: " . $element['rarityScore']['desc'];
 
