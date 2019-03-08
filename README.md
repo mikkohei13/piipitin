@@ -26,23 +26,18 @@ For debug:
 
 ## Todo
 
-- save to database
 - error throwing and cathing
-- tarkista ettei mennä pienempään eränumeroon kuin datafilkessa
+- tarkista ettei mennä pienempään eränumeroon kuin datafilessa
+- Lähin suomenkielinen nimi mukaan
 - check connection to api.laji.fi first and log error to telegram, only then write datafile 
-- use separate datafile for documents and rarities?
 - api cache=true for list query ?
 - TODO's from comments
-- send rarity messages to Telegram
-- Improve naming, e.g. dataArr vs. documentList
 - Filter AA's observations
 - Prepare for api errors
-- disable telegram 23:00-07:00
-- log messages publicly
-- To show only fresh observations, add time filter. Now returns also old observations entred today.
+- disable telegram 23:00-07:00?
 - Docker: Do not run Composer as root/super user! See https://getcomposer.org/root for details
 
-- prep for network problems, e.g. Warning:  file_get_contents(): php_network_getaddresses: getaddrinfo failed: Temporary failure in name resolution in /var/www/lajifi.php on line 5
+- prepare for network problems, e.g. Warning:  file_get_contents(): php_network_getaddresses: getaddrinfo failed: Temporary failure in name resolution in /var/www/lajifi.php on line 5
 
 
 
