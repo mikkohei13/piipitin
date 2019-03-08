@@ -19,6 +19,23 @@ For debug:
   http://localhost:90/?mode=documents&debug=http://tun.fi/JX.987888
   http://localhost:90/?mode=rarities&debug=http://tun.fi/JX.988066
 
+##
+
+Top havainnoijat ja määrittäjät
+
+Havainnoija-aggregointi
+- havaittu tänä vuonna Suomessa lajitasolla, Vihkossa?
+- aggregoi havainnoijan mukaan
+
+Det-aggregointi
+- havaittu tänä vuonna Suomessa lajitasolla, Vihkossa?
+- aggregoi havainnoijan mukaan
+
+Oma lajilista
+- havaittu tänä vuonna Suomessa lajitasolla, Vihkossa?
+  - itse havainnoijana, id
+- aggregoi lajin mukaan
+
 
 ## Upgrade (UNTESTED)
 
