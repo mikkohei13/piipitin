@@ -1,17 +1,17 @@
-<pre>
 <?php
-require_once "config/env.php";
-require_once "logger.php";
-require_once "lajifi.php";
+require_once "../config/env.php";
+require_once "../logger.php";
+require_once "../lajifi.php";
+require_once "helpers.php";
 
-foreach ($names as $i => $name) {
-  $nameUrlencoded = urlencode($name);
-  $url = "https://api.laji.fi/v0/warehouse/query/aggregate?aggregateBy=unit.linkings.taxon.scientificName&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=100&page=1&cache=true&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&time=2019&individualCountMin=1&teamMember=" . $nameUrlencoded . "&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
-
-  $json = getDataFromLajifi($url);
-  $arr = json_decode($json, TRUE);
-  echo $name . ": " . $arr['total'] . "\n";
+if (isset($_GET['observers'])) {
+  require_once "observers.php";
+//  logger("lajifi.log", "info", "GET top names");
 }
-
-
-echo "\n\nEND";
+elseif (isset($_GET['det'])) {
+  require_once "det.php";
+}
+else {
+  echo "Please give top list type.";
+//  logger("lajifi.log", "warning", "Top list type not given");
+}
