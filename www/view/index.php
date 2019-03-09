@@ -13,6 +13,8 @@ require_once "../config/env.php";
 $dataJson = file_get_contents("../data/" . DATAFILE_RARITIES);
 $dataArr = json_decode($dataJson, TRUE);
 
+$dataArr = array_reverse($dataArr);
+
 $observationCount = 0;
 
 foreach ($dataArr as $element) {
