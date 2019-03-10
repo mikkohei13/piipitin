@@ -11,6 +11,9 @@ if (isset($_GET['observers'])) {
 elseif (isset($_GET['det'])) {
   require_once "det.php";
 }
+elseif (isset($_GET['scarce'])) {
+  require_once "scarce.php";
+}
 else {
   echo "Please give top list type.";
 //  logger("lajifi.log", "warning", "Top list type not given");

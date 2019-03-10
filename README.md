@@ -43,6 +43,9 @@ Oma lajilista
 
 ## Todo
 
+- top-tilastoja
+  - uudet lajit, tunnetutlla ja tuntemattomalla nimellä
+  - eniten havaintoja suomesta vaikka ei suomalainen laji
 - Get also yesterday's data
 - error throwing and cathing
 - tarkista ettei mennä pienempään eränumeroon kuin datafilessa
