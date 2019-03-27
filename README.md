@@ -43,6 +43,7 @@ Oma lajilista
 
 ## Todo
 
+- Get also yesterday's data
 - error throwing and cathing
 - tarkista ettei mennä pienempään eränumeroon kuin datafilessa
 - Lähin suomenkielinen nimi mukaan
