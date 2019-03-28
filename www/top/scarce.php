@@ -14,7 +14,7 @@ $speciesArr = json_decode($speciesJson, TRUE);
 $threshold = 1;
 $limit = 20;
 
-$limit = 10; // debug
+$limit = 2; // debug
 
 foreach ($speciesArr['results'] as $i => $species) {
   if ($species['count'] > $threshold) {
