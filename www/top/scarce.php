@@ -67,13 +67,10 @@ foreach ($obsArray as $a => $obs) {
 
 
 function getObservationUnit($taxonId) {
-  /*
- https://api.laji.fi/v0/warehouse/query/list?pageSize=10&page=1&cache=false&taxonId=MX.204861&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=
-  */
 
   $taxonQname = str_replace("http://tun.fi/", "", $taxonId);
 
-  $url = "https://api.laji.fi/v0/warehouse/query/list?selected=unit.unitId%2Cgathering.country%2Cgathering.displayDateTime%2Cgathering.eventDate.begin%2Cgathering.eventDate.end%2Cgathering.locality%2Cgathering.municipality%2Cgathering.province%2Cgathering.team%2Cunit.abundanceString%2Cunit.annotationCount%2Cunit.linkings.originalTaxon.finnish%2Cunit.linkings.originalTaxon.id%2Cunit.linkings.originalTaxon.scientificName&pageSize=2&page=1&cache=false&taxonId=" . $taxonQname . "&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
+  $url = "https://api.laji.fi/v0/warehouse/query/list?selected=unit.unitId%2Cgathering.country%2Cgathering.displayDateTime%2Cgathering.eventDate.begin%2Cgathering.eventDate.end%2Cgathering.locality%2Cgathering.municipality%2Cgathering.province%2Cgathering.team%2Cunit.abundanceString%2Cunit.annotationCount%2Cunit.linkings.originalTaxon.finnish%2Cunit.linkings.originalTaxon.id%2Cunit.linkings.originalTaxon.scientificName&pageSize=2&page=1&cache=false&taxonId=" . $taxonQname . "&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
   $obsJson = getDataFromLajifi($url);
   $obsArr = json_decode($obsJson, TRUE);
 
