@@ -9,8 +9,13 @@ $taxonQname = "MX.53066"; $title = "Kantasienet";
 $taxonQname = "MX.37612"; $title = "Nisäkkäät";
 $taxonQname = "MX.53078"; $title = "Putkilokasvit";
 $taxonQname = "MX.43122"; $title = "Pistiäiset";
+$taxonQname = "MX.229577"; $title = "Luteet";
+$taxonQname = "MX.37580"; $title = "Linnut";
+$taxonQname = "MX.1"; $title = "Sudenkorennot";
+
 */
-$taxonQname = "MX.53066"; $title = "Kantasienet";
+$taxonQname = "MX.37580"; $title = "Linnut";
+
 
 
 
