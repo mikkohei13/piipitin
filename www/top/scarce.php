@@ -31,7 +31,7 @@ $speciesArr = json_decode($speciesJson, TRUE);
 $threshold = 1;
 $limit = 20;
 
-$limit = 100; // debug
+$limit = 10; // debug
 
 $obsArray = Array();
 
@@ -74,7 +74,7 @@ foreach ($obsArray as $a => $obs) {
   echo "<p><strong>";
   // debug:
   echo $obs['taxon']['family'] . ": <a href='" . $obs['taxonId'] . "'><em>" . $obs['taxon']['species'] . "</em></a> (" . $obs['taxon']['speciesVernacular'] . ") <a href='" . $obs['obs']['document']['documentId'] . "'>OBS</a></strong><br>\n";
-  echo $obs['obs']['gathering']['displayDateTime'] . "<br>\n";
+  echo $obs['obs']['gathering']['displayDateTime'] . ", Luonnonvaraisuus: " . $obs['obs']['unit']['nativeOccurrence'] . "<br>\n";
   echo $obs['obs']['gathering']['province'] . " " . $obs['obs']['gathering']['municipality'] . " " . $obs['obs']['gathering']['locality'] . "<br>\n";
   echo $obs['obs']['teamString'] . "<br>\n";
   echo "</p>\n\n";
@@ -92,7 +92,7 @@ function getObservationUnit($taxonId) {
 
   $taxonQname = str_replace("http://tun.fi/", "", $taxonId);
 
-  $url = "https://api.laji.fi/v0/warehouse/query/list?selected=document.documentId%2Cunit.unitId%2Cgathering.country%2Cgathering.displayDateTime%2Cgathering.eventDate.begin%2Cgathering.eventDate.end%2Cgathering.locality%2Cgathering.municipality%2Cgathering.province%2Cgathering.team%2Cunit.abundanceString%2Cunit.annotationCount%2Cunit.linkings.originalTaxon.finnish%2Cunit.linkings.originalTaxon.id%2Cunit.linkings.originalTaxon.scientificName&pageSize=2&page=1&cache=false&taxonId=" . $taxonQname . "&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
+  $url = "https://api.laji.fi/v0/warehouse/query/list?selected=unit.nativeOccurrence%2Cdocument.documentId%2Cunit.unitId%2Cgathering.country%2Cgathering.displayDateTime%2Cgathering.eventDate.begin%2Cgathering.eventDate.end%2Cgathering.locality%2Cgathering.municipality%2Cgathering.province%2Cgathering.team%2Cunit.abundanceString%2Cunit.annotationCount%2Cunit.linkings.originalTaxon.finnish%2Cunit.linkings.originalTaxon.id%2Cunit.linkings.originalTaxon.scientificName&pageSize=2&page=1&cache=false&taxonId=" . $taxonQname . "&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&individualCountMin=1&qualityIssues=NO_ISSUES&access_token=" . LAJIFI_TOKEN;
   $obsJson = getDataFromLajifi($url);
   $obsArr = json_decode($obsJson, TRUE);
 
@@ -102,6 +102,10 @@ function getObservationUnit($taxonId) {
 
   // Note: Especially old observations often lack info, e.g. locality names, date or collector.
   // Fill in here if missing
+
+  if (!isset($ret['unit']['nativeOccurrence'])) {
+    $ret['unit']['nativeOccurrence'] = "not selected";
+  }
 
   // Locality names
   if (!isset($ret['gathering']['province'])) {
