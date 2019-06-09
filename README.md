@@ -43,6 +43,9 @@ Oma lajilista
 
 ## Todo
 
+- Mielenkiintoiset, testaa
+  - havainnolla kellonaika
+  - Havainto viime vuodelta, mutta alle 365 päivää sitten
 - top-tilastoja
   - uudet lajit, tunnetutlla ja tuntemattomalla nimellä
   - eniten havaintoja suomesta vaikka ei suomalainen laji

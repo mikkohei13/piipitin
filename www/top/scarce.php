@@ -12,12 +12,10 @@ $taxonQname = "MX.43122"; $title = "Pistiäiset";
 $taxonQname = "MX.229577"; $title = "Luteet";
 $taxonQname = "MX.37580"; $title = "Linnut";
 $taxonQname = "MX.1"; $title = "Sudenkorennot";
+$taxonQname = "MX.37608"; $title = "Selkärankaiset";
 
 */
-$taxonQname = "MX.37580"; $title = "Linnut";
-
-
-
+$taxonQname = "MX.53695"; $title = "Perhoset";
 
 
 echo "<h1>Kerran Suomesta kirjatut: $title</h1><p>Tämä luettelo näyttää lajit, joista on Lajitietokeskuksessa vain yksi havainto Suomesta. <strong>PROTOTYYPPI, päivitetty " . date("d.m.Y") . "</strong></p><hr>";
@@ -31,7 +29,7 @@ $speciesArr = json_decode($speciesJson, TRUE);
 $threshold = 1;
 $limit = 20;
 
-$limit = 10; // debug
+$limit = 100; // debug
 
 $obsArray = Array();
 
@@ -70,14 +68,16 @@ usort($obsArray, function($b, $a) {
 });
   
 // Echo each obs
+$count = 1;
 foreach ($obsArray as $a => $obs) {
-  echo "<p><strong>";
+  echo "<p>$count. <strong>";
   // debug:
   echo $obs['taxon']['family'] . ": <a href='" . $obs['taxonId'] . "'><em>" . $obs['taxon']['species'] . "</em></a> (" . $obs['taxon']['speciesVernacular'] . ") <a href='" . $obs['obs']['document']['documentId'] . "'>OBS</a></strong><br>\n";
   echo $obs['obs']['gathering']['displayDateTime'] . ", Luonnonvaraisuus: " . $obs['obs']['unit']['nativeOccurrence'] . "<br>\n";
   echo $obs['obs']['gathering']['province'] . " " . $obs['obs']['gathering']['municipality'] . " " . $obs['obs']['gathering']['locality'] . "<br>\n";
   echo $obs['obs']['teamString'] . "<br>\n";
   echo "</p>\n\n";
+  $count++;
 }
 
 //print_r ($speciesArr);
@@ -104,7 +104,13 @@ function getObservationUnit($taxonId) {
   // Fill in here if missing
 
   if (!isset($ret['unit']['nativeOccurrence'])) {
-    $ret['unit']['nativeOccurrence'] = "not selected";
+    $ret['unit']['nativeOccurrence'] = "ei tietoa";
+  }
+  elseif (TRUE == $ret['unit']['nativeOccurrence']) {
+    $ret['unit']['nativeOccurrence'] = "luonnonvarainen";
+  }
+  elseif (FALSE == $ret['unit']['nativeOccurrence']) {
+    $ret['unit']['nativeOccurrence'] = "ei-luonnonvarainen";
   }
 
   // Locality names
