@@ -21,9 +21,10 @@ define("DEBUG", false);
 $params = Array();
 
 $params['pageSize'] = 100;
-$params['page'] = 1; // start page
+$params['page'] = 500; // start page
 
-$pageLimit = "10"; // DEBUG
+$pageLimit = 10; // DEBUG
+$pagesHandled = 0;
 
 $morePages = TRUE;
 
@@ -39,13 +40,14 @@ while($morePages) {
         // Last page, stop processing
         $morePages = FALSE;
     }
-    elseif ($dataArr['currentPage'] >= $pageLimit) {
+    elseif ($pagesHandled >= $pageLimit) {
         // Reached limit, stop processing
         $morePages = FALSE;
     }
     else {
         // Get next page
         $params['page']++;
+        $pagesHandled++;
     }
 }
 
