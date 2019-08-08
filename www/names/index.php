@@ -6,6 +6,12 @@ Notes:
 What are names that contain parenthesis? Subgenera? e.g. 
 http://tun.fi/MX.228146
 http://tun.fi/MX.228153
+
+Does this have empty finnish name?
+http://tun.fi/MX.53714
+
+Does this have english name as finnish:
+http://tun.fi/MX.5012927
 */
 
 require_once "../config/env.php";
@@ -15,7 +21,7 @@ define("DEBUG", false);
 $params = Array();
 
 $params['pageSize'] = 100;
-$params['page'] = 1;
+$params['page'] = 1; // start page
 
 $pageLimit = "10"; // DEBUG
 
@@ -47,6 +53,11 @@ function printNames($results) {
     foreach ($results as $nameKey => $nameArr) {
         debugData($nameArr, __LINE__);
 
+        // If no vernacular name, skip
+        if (!isset($nameArr['vernacularName']) || empty($nameArr['vernacularName'])) {
+            continue;
+        }
+
         // Synonyms
         $synonyms = "";
         if (isset($nameArr['synonyms'])) {
@@ -54,11 +65,6 @@ function printNames($results) {
                 $synonyms = $synonyms . "\t" . $synonymArr['scientificName'];
             }
             $synonyms = trim($synonyms);
-        }
-
-        // If no vernacular name, replace with empty
-        if (!isset($nameArr['vernacularName'])) {
-            $nameArr['vernacularName'] = "";
         }
 
         echo "http://tun.fi/" . $nameArr['id'] . "\t" . $nameArr['scientificName'] . "\t" . $nameArr['vernacularName'] . "\t" . $synonyms . "\n";
