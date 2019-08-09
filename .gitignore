@@ -1,7 +1,9 @@
 *-OLD.*
 
-www/data/*
-www/logs/*
+*/data/*
+*/logs/*
+www/names/data/*
+
 
 www/config/env.php
 www/config/php.prod.ini

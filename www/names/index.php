@@ -14,16 +14,19 @@ Does this have english name as finnish:
 http://tun.fi/MX.5012927
 */
 
+// Setup
 require_once "../config/env.php";
 
 define("DEBUG", false);
 
 $params = Array();
+$file = fopen("data/names.txt", "w");
 
-$params['pageSize'] = 100;
-$params['page'] = 500; // start page
+// Go through API pagination
+$params['pageSize'] = 10; // 1000
+$params['page'] = 1; // start page
 
-$pageLimit = 10; // DEBUG
+$pageLimit = 10; // 150
 $pagesHandled = 0;
 
 $morePages = TRUE;
@@ -48,8 +51,12 @@ while($morePages) {
         // Get next page
         $params['page']++;
         $pagesHandled++;
+        echo ($pagesHandled * $params['pageSize']) . " lines handled\n";
     }
 }
+
+fclose($file);
+echo "Finished with >" . ($pagesHandled * $params['pageSize']) . " lines handled\n";
 
 function printNames($results) {
     foreach ($results as $nameKey => $nameArr) {
@@ -57,6 +64,11 @@ function printNames($results) {
 
         // If no vernacular name, skip
         if (!isset($nameArr['vernacularName']) || empty($nameArr['vernacularName'])) {
+            continue;
+        }
+
+        // If no scientific name, skip
+        if (!isset($nameArr['scientificName']) || empty($nameArr['scientificName'])) {
             continue;
         }
 
@@ -69,8 +81,14 @@ function printNames($results) {
             $synonyms = trim($synonyms);
         }
 
-        echo "http://tun.fi/" . $nameArr['id'] . "\t" . $nameArr['scientificName'] . "\t" . $nameArr['vernacularName'] . "\t" . $synonyms . "\n";
+        writeLine("http://tun.fi/" . $nameArr['id'] . "\t" . $nameArr['scientificName'] . "\t" . $nameArr['vernacularName'] . "\t" . $synonyms);
     }
+}
+
+function writeLine($line) {
+    global $file;
+    fwrite($file, $line . "\n");
+    return;
 }
 
 // ------------------------------------------------
