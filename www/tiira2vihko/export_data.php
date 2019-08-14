@@ -27,9 +27,12 @@ function export_data($vihkoRows) {
         @exportCell($row['Havainnoijien nimet ovat julkisia - Yleinen keruutapahtuma']); //  => Kyllä
         @exportCell($row['Havainnon tarkat paikkatiedot ovat julkisia - Havaintoerä']); //  => 10 km
         @exportCell($row['Määrä - Havainto']); //  => 50
+        @exportCell($row['Sukupuoli - Havainto']);
         @exportCell($row['Linnun puku - Havainto']); //  => ad (aikuinen)
         @exportCell($row['Linnun ikä - Havainto']); //  => +1kv (vanhempi kuin 1. kalenterivuosi)
         @exportCell($row['Linnun tila - Havainto']); //  => p, kiert
+        @exportCell($row['Bongattu - Havainto']);
+        @exportCell($row['Pesintä - Havainto']);
         @exportCell($row['Avainsanat - Havaintoerä']); //  => tiira.fi,import,tiira2vihko
         @exportCell($row['Lisätiedot - Keruutapahtuma']); //  => linnun koordinaatit / koordinaattien tarkkuus <500 m / tallentanut Tiiraan: Mikko Heikkinen / tallennettu Tiiraan: 2019-08-13 22:29:16
         @exportCell($row['Kokoelma/Avainsanat - Havainto']); //  => koordinaatit-linnun
@@ -49,7 +52,7 @@ function exportCell($cell) {
 }
 
 function exportHeaderRow() {
-    echo "Laji - Määritys	Muut tunnisteet - Havainto	Alku - Yleinen keruutapahtuma	Loppu - Yleinen keruutapahtuma	Kunta - Keruutapahtuma	Paikannimet - Keruutapahtuma	Koordinaatit@N - Keruutapahtuma	Koordinaatit@E - Keruutapahtuma	Koordinaattien tarkkuus metreinä	Koordinaatit@sys - Keruutapahtuma	Pesimisvarmuusindeksi - Havainto	Havainnoijat - Yleinen keruutapahtuma	Havainnoijien nimet ovat julkisia - Yleinen keruutapahtuma	Havainnon tarkat paikkatiedot ovat julkisia - Havaintoerä	Määrä - Havainto	Linnun puku - Havainto	Linnun ikä - Havainto	Linnun tila - Havainto	Avainsanat - Havaintoerä	Lisätiedot - Keruutapahtuma	Kokoelma/Avainsanat - Havainto	Lisätiedot - Havainto";
+    echo "Laji - Määritys	Muut tunnisteet - Havainto	Alku - Yleinen keruutapahtuma	Loppu - Yleinen keruutapahtuma	Kunta - Keruutapahtuma	Paikannimet - Keruutapahtuma	Koordinaatit@N - Keruutapahtuma	Koordinaatit@E - Keruutapahtuma	Koordinaattien tarkkuus metreinä	Koordinaatit@sys - Keruutapahtuma	Pesimisvarmuusindeksi - Havainto	Havainnoijat - Yleinen keruutapahtuma	Havainnoijien nimet ovat julkisia - Yleinen keruutapahtuma	Havainnon tarkat paikkatiedot ovat julkisia - Havaintoerä	Määrä - Havainto	Sukupuoli - Havainto    Linnun puku - Havainto	Linnun ikä - Havainto	Linnun tila - Havainto  Bongattu - Havainto Pesintä - Havainto	Avainsanat - Havaintoerä	Lisätiedot - Keruutapahtuma	Kokoelma/Avainsanat - Havainto	Lisätiedot - Havainto";
     echo "\n";
     return;
 }
