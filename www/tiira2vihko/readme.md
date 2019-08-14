@@ -28,7 +28,10 @@ tallentaja on vastuussa käyttöehtojen noudattamisesta, eli pitää kysyä lupa
 - muut jotka havainnoijina
 - jos joku muu tallentanut havainnon (hae vain omat tallennukset, jos haluat välttää tämän)
 
+Ei tuettu
+epätarkat päivämäärät, jossa päivä tai kuukausi nolla
 
+------
 
 Schema changes
 Add to MY.birdPlumageEnum:

@@ -5,20 +5,21 @@
 function handleRow($row, $colNames) {
     $vihkoRow = Array();
   
+    $notesGathering = Array();
+    $notesUnit = Array();
+    $keywordsDocument = Array();
+    $keywordsUnit = Array();
+  
     // Build indexed array from associative array
     $rowAssoc = Array();
     foreach ($row as $colNumber => $cell) {
       $rowAssoc[$colNames[$colNumber]] = trim($cell);
     }
   
+    // Skip SUMMA rows, since they duplicate the "real" observations
     if ("SUMMA" == $rowAssoc['rivityyppi']) {
       return FALSE;
     }
-  
-    $notesGathering = Array();
-    $notesUnit = Array();
-    $keywordsDocument = Array();
-    $keywordsUnit = Array();
   
     // Taxon
     $vihkoRow['Laji - Määritys'] = $rowAssoc['Laji'];
@@ -65,6 +66,7 @@ function handleRow($row, $colNames) {
       array_push($notesGathering, "linnun koordinaatit");
       if (empty($rowAssoc['Tarkkuus_linnun'])) {
         array_push($notesGathering, "koordinaattien tarkkuus tuntematon");
+        array_push($keywordsUnit, "coord-accuracy-unknown");
       }
       else {
         array_push($notesGathering, "koordinaattien tarkkuus " . $rowAssoc['Tarkkuus_linnun']);
@@ -83,11 +85,9 @@ function handleRow($row, $colNames) {
         array_push($notesGathering, "koordinaattien tarkkuus " . $rowAssoc['Tarkkuus']);
       }
     }
-    // ABBA
     $vihkoRow['Koordinaatit@sys - Keruutapahtuma'] = "wgs84";
   
     // Notes. (Lisätietoja_2 first, because it's first on the tiira.fi form)
-    // ABBA change this to array push
     array_push($notesUnit, $rowAssoc['Lisätietoja_2']);
     array_push($notesUnit, $rowAssoc['Lisätietoja']);
   
@@ -178,13 +178,33 @@ function handleRow($row, $colNames) {
     // This handles status in different way than Vihko so far by adding direction to moving field
     $vihkoRow['Linnun tila - Havainto'] = $rowAssoc['Tila'];
     
+    // Flock
+    array_push($notesUnit, "parvi " . $rowAssoc['Parvi']);
 
+    // Twitched
+    if ("X" == $rowAssoc['Bongattu']) {
+      $vihkoRow['Bongattu - Havainto'] = "Kyllä"; 
+    }
+
+    // Breeding
+    if ("X" == $rowAssoc['Pesintä']) {
+      $vihkoRow['Pesintä - Havainto'] = "Kyllä"; 
+    }
+
+    // Indirect
+    /*
+//    No field on Tiira UI, not currently used?
+    if ("X" == $rowAssoc['Epäsuora havainto']) {
+//      array_push($notesUnit, "epäsuora havainto");
+      $vihkoRow['Havainnointitapa - Havainto'] = "Epäsuora havainto (jäljet, ulosteet, yms)"; 
+    }
+    */
 
 
     // Keywords
     array_push($keywordsDocument, "tiira.fi");
-    array_push($keywordsDocument, "tiira2vihko");
     array_push($keywordsDocument, "import");
+    array_push($keywordsDocument, "tiira2vihko");
   
 // TODO: remove empty items
     $vihkoRow['Avainsanat - Havaintoerä'] = implode(",", $keywordsDocument);
