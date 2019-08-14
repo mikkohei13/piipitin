@@ -22,3 +22,29 @@ koordinaattien tarkkuus
 <5km  5000
 >5km  10000
 tyhjä   2000
+
+
+tallentaja on vastuussa käyttöehtojen noudattamisesta, eli pitää kysyä lupa muiden nimien tallennukseen
+- muut jotka havainnoijina
+- jos joku muu tallentanut havainnon (hae vain omat tallennukset, jos haluat välttää tämän)
+
+
+
+Schema changes
+Add to MY.birdPlumageEnum:
+MY.birdPlumagePep = pep (peruspuku)
+MY.birdPlumageSs = ss (sulkasatoinen)
+
+Add to MY.birdAgeEnum:
+
+MY.birdAgePlus3kv = +3kv
+MY.birdAge3Kv = 3kv
+...
+MY.birdAgePlus8kv = +8kv
+MY.birdAge8Kv = 8kv
+
+
+Fix typos
+olden -> older
+calender -> calendar
+

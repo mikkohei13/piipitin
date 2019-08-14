@@ -16,6 +16,7 @@ function handleRow($row, $colNames) {
     }
   
     $notesGathering = Array();
+    $notesUnit = Array();
     $keywordsDocument = Array();
     $keywordsUnit = Array();
   
@@ -86,24 +87,19 @@ function handleRow($row, $colNames) {
     $vihkoRow['Koordinaatit@sys - Keruutapahtuma'] = "wgs84";
   
     // Notes. (Lisätietoja_2 first, because it's first on the tiira.fi form)
-    if (!empty($rowAssoc['Lisätietoja']) && !empty($rowAssoc['Lisätietoja_2'])) {
-      $vihkoRow['Lisätiedot - Havainto'] = $rowAssoc['Lisätietoja_2'] . " / " . $rowAssoc['Lisätietoja'];
-    }
-    else {
-      $vihkoRow['Lisätiedot - Havainto'] = $rowAssoc['Lisätietoja_2'] . " " . $rowAssoc['Lisätietoja'];
-      $vihkoRow['Lisätiedot - Havainto'] = trim($vihkoRow['Lisätiedot - Havainto']);
-    }
+    // ABBA change this to array push
+    array_push($notesUnit, $rowAssoc['Lisätietoja_2']);
+    array_push($notesUnit, $rowAssoc['Lisätietoja']);
   
     // Atlas
     $vihkoRow['Pesimisvarmuusindeksi - Havainto'] = $rowAssoc['Atlaskoodi'];
   
     // Metadata
     array_push($notesGathering, "tallentaja: " . $rowAssoc['Tallentaja']);
-    array_push($notesGathering, "tallentaja: " . $rowAssoc['Tallennusaika']);
+    array_push($notesGathering, "tallennusaika: " . $rowAssoc['Tallennusaika']);
   
     // Observers
-  //  $vihkoRow['Havainnoijat - Yleinen keruutapahtuma'] = $rowAssoc['Havainnoijat'];
-    $vihkoRow['Havainnoijat - Yleinen keruutapahtuma'] = ""; // Hidden due to privary requirements TODO: Add importer name
+    $vihkoRow['Havainnoijat - Yleinen keruutapahtuma'] = $rowAssoc['Havainnoijat'];
     $vihkoRow['Havainnoijien nimet ovat julkisia - Yleinen keruutapahtuma'] = "Kyllä";
   
     // Coarsening
@@ -115,8 +111,14 @@ function handleRow($row, $colNames) {
     else {
       $vihkoRow['Havainnon tarkat paikkatiedot ovat julkisia - Havaintoerä'] = "10 km"; 
     }
+
+    /*
+    if (!empty($rowAssoc['Tallenteita'])) {
+        array_push($notesUnit, $rowAssoc['Tallenteita']);
+    }
+    */
   
-    // Unit info
+    // Abundance & sex
     $vihkoRow['Määrä - Havainto'] = $rowAssoc['Määrä'];
     if ("pariutuneet" == $rowAssoc['Sukupuoli']) {
       $vihkoRow['Määrä - Havainto'] .= " pariutuneet";
@@ -129,19 +131,73 @@ function handleRow($row, $colNames) {
       $vihkoRow['Sukupuoli - Havainto'] = "naaras";
     }
 
+    // Plumage
+    $mapPlumage["ad"] = "ad (aikuinen)";
+    $mapPlumage["eijp"] = "eijp (muu kuin juhlapuku)";
+    $mapPlumage["imm"] = "imm (ei-sukukypsä)";
+    $mapPlumage["jp"] = "jp (juhlapuku)";
+    $mapPlumage["juv"] = "juv (1. täydellinen puku)";
+    $mapPlumage["n-puk"] = "n-puk (naaraspukuinen)";
+    $mapPlumage["pull"] = "pull (untuvapoikanen)";
+    $mapPlumage["subad"] = "subad (juv ja ad välinen puku)";
+    $mapPlumage["tp"] = "tp (talvipukuinen)";
+    $mapPlumage["vp"] = "vp (vaihtopukuinen)";
+    $mapPlumage["pep"] = "pep (peruspuku)"; // todo: add
+    $mapPlumage["ss"] = "ss (sulkasatoinen)"; // todo: add
+
+    if (!empty($rowAssoc['Puku'])) {
+        $vihkoRow['Linnun puku - Havainto'] = $mapPlumage[$rowAssoc['Puku']];
+    }
+
+    // Age
+    $mapAge["+1kv"] = "+1kv (vanhempi kuin 1. kalenterivuosi)";
+    $mapAge["1kv"] = "1kv (1. kalenterivuosi)";
+    $mapAge["+2kv"] = "+2kv (vanhempi kuin 2. kalenterivuosi)";
+    $mapAge["2kv"] = "2kv (edellisenä vuonna syntynyt)";
+    $mapAge["+3kv"] = "+3kv";
+    $mapAge["3kv"] = "3kv";
+    $mapAge["+4kv"] = "+4kv";
+    $mapAge["4kv"] = "4kv";
+    $mapAge["+5kv"] = "+5kv";
+    $mapAge["5kv"] = "5kv";
+    $mapAge["+6kv"] = "+6kv";
+    $mapAge["6kv"] = "6kv";
+    $mapAge["+7kv"] = "+7kv";
+    $mapAge["7kv"] = "7kv";
+    $mapAge["+8kv"] = "+8kv";
+    $mapAge["8kv"] = "8kv";
+    $mapAge["fl"] = "fl (täysikasvuinen)";
+    $mapAge["pm"] = "pm (maastopoikanen)";
+    $mapAge["pp"] = "pp (pesäpoikanen";
+
+    if (!empty($rowAssoc['Ikä'])) {
+        $vihkoRow['Linnun ikä - Havainto'] = $mapAge[$rowAssoc['Ikä']];
+    }
+
+    // Moving (status)
+    // This handles status in different way than Vihko so far by adding direction to moving field
+    $vihkoRow['Linnun tila - Havainto'] = $rowAssoc['Tila'];
+    
+
+
+
     // Keywords
     array_push($keywordsDocument, "tiira.fi");
     array_push($keywordsDocument, "tiira2vihko");
     array_push($keywordsDocument, "import");
   
-
-    $vihkoRow['Lisätiedot - Keruutapahtuma'] = implode(" / ", $notesGathering);
+// TODO: remove empty items
     $vihkoRow['Avainsanat - Havaintoerä'] = implode(",", $keywordsDocument);
 
+    if (!empty($notesGathering)) {
+        $vihkoRow['Lisätiedot - Keruutapahtuma'] = implode(" / ", $notesGathering);
+    }
     if (!empty($keywordsUnit)) {
         $vihkoRow['Kokoelma/Avainsanat - Havainto'] = implode(",", $keywordsUnit);
     }
-
+    if (!empty($notesUnit)) {
+        $vihkoRow['Lisätiedot - Havainto'] = implode("/", $notesUnit);
+    }
   
     /*
     $vihkoRow[' - Havainto'] = $rowAssoc[''];
