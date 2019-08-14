@@ -21,4 +21,4 @@ koordinaattien tarkkuus
 1km 1000
 <5km  5000
 >5km  10000
-
+tyhjä   2000
