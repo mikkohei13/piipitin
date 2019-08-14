@@ -1,6 +1,9 @@
 <?php
 
-
+/* TODO:
+  - observer's MA-code (or on laji.fi import?)
+  - remove empty items from arrays
+*/
 
 function handleRow($row, $colNames) {
     $vihkoRow = Array();
@@ -26,6 +29,7 @@ function handleRow($row, $colNames) {
   
     // Id
     $vihkoRow['Muut tunnisteet - Havainto'] = "tiira.fi:" . $rowAssoc['Havainto id'];
+    array_push($notesUnit, "https://www.tiira.fi/selain/naytahavis.php?id=" . $rowAssoc['Havainto id']);
   
     // Date begin and end
     $vihkoRow['Alku - Yleinen keruutapahtuma'] = $rowAssoc['Pvm1'];
@@ -64,9 +68,10 @@ function handleRow($row, $colNames) {
       $vihkoRow['Koordinaatit@E'] = $rowAssoc['X-koord'];
       $vihkoRow['Koordinaattien tarkkuus metreinä'] = coordinateAccuracyToInt($rowAssoc['Tarkkuus_linnun']);
       array_push($notesGathering, "linnun koordinaatit");
+      array_push($keywordsUnit, "koordinaatit-linnun");
       if (empty($rowAssoc['Tarkkuus_linnun'])) {
+        array_push($keywordsUnit, "koordinaatit-tarkkuus-tuntematon");
         array_push($notesGathering, "koordinaattien tarkkuus tuntematon");
-        array_push($keywordsUnit, "coord-accuracy-unknown");
       }
       else {
         array_push($notesGathering, "koordinaattien tarkkuus " . $rowAssoc['Tarkkuus_linnun']);
@@ -78,7 +83,9 @@ function handleRow($row, $colNames) {
       $vihkoRow['Koordinaatit@E'] = $rowAssoc['X-koord'];
       $vihkoRow['Koordinaattien tarkkuus metreinä'] = coordinateAccuracyToInt($rowAssoc['Tarkkuus']);
       array_push($notesGathering, "havainnoijan koordinaatit");
+      array_push($keywordsUnit, "koordinaatit-havainnoijan");
       if (empty($rowAssoc['Tarkkuus'])) {
+        array_push($keywordsUnit, "koordinaatit-tarkkuus-tuntematon");
         array_push($notesGathering, "koordinaattien tarkkuus tuntematon");
       }
       else {
@@ -99,7 +106,7 @@ function handleRow($row, $colNames) {
     array_push($notesGathering, "tallennusaika: " . $rowAssoc['Tallennusaika']);
   
     // Observers
-    $vihkoRow['Havainnoijat - Yleinen keruutapahtuma'] = $rowAssoc['Havainnoijat'];
+    $vihkoRow['Havainnoijat - Yleinen keruutapahtuma'] = str_replace(",", ";", $rowAssoc['Havainnoijat']);
     $vihkoRow['Havainnoijien nimet ovat julkisia - Yleinen keruutapahtuma'] = "Kyllä";
   
     // Coarsening
@@ -179,7 +186,9 @@ function handleRow($row, $colNames) {
     $vihkoRow['Linnun tila - Havainto'] = $rowAssoc['Tila'];
     
     // Flock
-    array_push($notesUnit, "parvi " . $rowAssoc['Parvi']);
+    if (!empty($rowAssoc['Parvi'])) {
+      array_push($notesUnit, "parvi " . $rowAssoc['Parvi']);
+    }
 
     // Twitched
     if ("X" == $rowAssoc['Bongattu']) {
@@ -206,7 +215,8 @@ function handleRow($row, $colNames) {
     array_push($keywordsDocument, "import");
     array_push($keywordsDocument, "tiira2vihko");
   
-// TODO: remove empty items
+// TODO: remove empty items from arrays
+
     $vihkoRow['Avainsanat - Havaintoerä'] = implode(",", $keywordsDocument);
 
     if (!empty($notesGathering)) {
@@ -216,7 +226,7 @@ function handleRow($row, $colNames) {
         $vihkoRow['Kokoelma/Avainsanat - Havainto'] = implode(",", $keywordsUnit);
     }
     if (!empty($notesUnit)) {
-        $vihkoRow['Lisätiedot - Havainto'] = implode("/", $notesUnit);
+        $vihkoRow['Lisätiedot - Havainto'] = implode(" / ", $notesUnit);
     }
   
     /*
