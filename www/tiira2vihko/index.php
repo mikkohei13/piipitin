@@ -28,7 +28,10 @@ if (($handle = fopen($file, "r")) !== FALSE) {
 //      echo "$fieldCount fields\t"; // debug
 
       $vihkoRow = handleRow($row, $colNames);
-      if ($vihkoRow !== NULL) { // todo: better error handling
+      if (isset($vihkoRow['skipped']) && TRUE === $vihkoRow['skipped']) {
+        echo $vihkoRow['row'] . " " . $vihkoRow['skippingReason'] . "\n";
+      }
+      else {
         $vihkoRows[] = $vihkoRow;
       }
     }

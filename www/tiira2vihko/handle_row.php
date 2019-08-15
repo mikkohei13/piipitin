@@ -18,9 +18,12 @@ function handleRow($row, $colNames) {
   
     // Skip SUMMA rows, since they duplicate the "real" observations
     if ("SUMMA" == $rowAssoc['rivityyppi']) {
-      return NULL;
+      return Array('skipped' => TRUE, 'skippingReason' => "sum row", 'row' => $rowAssoc['Havainto id']);
     }
-
+    // Skip if both Y-coords are missing, otherwise expect that full coordinates are set 
+    elseif (empty($rowAssoc['Y-koord']) && empty ($rowAssoc['X-koord-linnun'])) {
+      return Array('skipped' => TRUE, 'skippingReason' => "coordinates missing", 'row' => $rowAssoc['Havainto id']);
+    }
 
     // Taxon
     $vihkoRow['Laji - Määritys'] = $rowAssoc['Laji'];
@@ -116,8 +119,8 @@ function handleRow($row, $colNames) {
     // Coordinates
     // If there is one coordinate about the bird, expect that there are full coordinates
     if (!empty($rowAssoc['X-koord-linnun'])) {
-      $vihkoRow['Koordinaatit@N'] = $rowAssoc['Y-koord'];
-      $vihkoRow['Koordinaatit@E'] = $rowAssoc['X-koord'];
+      $vihkoRow['Koordinaatit@N'] = $rowAssoc['Y-koord-linnun'];
+      $vihkoRow['Koordinaatit@E'] = $rowAssoc['X-koord-linnun'];
       $vihkoRow['Koordinaattien tarkkuus metreinä'] = coordinateAccuracyToInt($rowAssoc['Tarkkuus_linnun']);
       array_push($notesGathering, "linnun koordinaatit");
       array_push($keywordsUnit, "koordinaatit-linnun");
