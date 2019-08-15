@@ -1,6 +1,7 @@
 <pre>
 <?php
 require_once "handle_row.php";
+require_once "export_data.php";
 
 /*
 Tee havainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
@@ -8,12 +9,14 @@ Tee havainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lom
 $file = "data/2019.txt";
 //$file = "data/testihavainnot.txt";
 
+$vihkoRows = Array();
 $rowNumber = 0;
 
 if (($handle = fopen($file, "r")) !== FALSE) {
 
   // Loops through rows
   while (($row = fgetcsv($handle, 0, "#")) !== FALSE) {
+    $vihkoRow = NULL;
 
     // Convert ISO-8859-1 to UTF-8
     $row = array_map("utf8_encode", $row);
@@ -27,7 +30,10 @@ if (($handle = fopen($file, "r")) !== FALSE) {
 //      $fieldCount = count($row);
 //      echo "$fieldCount fields\t"; // debug
 
-      print_r (handleRow($row, $colNames)); // TODO: Check if === false
+      $vihkoRow = handleRow($row, $colNames);
+      if ($vihkoRow !== NULL) {
+        $vihkoRows[] = $vihkoRow;
+      }
 
       // Loops through cells
       /*
@@ -35,13 +41,15 @@ if (($handle = fopen($file, "r")) !== FALSE) {
         echo $colNames[$colNumber] . ":" . $cell . "\t";
       }
       */
-
-      echo "\n"; // debug
     }
 
     $rowNumber++;
   }
   fclose($handle);
+
+  // Do something with the data
+  export_data($vihkoRows);
+
   echo "Finished.";
 }
 else {

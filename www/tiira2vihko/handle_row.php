@@ -21,7 +21,7 @@ function handleRow($row, $colNames) {
   
     // Skip SUMMA rows, since they duplicate the "real" observations
     if ("SUMMA" == $rowAssoc['rivityyppi']) {
-      return FALSE;
+      return NULL;
     }
   
     // Taxon
@@ -102,8 +102,8 @@ function handleRow($row, $colNames) {
     $vihkoRow['Pesimisvarmuusindeksi - Havainto'] = $rowAssoc['Atlaskoodi'];
   
     // Metadata
-    array_push($notesGathering, "tallentaja: " . $rowAssoc['Tallentaja']);
-    array_push($notesGathering, "tallennusaika: " . $rowAssoc['Tallennusaika']);
+    array_push($notesGathering, "tallentanut Tiiraan: " . $rowAssoc['Tallentaja']);
+    array_push($notesGathering, "tallennettu Tiiraan: " . $rowAssoc['Tallennusaika']);
   
     // Observers
     $vihkoRow['Havainnoijat - Yleinen keruutapahtuma'] = str_replace(",", ";", $rowAssoc['Havainnoijat']);
