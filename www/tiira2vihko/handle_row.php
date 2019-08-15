@@ -36,25 +36,31 @@ function handleRow($row, $colNames) {
     $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $rowAssoc['Pvm2'];
   
     // Time begin
-    if (!empty($rowAssoc['Kello_lintu_1'])) {
-      $kello1 = $rowAssoc['Kello_lintu_1'];
-    }
-    elseif (!empty($rowAssoc['Kello_hav_1'])) {
-      $kello1 = $rowAssoc['Kello_hav_1'];
-    }
-    if (isset($kello1)) {
-      $vihkoRow['Alku - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'] . ", " . $kello1;
+    // Kello_lintu -field cannot be used as a timestamp because it does not include date. Except if the whole observation is made during one day we could use the observation date as the bird date also. (todo)
+    if (!empty($rowAssoc['Kello_hav_1'])) {
+      $vihkoRow['Alku - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'] . ", " . $rowAssoc['Kello_hav_1'];
     }
   
     // Time end
+    if (!empty($rowAssoc['Kello_hav_2'])) {
+        // If begin end date is missing, add begin date, because there needs to be an end date if there is an end time. 
+        if (empty($vihkoRow['Loppu - Yleinen keruutapahtuma'])) {
+            $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $rowAssoc['Pvm1'];
+        }
+        $vihkoRow['Loppu - Yleinen keruutapahtuma'] .= ", " . $rowAssoc['Kello_hav_2'];
+    }
+
+    // Bird time
+    $timeBird = "";
+    if (!empty($rowAssoc['Kello_lintu_1'])) {
+        $timeBird = "linnun havaintoaika: " . $rowAssoc['Kello_lintu_1'];
+    }
     if (!empty($rowAssoc['Kello_lintu_2'])) {
-      $kello2 = $rowAssoc['Kello_lintu_2'];
+        $timeBird .= "-" . $rowAssoc['Kello_lintu_2'];
     }
-    elseif (!empty($rowAssoc['Kello_hav_2'])) {
-      $kello2 = $rowAssoc['Kello_hav_2'];
-    }
-    if (isset($kello2)) {
-      $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $vihkoRow['Loppu - Yleinen keruutapahtuma'] . ", " . $kello2;
+    if (!empty($timeBird)) {
+        array_push($notesUnit, $timeBird);
+        array_push($keywordsUnit, "linnulla-aika");
     }
   
     // Locality

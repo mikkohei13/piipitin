@@ -50,7 +50,6 @@ if (($handle = fopen($file, "r")) !== FALSE) {
   // Do something with the data
   export_data($vihkoRows);
 
-  echo "Finished.";
 }
 else {
   echo "Reading file failed.";
@@ -63,7 +62,7 @@ function setColNames($row) {
     $colNames[$i] = $colName;
   }
 
-  print_r ($colNames); // debug
+//  print_r ($colNames); // debug
   return $colNames;
 }
 

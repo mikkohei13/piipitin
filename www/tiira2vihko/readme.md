@@ -1,4 +1,11 @@
 
+
+Todo:
+- päätä avainsanat engl. vs. suomi
+- tarkista tavuviiva sallittu avainsanoissa
+- tarkista että kellonajat oikein
+
+
 Tulkinta
 
 rivityyppi SUMMA jätetään pois
