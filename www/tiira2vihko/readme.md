@@ -4,7 +4,24 @@ Todo:
 - päätä avainsanat engl. vs. suomi
 - tarkista tavuviiva sallittu avainsanoissa
 - tarkista että kellonajat oikein
+- testaa jos tyhjiä kenttiä ei täytetty tiira-exportissa
 
+  TODO:  
+  Not handled:
+  Paikannettu
+
+Aikaformaatti
+2019-08-15T17:32
+
+PV-indeksit
+Ryhmänimet
+
+erotellaanko tila-kentän arvot puolipisteellä vai pilkulla (kuten tässä nyt)?
+
+erotellaanko avainsanat puolipisteellä vai pilkulla?
+
+
+-----
 
 Tulkinta
 
@@ -40,7 +57,28 @@ epätarkat päivämäärät, jossa päivä tai kuukausi nolla
 
 ------
 
+import-parannuksia
+- nappi, jolla voi valita helposti "arvo sellaisenaan". Voi jo nyt: nuoli+enter
+
+Tiedoston datasta ei löytynyt havaintoja, jotka olisi voitu tallentaa. 
+-> 
+Tiedoston havainnoissa on virheitä, jonka vuoksi tietostoa ei voi tallentaa.
+
+
+-----
+
+Taxonomy
+ks tiiran käyttämät termit lajia ylemmille pseudotaksoneille. Mihin laitetaan - aka, alt, obs?
+
 Schema changes
+
+
+Ehdotus: jätetään selitetekstit labeleista poi, jos olemassa lyhenne, jonka käyttö vakiintunut. Ohjeet muualle.
+esim. 
+pesimisvarmuusindeksit
+lintujen iät
+lintujen puvut
+
 Add to MY.birdPlumageEnum:
 MY.birdPlumagePep = pep (peruspuku)
 MY.birdPlumageSs = ss (sulkasatoinen)

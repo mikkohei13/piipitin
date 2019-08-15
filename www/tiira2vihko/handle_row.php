@@ -32,25 +32,25 @@ function handleRow($row, $colNames) {
     array_push($notesUnit, "https://www.tiira.fi/selain/naytahavis.php?id=" . $rowAssoc['Havainto id']);
   
     // Date begin and end
-    $vihkoRow['Alku - Yleinen keruutapahtuma'] = $rowAssoc['Pvm1'];
-    $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $rowAssoc['Pvm2'];
+    $vihkoRow['Alku - Yleinen keruutapahtuma'] = formatDate($rowAssoc['Pvm1']);
+    $vihkoRow['Loppu - Yleinen keruutapahtuma'] = formatDate($rowAssoc['Pvm2']);
   
     // Time begin
-    // Kello_lintu -field cannot be used as a timestamp because it does not include date. Except if the whole observation is made during one day we could use the observation date as the bird date also. (todo)
     if (!empty($rowAssoc['Kello_hav_1'])) {
-      $vihkoRow['Alku - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'] . ", " . $rowAssoc['Kello_hav_1'];
+      $vihkoRow['Alku - Yleinen keruutapahtuma'] .=  formatTime($rowAssoc['Kello_hav_1']);
     }
   
     // Time end
     if (!empty($rowAssoc['Kello_hav_2'])) {
         // If begin end date is missing, add begin date, because there needs to be an end date if there is an end time. 
         if (empty($vihkoRow['Loppu - Yleinen keruutapahtuma'])) {
-            $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $rowAssoc['Pvm1'];
+            $vihkoRow['Loppu - Yleinen keruutapahtuma'] = formatDate($rowAssoc['Pvm1']);
         }
-        $vihkoRow['Loppu - Yleinen keruutapahtuma'] .= ", " . $rowAssoc['Kello_hav_2'];
+        $vihkoRow['Loppu - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_2']);
     }
 
-    // Bird time
+    // Bird time, in notes field
+  // Kello_lintu -field cannot be used as a timestamp because it does not include date. Except if the whole observation is made during one day we could use the observation date as the bird date also. (todo)
     $timeBird = "";
     if (!empty($rowAssoc['Kello_lintu_1'])) {
         $timeBird = "linnun havaintoaika: " . $rowAssoc['Kello_lintu_1'];
@@ -101,15 +101,19 @@ function handleRow($row, $colNames) {
     $vihkoRow['Koordinaatit@sys - Keruutapahtuma'] = "wgs84";
   
     // Notes. (Lisätietoja_2 first, because it's first on the tiira.fi form)
-    array_push($notesUnit, $rowAssoc['Lisätietoja_2']);
-    array_push($notesUnit, $rowAssoc['Lisätietoja']);
+    if (!empty($rowAssoc['Lisätietoja_2'])) {
+      array_push($notesUnit, "havainnon lisätiedot: " . $rowAssoc['Lisätietoja_2']);
+    }
+    if (!empty($rowAssoc['Lisätietoja'])) {
+      array_push($notesUnit, "summahavainnon lisätiedot: " . $rowAssoc['Lisätietoja']);
+    }
   
     // Atlas
     $vihkoRow['Pesimisvarmuusindeksi - Havainto'] = $rowAssoc['Atlaskoodi'];
   
     // Metadata
-    array_push($notesGathering, "tallentanut Tiiraan: " . $rowAssoc['Tallentaja']);
-    array_push($notesGathering, "tallennettu Tiiraan: " . $rowAssoc['Tallennusaika']);
+    array_push($notesUnit, "tallentanut Tiiraan: " . $rowAssoc['Tallentaja']);
+    array_push($notesUnit, "tallennettu Tiiraan: " . $rowAssoc['Tallennusaika']);
   
     // Observers
     $vihkoRow['Havainnoijat - Yleinen keruutapahtuma'] = str_replace(",", ";", $rowAssoc['Havainnoijat']);
@@ -132,7 +136,13 @@ function handleRow($row, $colNames) {
     */
   
     // Abundance & sex
-    $vihkoRow['Määrä - Havainto'] = $rowAssoc['Määrä'];
+    if (!empty($rowAssoc['Määrä'])) {
+      $vihkoRow['Määrä - Havainto'] = $rowAssoc['Määrä'];
+    }
+    else {
+      $vihkoRow['Määrä - Havainto'] = 0;
+    }
+
     if ("pariutuneet" == $rowAssoc['Sukupuoli']) {
       $vihkoRow['Määrä - Havainto'] .= " pariutuneet";
       $vihkoRow['Sukupuoli - Havainto'] = "eri sukupuolia";
@@ -220,44 +230,47 @@ function handleRow($row, $colNames) {
     array_push($keywordsDocument, "tiira.fi");
     array_push($keywordsDocument, "import");
     array_push($keywordsDocument, "tiira2vihko");
-  
-// TODO: remove empty items from arrays
 
     $vihkoRow['Avainsanat - Havaintoerä'] = implode(",", $keywordsDocument);
 
     if (!empty($notesGathering)) {
-        $vihkoRow['Lisätiedot - Keruutapahtuma'] = implode(" / ", $notesGathering);
+//      $notesGathering = array_filter($notesGathering, !empty($value)); // This SHOULD (not tested) remove empty itemsvalues from array, but it's not needed here, because values are not pushed into the array anymore if they do not exists.
+      $vihkoRow['Lisätiedot - Keruutapahtuma'] = implode(" / ", $notesGathering);
     }
     if (!empty($keywordsUnit)) {
-        $vihkoRow['Kokoelma/Avainsanat - Havainto'] = implode(",", $keywordsUnit);
+        $vihkoRow['Kokoelma/Avainsanat - Havainto'] = implode(";", $keywordsUnit);
     }
     if (!empty($notesUnit)) {
         $vihkoRow['Lisätiedot - Havainto'] = implode(" / ", $notesUnit);
     }
-  
-    /*
-    $vihkoRow[' - Havainto'] = $rowAssoc[''];
-    $vihkoRow[' - Havainto'] = $rowAssoc[''];
-    $vihkoRow[' - Havainto'] = $rowAssoc[''];
     
-  */
-  
-    
-  
-  
-  
-  /*
-  TODO:
-  Notes when cood accuracy not known
-  tags: noCoordinateAccuracy
-  
-  Not handled:
-  Paikannettu
-  */
-  
     return $vihkoRow;
   }
-  
+
+/*
+  function isValue($value) {
+    if (empty($value)) { return TRUE; } return FALSE;
+//    { return !is_null($value) && $value !== ''; }
+  }
+*/
+
+  function formatTime($time) {
+    $pieces = explode(":", $time);
+    $timeFormatted = ("T" . $pieces[0] . ":" . $pieces[1]);
+//    echo "F: " . $timeFormatted . "\n"; // debug
+    return $timeFormatted;
+  }
+
+  function formatDate($date) {
+    if (empty($date)) {
+      return "";
+    }
+    $pieces = explode(".", $date);
+    $dateFormatted = $pieces[2] . "-" . $pieces[1] . "-" . $pieces[0];
+//    echo "D: " . $dateFormatted . "\n"; // debug
+    return $dateFormatted;
+  }
+
   function coordinateAccuracyToInt($str) {
   
     switch ($str) {

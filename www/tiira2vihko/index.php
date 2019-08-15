@@ -7,6 +7,7 @@ require_once "export_data.php";
 Tee havainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
 */
 $file = "data/2019.txt";
+$file = "data/kaikki.txt";
 //$file = "data/testihavainnot.txt";
 
 $vihkoRows = Array();

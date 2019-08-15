@@ -1,7 +1,11 @@
 <?php
 
 function export_data($vihkoRows) {
-//    print_r ($vihkoRows); // debug
+    
+    if (isset($_GET['DEBUG'])) {
+        print_r ($vihkoRows);
+        exit("Finished debug");
+    }
 
 // todo: check if this contains all columns
 
