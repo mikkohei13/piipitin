@@ -41,31 +41,49 @@ function handleRow($row, $colNames) {
     /*
     Problem with dates:
     Tiira allows entering conflicting time information, where end time if before start time, or where start time is missing.
-    Therefore it is difficult to reliably create valid datetimes from all possbile combinations of dates and time. 
 
-    Thus we only export times into time field in these cases:
-      A) There are two times, and start time is <= end time.
-      B) There are two times, and two dates which are different. (Tiira does not allow start date after end date) (TODO)
+    What we want to avoid is 
+    A) Missing end date, even though there is end time
+    B) End date+time combination that is before start date+time combination. 
     */
 
     // Time
+
+    // If both times are set
     if (!empty($rowAssoc['Kello_hav_1']) && !empty($rowAssoc['Kello_hav_2'])) {
-        // If end date is missing, add begin date, because there needs to be an end date if there is an end time. 
-        if (empty($vihkoRow['Loppu - Yleinen keruutapahtuma'])) {
-          $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'];
+
+      // Case A) If end date is missing, add begin date, because there needs to be an end date if there is an end time. 
+      if (empty($vihkoRow['Loppu - Yleinen keruutapahtuma'])) {
+        $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'];
       }
 
-    // Case A:
-      if (str_replace(":", "", $rowAssoc['Kello_hav_1']) <= str_replace(":", "", $rowAssoc['Kello_hav_2'])) {
-        $vihkoRow['Alku - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_1']);
-        $vihkoRow['Loppu - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_2']);
+      // Case B)
+      $tentativeStartDatetime = $vihkoRow['Alku - Yleinen keruutapahtuma'] . formatTime($rowAssoc['Kello_hav_1']);
+      $tentativeEndDatetime = $vihkoRow['Loppu - Yleinen keruutapahtuma'] . formatTime($rowAssoc['Kello_hav_2']);
+
+      // Compare that start datetime is before or equal to end datetime
+      if ($tentativeStartDatetime <= $tentativeEndDatetime) {
+        $vihkoRow['Alku - Yleinen keruutapahtuma'] = $tentativeStartDatetime;
+        $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $tentativeEndDatetime;
       }
-      // CASE B:
-      elseif ($vihkoRow['Alku - Yleinen keruutapahtuma'] != $vihkoRow['Loppu - Yleinen keruutapahtuma']) {
-        $vihkoRow['Alku - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_1']);
-        $vihkoRow['Loppu - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_2']);
+      else {
+        // else don't include times, since one of them is incorrect
+        array_push($keywordsUnit, "havainnon-aika-epäselvä");
+        array_push($notesUnit, ("havainnon alkuaika " . $rowAssoc['Kello_hav_1'] . " myöhemmin kuin loppuaika " . $rowAssoc['Kello_hav_2']));
       }
     }
+    // If only start time is set
+    elseif (!empty($rowAssoc['Kello_hav_1'])) {
+      $vihkoRow['Alku - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'] . formatTime($rowAssoc['Kello_hav_1']);
+    }
+    // If only end time is set
+    elseif (!empty($rowAssoc['Kello_hav_2'])) {
+      if (empty($vihkoRow['Loppu - Yleinen keruutapahtuma'])) {
+        $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'];
+      }
+      $vihkoRow['Loppu - Yleinen keruutapahtuma'] . formatTime($rowAssoc['Kello_hav_2']);
+    }
+    // else no dates to handle
   
     /*
     // Time end
