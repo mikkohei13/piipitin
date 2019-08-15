@@ -3,6 +3,8 @@
 function export_data($vihkoRows) {
 //    print_r ($vihkoRows); // debug
 
+// todo: check if this contains all columns
+
     exportHeaderRow();
 
     foreach ($vihkoRows as $rowNumber => $row) {
