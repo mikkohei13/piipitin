@@ -42,9 +42,15 @@ function handleRow($row, $colNames) {
     Problem with dates:
     Tiira allows entering conflicting time information, where end time if before start time, or where start time is missing.
 
+    Here we expect that start time is during start date, and end time is during end date.
+
     What we want to avoid is 
     A) Missing end date, even though there is end time
     B) End date+time combination that is before start date+time combination. 
+
+    TODO:
+    - havainnon päivä ja aika dokumenttiin MUST
+    - linnun aika unittiin SHOULD/NICE
     */
 
     // Time
@@ -52,12 +58,13 @@ function handleRow($row, $colNames) {
     // If both times are set
     if (!empty($rowAssoc['Kello_hav_1']) && !empty($rowAssoc['Kello_hav_2'])) {
 
-      // Case A) If end date is missing, add begin date, because there needs to be an end date if there is an end time. 
+      // Test for case A 
       if (empty($vihkoRow['Loppu - Yleinen keruutapahtuma'])) {
+        // Handle case A by filling in end date
         $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'];
       }
 
-      // Case B)
+      // Test for case B)
       $tentativeStartDatetime = $vihkoRow['Alku - Yleinen keruutapahtuma'] . formatTime($rowAssoc['Kello_hav_1']);
       $tentativeEndDatetime = $vihkoRow['Loppu - Yleinen keruutapahtuma'] . formatTime($rowAssoc['Kello_hav_2']);
 
@@ -67,7 +74,7 @@ function handleRow($row, $colNames) {
         $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $tentativeEndDatetime;
       }
       else {
-        // else don't include times, since one of them is incorrect
+        // Handle case B by not including times, since one of them is incorrect
         array_push($keywordsUnit, "havainnon-aika-epäselvä");
         array_push($notesUnit, ("havainnon alkuaika " . $rowAssoc['Kello_hav_1'] . " myöhemmin kuin loppuaika " . $rowAssoc['Kello_hav_2']));
       }
