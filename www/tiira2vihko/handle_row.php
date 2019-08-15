@@ -123,9 +123,9 @@ function handleRow($row, $colNames) {
       $vihkoRow['Koordinaatit@E'] = $rowAssoc['X-koord-linnun'];
       $vihkoRow['Koordinaattien tarkkuus metreinä'] = coordinateAccuracyToInt($rowAssoc['Tarkkuus_linnun']);
       array_push($notesGathering, "linnun koordinaatit");
-      array_push($keywordsDocument, "koordinaatit-linnun");
+      array_push($keywordsUnit, "koordinaatit-linnun");
       if (empty($rowAssoc['Tarkkuus_linnun'])) {
-        array_push($keywordsDocument, "koordinaatit-tarkkuus-tuntematon");
+        array_push($keywordsUnit, "koordinaatit-tarkkuus-tuntematon");
         array_push($notesGathering, "koordinaattien tarkkuus tuntematon");
       }
       else {
@@ -138,9 +138,9 @@ function handleRow($row, $colNames) {
       $vihkoRow['Koordinaatit@E'] = $rowAssoc['X-koord'];
       $vihkoRow['Koordinaattien tarkkuus metreinä'] = coordinateAccuracyToInt($rowAssoc['Tarkkuus']);
       array_push($notesGathering, "havainnoijan koordinaatit");
-      array_push($keywordsDocument, "koordinaatit-havainnoijan");
+      array_push($keywordsUnit, "koordinaatit-havainnoijan");
       if (empty($rowAssoc['Tarkkuus'])) {
-        array_push($keywordsDocument, "koordinaatit-tarkkuus-tuntematon");
+        array_push($keywordsUnit, "koordinaatit-tarkkuus-tuntematon");
         array_push($notesGathering, "koordinaattien tarkkuus tuntematon");
       }
       else {
