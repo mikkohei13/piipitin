@@ -3,9 +3,6 @@
 require_once "handle_row.php";
 require_once "export_data.php";
 
-/*
-Todo: Tee testihavainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
-*/
 $file = "data/2019.txt";
 //$file = "data/kaikki.txt";
 $file = "data/testihavainnot.txt";

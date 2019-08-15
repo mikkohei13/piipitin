@@ -1,79 +1,75 @@
 
 
-Todo:
+
+Todo
+----
+
+- havainnon päivä ja aika dokumenttiin (tarkista)
+- Better error handling (ks. todo)
+- Tee testihavainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
+- testaa jos tyhjiä kenttiä ei täytetty tiira-exportin asetuksissa
 - päätä avainsanat engl. vs. suomi
 - tarkista tavuviiva sallittu avainsanoissa
-- tarkista että kellonajat oikein
-- testaa jos tyhjiä kenttiä ei täytetty tiira-exportissa
+- Tarkista erotellaanko tila-kentän arvot puolipisteellä vai pilkulla (kuten tässä nyt)?
+- Ryhmänimien (joutsenlaji yms.) mappaus
 
-  TODO:  
-  Not handled:
-  Paikannettu
+Laji.fi muutoksia vaativia:
+- Siirrä linnun aika unit-päivään, kun sellaisen voi importoida
+- PV-indeksin mappaus
+- Iän mappaus
+- Tila suuntakenttään
 
-Aikaformaatti
-2019-08-15T17:32
-
-PV-indeksit
-Ryhmänimet
-
-erotellaanko tila-kentän arvot puolipisteellä vai pilkulla (kuten tässä nyt)?
-
-erotellaanko avainsanat puolipisteellä vai pilkulla?
-
-
------
 
 Tulkinta
+--------
 
-rivityyppi SUMMA jätetään pois
+Käyttäjän vastuulla on että sekä itse havaintojen että muiden havainnoijien nimien tallennukseen on saatu lupa. Henkilönimiä ei poisteta tai salata.
 
-unitin keywordsiin tiira.fi, tiira2laji
+Tiirassa salatut havainnot karkeistetaan 10km tarkkuuteen. Jos tämä ei käyttäjälle riitä, hänen täytyy jättää salaisiksi halutut havainnot pois tallennustiedostosta.
 
-unitin id-kenttään id
+Rivityyppi SUMMA jätetään pois
 
-Jos linnun paikka annettu, käytetään sitä
-Jos ei, käytetään havainnoijan paikkaa
-Gathering remarksiin importoitu tiirasta "havainnoijan paikka" tai "linnun paikka" + ", tarkkuus " tarkkuus originaalina
+Sarakkeita "Päivitetty" ja "Epäsuora havainto" ei huomioida, koska näiden merkitys epäselvä ja vaikuttavat sisältävän aina saman arvon.
 
-koordinaattien tarkkuus
-10m 10
-50m  50
-200m  200
-250m  250
-500m  500
->500m 2000
-1km 1000
-<5km  5000
->5km  10000
-tyhjä   2000
+Jos linnun paikka on annettu, käytetään sitä. Jos ei, käytetään havainnoijan paikkaa. Kumpaa käytetty kirjataan lisätietoihin ja avainsanoihin.
 
+Koordinaattien tarkkuus mapattu metreiksi seuraavasti:
+- Havainnoijan sijainnin tarkkuus
+  - 10m 10
+  - 50m  50
+  - 200m  200
+  - 250m  250
+  - 500m  500
+  - >500m 2000
+- Havainnon sijainnin tarkkuus
+  - 1km 1000
+  - <5km  5000
+  - >5km  10000
+  - tyhjä   2000
 
-tallentaja on vastuussa käyttöehtojen noudattamisesta, eli pitää kysyä lupa muiden nimien tallennukseen
-- muut jotka havainnoijina
-- jos joku muu tallentanut havainnon (hae vain omat tallennukset, jos haluat välttää tämän)
+Alkuperäinen tarkkuus kirjataan lisätietoihin. Jos tarkkuus on tyhjä, kirjataan tämä avainsanaksi,
 
-Ei tuettu
-epätarkat päivämäärät, jossa päivä tai kuukausi nolla
+Epätarkoja päivämääriä ei hyväksitä. Jos päivä tai kuukausi on nolla, on käyttäjän muutettava tämä päivämääräväliksi. (Tiiran ja Laji.fi:n päivämäärälogiikka eroaa tässä: Tiirassa päivämääräväli tarkoittaa että lintu havaittu *koko* merkittynä aikana, Laji.fi:ssa että *joskus* merkittynä aikana.)
+
 
 ------
 
-import-parannuksia
-- nappi, jolla voi valita helposti "arvo sellaisenaan". Voi jo nyt: nuoli+enter
+Laji.fi
 
 Tiedoston datasta ei löytynyt havaintoja, jotka olisi voitu tallentaa. 
 -> 
-Tiedoston havainnoissa on virheitä, jonka vuoksi tietostoa ei voi tallentaa.
-
-
------
+Tiedoston havainnoissa on virheitä, joiden vuoksi tietostoa ei voi tallentaa.
 
 Taxonomy
 ks tiiran käyttämät termit lajia ylemmille pseudotaksoneille. Mihin laitetaan - aka, alt, obs?
 
+
 Schema changes
 
 
-Ehdotus: jätetään selitetekstit labeleista poi, jos olemassa lyhenne, jonka käyttö vakiintunut. Ohjeet muualle.
+Ehdotus: jätetään selitetekstit labeleista pois, jos olemassa lyhenne, jonka käyttö vakiintunut. Ohjeet muualle.
+Vaihtoehto: sallitaan importissa pelkkä arvo, ts. ennen sulkua oleva osa trimmattuna. Tällöin tämän pitää olla uniikki, mutta niihän se onkin, jos suluissa vain ohje/selitys.
+
 esim. 
 pesimisvarmuusindeksit
 lintujen iät

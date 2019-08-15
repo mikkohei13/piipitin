@@ -1,10 +1,5 @@
 <?php
 
-/* TODO:
-  - observer's MA-code (or on laji.fi import?)
-  - remove empty items from arrays
-*/
-
 function handleRow($row, $colNames) {
 //    print_r ($colNames); print_r ($row); return NULL; // debug: prints our raw rows as arrays
     $vihkoRow = Array();
@@ -48,9 +43,6 @@ function handleRow($row, $colNames) {
     A) Missing end date, even though there is end time
     B) End date+time combination that is before start date+time combination. 
 
-    TODO:
-    - havainnon päivä ja aika dokumenttiin MUST
-    - linnun aika unittiin SHOULD/NICE
     */
 
     // Time
@@ -104,8 +96,6 @@ function handleRow($row, $colNames) {
     */
 
     // Bird time, in notes field
-    // Kello_lintu -field cannot be used as a timestamp because it does not include date. 
-    //Except if the whole observation is made during one day we could use the observation date as the bird date also. (todo)
     $timeBird = "";
     if (!empty($rowAssoc['Kello_lintu_1'])) {
         $timeBird = "linnun havaintoaika: " . $rowAssoc['Kello_lintu_1'];
@@ -220,8 +210,8 @@ function handleRow($row, $colNames) {
     $mapPlumage["subad"] = "subad (juv ja ad välinen puku)";
     $mapPlumage["tp"] = "tp (talvipukuinen)";
     $mapPlumage["vp"] = "vp (vaihtopukuinen)";
-    $mapPlumage["pep"] = "pep (peruspuku)"; // todo: add
-    $mapPlumage["ss"] = "ss (sulkasatoinen)"; // todo: add
+    $mapPlumage["pep"] = "pep (peruspuku)"; // todo: add to schema
+    $mapPlumage["ss"] = "ss (sulkasatoinen)"; // todo: add to schema
 
     if (!empty($rowAssoc['Puku'])) {
         $vihkoRow['Linnun puku - Havainto'] = $mapPlumage[$rowAssoc['Puku']];

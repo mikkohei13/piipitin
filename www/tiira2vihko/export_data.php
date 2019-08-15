@@ -9,36 +9,34 @@ function export_data($vihkoRows) {
 
     $fileString = "";
 
-// todo: check if this contains all columns
-
     $fileString .= exportHeaderRow();
 
     foreach ($vihkoRows as $rowNumber => $row) {
-        $fileString .= @exportCell($row['Laji - Määritys']); //  => sepelkyyhky
-        $fileString .= @exportCell($row['Muut tunnisteet - Havainto']); //  => tiira.fi:19988183
-        $fileString .= @exportCell($row['Alku - Yleinen keruutapahtuma']); //  => 08.08.2019, 17:30:00
-        $fileString .= @exportCell($row['Loppu - Yleinen keruutapahtuma']); //  => 09.08.2019, 17:40:00
-        $fileString .= @exportCell($row['Kunta - Keruutapahtuma']); //  => Espoo
-        $fileString .= @exportCell($row['Paikannimet - Keruutapahtuma']); //  => Latokaski
-        $fileString .= @exportCell($row['Koordinaatit@N']); //  => 60.1795
-        $fileString .= @exportCell($row['Koordinaatit@E']); //  => 24.6649
-        $fileString .= @exportCell($row['Koordinaattien tarkkuus metreinä']); //  => 500
-        $fileString .= @exportCell($row['Koordinaatit@sys - Keruutapahtuma']); //  => wgs84
-        $fileString .= @exportCell($row['Pesimisvarmuusindeksi - Havainto']); //  => 2
-        $fileString .= @exportCell($row['Havainnoijat - Yleinen keruutapahtuma']); //  => Mikko Heikkinen; Inka Plit
-        $fileString .= @exportCell($row['Havainnoijien nimet ovat julkisia - Yleinen keruutapahtuma']); //  => Kyllä
-        $fileString .= @exportCell($row['Havainnon tarkat paikkatiedot ovat julkisia - Havaintoerä']); //  => 10 km
-        $fileString .= @exportCell($row['Määrä - Havainto']); //  => 50
+        $fileString .= @exportCell($row['Laji - Määritys']);
+        $fileString .= @exportCell($row['Muut tunnisteet - Havainto']);
+        $fileString .= @exportCell($row['Alku - Yleinen keruutapahtuma']);
+        $fileString .= @exportCell($row['Loppu - Yleinen keruutapahtuma']);
+        $fileString .= @exportCell($row['Kunta - Keruutapahtuma']);
+        $fileString .= @exportCell($row['Paikannimet - Keruutapahtuma']);
+        $fileString .= @exportCell($row['Koordinaatit@N']);
+        $fileString .= @exportCell($row['Koordinaatit@E']);
+        $fileString .= @exportCell($row['Koordinaattien tarkkuus metreinä']);
+        $fileString .= @exportCell($row['Koordinaatit@sys - Keruutapahtuma']);
+        $fileString .= @exportCell($row['Pesimisvarmuusindeksi - Havainto']);
+        $fileString .= @exportCell($row['Havainnoijat - Yleinen keruutapahtuma']);
+        $fileString .= @exportCell($row['Havainnoijien nimet ovat julkisia - Yleinen keruutapahtuma']);
+        $fileString .= @exportCell($row['Havainnon tarkat paikkatiedot ovat julkisia - Havaintoerä']);
+        $fileString .= @exportCell($row['Määrä - Havainto']);
         $fileString .= @exportCell($row['Sukupuoli - Havainto']);
-        $fileString .= @exportCell($row['Linnun puku - Havainto']); //  => ad (aikuinen)
-        $fileString .= @exportCell($row['Linnun ikä - Havainto']); //  => +1kv (vanhempi kuin 1. kalenterivuosi)
-        $fileString .= @exportCell($row['Linnun tila - Havainto']); //  => p, kiert
+        $fileString .= @exportCell($row['Linnun puku - Havainto']);
+        $fileString .= @exportCell($row['Linnun ikä - Havainto']);
+        $fileString .= @exportCell($row['Linnun tila - Havainto']);
         $fileString .= @exportCell($row['Bongattu - Havainto']);
         $fileString .= @exportCell($row['Pesintä - Havainto']);
-        $fileString .= @exportCell($row['Avainsanat - Havaintoerä']); //  => tiira.fi,import,tiira2vihko
-        $fileString .= @exportCell($row['Lisätiedot - Keruutapahtuma']); //  => linnun koordinaatit / koordinaattien tarkkuus <500 m / tallentanut Tiiraan: Mikko Heikkinen / tallennettu Tiiraan: 2019-08-13 22:29:16
-        $fileString .= @exportCell($row['Kokoelma/Avainsanat - Havainto']); //  => koordinaatit-linnun
-        $fileString .= @exportCell($row['Lisätiedot - Havainto']); //  => https://www.tiira.fi/selain/naytahavis.php?id=19988183 / 1a / tuli peltojen suunnasta / parvi 17123
+        $fileString .= @exportCell($row['Avainsanat - Havaintoerä']);
+        $fileString .= @exportCell($row['Lisätiedot - Keruutapahtuma']);
+        $fileString .= @exportCell($row['Kokoelma/Avainsanat - Havainto']);
+        $fileString .= @exportCell($row['Lisätiedot - Havainto']);
 
         $fileString .= "\n";
     }
