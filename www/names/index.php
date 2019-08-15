@@ -23,10 +23,14 @@ $params = Array();
 $file = fopen("data/names.txt", "w");
 
 // Go through API pagination
-$params['pageSize'] = 10; // 1000
+$params['pageSize'] = 1000;
+//$params['pageSize'] = 10; // debug
+
 $params['page'] = 1; // start page
 
-$pageLimit = 10; // 150
+$pageLimit = 150;
+//$pageLimit = 10; // debug
+
 $pagesHandled = 0;
 
 $morePages = TRUE;
@@ -115,7 +119,7 @@ VR:
 https://laji.fi/api/taxa?selectedFields=vernacularName,id,scientificName,synonyms.scientificName&lang=fi
 */
 function buildTaxonQuery($params) {
-    $url = "https://laji.fi/api/taxa?selectedFields=vernacularName,id,scientificName,synonyms.scientificName&lang=fi&pageSize=" . $params['pageSize'] . "&page=" . $params['page'];
+    $url = "https://laji.fi/api/taxa?langFallback=false&selectedFields=vernacularName,id,scientificName,synonyms.scientificName&lang=fi&pageSize=" . $params['pageSize'] . "&page=" . $params['page'];
     debugData($url, __LINE__);
     return $url;
 }
