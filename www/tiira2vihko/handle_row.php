@@ -8,6 +8,7 @@ function handleRow($row, $colNames) {
     $notesUnit = Array();
     $keywordsDocument = Array();
     $keywordsUnit = Array();
+    $identifiersUnit = Array();
   
     // Build indexed array from associative array
     $rowAssoc = Array();
@@ -25,7 +26,7 @@ function handleRow($row, $colNames) {
     $vihkoRow['Laji - Määritys'] = $rowAssoc['Laji'];
   
     // Id
-    $vihkoRow['Muut tunnisteet - Havainto'] = "tiira.fi:" . $rowAssoc['Havainto id'];
+    array_push($identifiersUnit, ("tiira.fi:" . $rowAssoc['Havainto id']));
     array_push($notesUnit, "https://www.tiira.fi/selain/naytahavis.php?id=" . $rowAssoc['Havainto id']);
   
     // Date begin and end
@@ -147,17 +148,17 @@ function handleRow($row, $colNames) {
   
     // Notes. (Lisätietoja_2 first, because it's first on the tiira.fi form)
     if (!empty($rowAssoc['Lisätietoja_2'])) {
-      array_push($notesUnit, "havainnon lisätiedot: " . $rowAssoc['Lisätietoja_2']);
+      array_push($notesUnit, "alihavainnon lisätiedot: " . $rowAssoc['Lisätietoja_2']);
     }
     if (!empty($rowAssoc['Lisätietoja'])) {
-      array_push($notesUnit, "summahavainnon lisätiedot: " . $rowAssoc['Lisätietoja']);
+      array_push($notesUnit, "havainnon lisätiedot: " . $rowAssoc['Lisätietoja']);
     }
   
     // Atlas
     $vihkoRow['Pesimisvarmuusindeksi - Havainto'] = $rowAssoc['Atlaskoodi'];
   
     // Metadata
-    array_push($notesUnit, "tallentanut Tiiraan: " . $rowAssoc['Tallentaja']);
+//    array_push($notesUnit, "tallentanut Tiiraan: " . $rowAssoc['Tallentaja']); // Remove to protect personal data, while allowing to import own observations
     array_push($notesUnit, "tallennettu Tiiraan: " . $rowAssoc['Tallennusaika']);
   
     // Observers
@@ -246,9 +247,10 @@ function handleRow($row, $colNames) {
     // This handles status in different way than Vihko so far by adding direction to moving field
     $vihkoRow['Linnun tila - Havainto'] = $rowAssoc['Tila'];
     
-    // Flock
+    // Flock id (This seems to be unique ID in Tiira, so put it into id field.)
     if (!empty($rowAssoc['Parvi'])) {
-      array_push($notesUnit, "parvi " . $rowAssoc['Parvi']);
+      array_push($identifiersUnit, ("parvi:" . $rowAssoc['Parvi']));
+//      array_push($notesUnit, "parvi " . $rowAssoc['Parvi']);
     }
 
     // Twitched
@@ -272,12 +274,13 @@ function handleRow($row, $colNames) {
     */
 
 
-    // Keywords
-    array_push($keywordsDocument, "tiira.fi");
-    array_push($keywordsDocument, "import");
-    array_push($keywordsDocument, "tiira2vihko");
+    // Keywords for all documents
+    array_push($keywordsDocument, "tiira.fi"); // Source
+    array_push($keywordsDocument, "import"); // Action
+    array_push($keywordsDocument, "tiira2vihko"); // Tool
 
-    $vihkoRow['Avainsanat - Havaintoerä'] = implode(",", $keywordsDocument);
+    $vihkoRow['Avainsanat - Havaintoerä'] = implode(";", $keywordsDocument);
+    $vihkoRow['Muut tunnisteet - Havainto'] = implode(";", $identifiersUnit);
 
     if (!empty($notesGathering)) {
 //      $notesGathering = array_filter($notesGathering, !empty($value)); // This SHOULD (not tested) remove empty itemsvalues from array, but it's not needed here, because values are not pushed into the array anymore if they do not exists.

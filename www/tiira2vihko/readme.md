@@ -4,6 +4,9 @@
 Todo
 ----
 
+- Skippaa koordinaatittomat
+- loggaa skipatut
+- testaa että avainsanat ja tunnisteet tallentuvat eroteltuina
 - havainnon päivä ja aika dokumenttiin (tarkista)
 - Better error handling (ks. todo)
 - Tee testihavainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
@@ -11,7 +14,12 @@ Todo
 - päätä avainsanat engl. vs. suomi
 - tarkista tavuviiva sallittu avainsanoissa
 - Tarkista erotellaanko tila-kentän arvot puolipisteellä vai pilkulla (kuten tässä nyt)?
-- Ryhmänimien (joutsenlaji yms.) mappaus
+- Ryhmänimien (joutsenlaji yms.) mappaus, ml.
+- pieni & iso päiväpetolintu
+- vesilintu
+- HDR
+- pikkulintu
+
 
 Laji.fi muutoksia vaativia:
 - Siirrä linnun aika unit-päivään, kun sellaisen voi importoida
@@ -24,6 +32,8 @@ Tulkinta
 --------
 
 Käyttäjän vastuulla on että sekä itse havaintojen että muiden havainnoijien nimien tallennukseen on saatu lupa. Henkilönimiä ei poisteta tai salata.
+
+Koordinaatittomat havainnot jätetään pois. (Nämä saattavat olla lintuyhdistysten vanhoista arkistoista digitoituja havaintoja.)
 
 Tiirassa salatut havainnot karkeistetaan 10km tarkkuuteen. Jos tämä ei käyttäjälle riitä, hänen täytyy jättää salaisiksi halutut havainnot pois tallennustiedostosta.
 
