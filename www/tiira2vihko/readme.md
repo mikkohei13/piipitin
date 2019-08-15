@@ -4,16 +4,12 @@
 Todo
 ----
 
-- Skippaa koordinaatittomat
-- loggaa skipatut
-- testaa että avainsanat ja tunnisteet tallentuvat eroteltuina
-- havainnon päivä ja aika dokumenttiin (tarkista)
-- Better error handling (ks. todo)
+- Tarkista että salaukset menevät suunnitellusti
+- Mieti kannattaako tiira-linkki tallentaa, voi muuttua tiiran uudistuessa
 - Tee testihavainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
 - testaa jos tyhjiä kenttiä ei täytetty tiira-exportin asetuksissa
 - päätä avainsanat engl. vs. suomi
 - tarkista tavuviiva sallittu avainsanoissa
-- Tarkista erotellaanko tila-kentän arvot puolipisteellä vai pilkulla (kuten tässä nyt)?
 - Ryhmänimien (joutsenlaji yms.) mappaus, ml.
 - pieni & iso päiväpetolintu
 - vesilintu

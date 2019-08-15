@@ -71,7 +71,7 @@ function handleRow($row, $colNames) {
       }
       else {
         // Handle case B by not including times, since one of them is incorrect
-        array_push($keywordsUnit, "havainnon-aika-epäselvä");
+        array_push($keywordsDocument, "havainnon-aika-epäselvä");
         array_push($notesUnit, ("havainnon alkuaika " . $rowAssoc['Kello_hav_1'] . " myöhemmin kuin loppuaika " . $rowAssoc['Kello_hav_2']));
       }
     }
@@ -123,9 +123,9 @@ function handleRow($row, $colNames) {
       $vihkoRow['Koordinaatit@E'] = $rowAssoc['X-koord-linnun'];
       $vihkoRow['Koordinaattien tarkkuus metreinä'] = coordinateAccuracyToInt($rowAssoc['Tarkkuus_linnun']);
       array_push($notesGathering, "linnun koordinaatit");
-      array_push($keywordsUnit, "koordinaatit-linnun");
+      array_push($keywordsDocument, "koordinaatit-linnun");
       if (empty($rowAssoc['Tarkkuus_linnun'])) {
-        array_push($keywordsUnit, "koordinaatit-tarkkuus-tuntematon");
+        array_push($keywordsDocument, "koordinaatit-tarkkuus-tuntematon");
         array_push($notesGathering, "koordinaattien tarkkuus tuntematon");
       }
       else {
@@ -138,9 +138,9 @@ function handleRow($row, $colNames) {
       $vihkoRow['Koordinaatit@E'] = $rowAssoc['X-koord'];
       $vihkoRow['Koordinaattien tarkkuus metreinä'] = coordinateAccuracyToInt($rowAssoc['Tarkkuus']);
       array_push($notesGathering, "havainnoijan koordinaatit");
-      array_push($keywordsUnit, "koordinaatit-havainnoijan");
+      array_push($keywordsDocument, "koordinaatit-havainnoijan");
       if (empty($rowAssoc['Tarkkuus'])) {
-        array_push($keywordsUnit, "koordinaatit-tarkkuus-tuntematon");
+        array_push($keywordsDocument, "koordinaatit-tarkkuus-tuntematon");
         array_push($notesGathering, "koordinaattien tarkkuus tuntematon");
       }
       else {
@@ -247,8 +247,8 @@ function handleRow($row, $colNames) {
     }
 
     // Moving (status)
-    // This handles status in different way than Vihko so far by adding direction to moving field
-    $vihkoRow['Linnun tila - Havainto'] = $rowAssoc['Tila'];
+    // This handles status in different way than Vihko so far, by adding direction to moving field
+    $vihkoRow['Linnun tila - Havainto'] = str_replace(",", ";", $rowAssoc['Tila']);
     
     // Flock id (This seems to be unique ID in Tiira, so put it into id field.)
     if (!empty($rowAssoc['Parvi'])) {

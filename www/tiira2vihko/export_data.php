@@ -41,7 +41,7 @@ function export_data($vihkoRows) {
         $fileString .= "\n";
     }
 
-    $exportFilename = "data/tiira-export-" . date("Hmi") . "-(JX.519).csv";
+    $exportFilename = "data/tiira-export-" . date("His") . "-(JX.519).csv";
     file_put_contents($exportFilename, ("\xEF\xBB\xBF".$fileString)); // Add BOM
 
     echo "exported " . $exportFilename;
