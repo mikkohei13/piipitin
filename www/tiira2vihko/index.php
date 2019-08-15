@@ -4,11 +4,12 @@ require_once "handle_row.php";
 require_once "export_data.php";
 
 /*
-Tee havainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
+Todo: Tee testihavainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
 */
 $file = "data/2019.txt";
 //$file = "data/kaikki.txt";
-//$file = "data/testihavainnot.txt";
+$file = "data/testihavainnot.txt";
+$file = "data/uusi.txt";
 
 $vihkoRows = Array();
 $rowNumber = 0;
@@ -32,16 +33,9 @@ if (($handle = fopen($file, "r")) !== FALSE) {
 //      echo "$fieldCount fields\t"; // debug
 
       $vihkoRow = handleRow($row, $colNames);
-      if ($vihkoRow !== NULL) {
+      if ($vihkoRow !== NULL) { // todo: better error handling
         $vihkoRows[] = $vihkoRow;
       }
-
-      // Loops through cells
-      /*
-      foreach ($row as $colNumber => $cell) {
-        echo $colNames[$colNumber] . ":" . $cell . "\t";
-      }
-      */
     }
 
     $rowNumber++;

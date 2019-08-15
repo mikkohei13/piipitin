@@ -6,6 +6,7 @@
 */
 
 function handleRow($row, $colNames) {
+//    print_r ($colNames); print_r ($row); return NULL; // debug: prints our raw rows as arrays
     $vihkoRow = Array();
   
     $notesGathering = Array();
@@ -23,7 +24,8 @@ function handleRow($row, $colNames) {
     if ("SUMMA" == $rowAssoc['rivityyppi']) {
       return NULL;
     }
-  
+
+
     // Taxon
     $vihkoRow['Laji - Määritys'] = $rowAssoc['Laji'];
   
@@ -35,11 +37,37 @@ function handleRow($row, $colNames) {
     $vihkoRow['Alku - Yleinen keruutapahtuma'] = formatDate($rowAssoc['Pvm1']);
     $vihkoRow['Loppu - Yleinen keruutapahtuma'] = formatDate($rowAssoc['Pvm2']);
   
-    // Time begin
-    if (!empty($rowAssoc['Kello_hav_1'])) {
-      $vihkoRow['Alku - Yleinen keruutapahtuma'] .=  formatTime($rowAssoc['Kello_hav_1']);
+
+    /*
+    Problem with dates:
+    Tiira allows entering conflicting time information, where end time if before start time, or where start time is missing.
+    Therefore it is difficult to reliably create valid datetimes from all possbile combinations of dates and time. 
+
+    Thus we only export times into time field in these cases:
+      A) There are two times, and start time is <= end time.
+      B) There are two times, and two dates which are different. (Tiira does not allow start date after end date) (TODO)
+    */
+
+    // Time
+    if (!empty($rowAssoc['Kello_hav_1']) && !empty($rowAssoc['Kello_hav_2'])) {
+        // If end date is missing, add begin date, because there needs to be an end date if there is an end time. 
+        if (empty($vihkoRow['Loppu - Yleinen keruutapahtuma'])) {
+          $vihkoRow['Loppu - Yleinen keruutapahtuma'] = $vihkoRow['Alku - Yleinen keruutapahtuma'];
+      }
+
+    // Case A:
+      if (str_replace(":", "", $rowAssoc['Kello_hav_1']) <= str_replace(":", "", $rowAssoc['Kello_hav_2'])) {
+        $vihkoRow['Alku - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_1']);
+        $vihkoRow['Loppu - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_2']);
+      }
+      // CASE B:
+      elseif ($vihkoRow['Alku - Yleinen keruutapahtuma'] != $vihkoRow['Loppu - Yleinen keruutapahtuma']) {
+        $vihkoRow['Alku - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_1']);
+        $vihkoRow['Loppu - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_2']);
+      }
     }
   
+    /*
     // Time end
     if (!empty($rowAssoc['Kello_hav_2'])) {
         // If begin end date is missing, add begin date, because there needs to be an end date if there is an end time. 
@@ -48,9 +76,11 @@ function handleRow($row, $colNames) {
         }
         $vihkoRow['Loppu - Yleinen keruutapahtuma'] .= formatTime($rowAssoc['Kello_hav_2']);
     }
+    */
 
     // Bird time, in notes field
-  // Kello_lintu -field cannot be used as a timestamp because it does not include date. Except if the whole observation is made during one day we could use the observation date as the bird date also. (todo)
+    // Kello_lintu -field cannot be used as a timestamp because it does not include date. 
+    //Except if the whole observation is made during one day we could use the observation date as the bird date also. (todo)
     $timeBird = "";
     if (!empty($rowAssoc['Kello_lintu_1'])) {
         $timeBird = "linnun havaintoaika: " . $rowAssoc['Kello_lintu_1'];
@@ -212,6 +242,7 @@ function handleRow($row, $colNames) {
     }
 
     // Breeding
+//    echo "pesinta: " . $rowAssoc['Pesintä']; // debug
     if ("X" == $rowAssoc['Pesintä']) {
       $vihkoRow['Pesintä - Havainto'] = "Kyllä"; 
     }
