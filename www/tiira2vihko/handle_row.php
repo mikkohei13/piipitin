@@ -30,7 +30,7 @@ function handleRow($row, $colNames) {
   
     // Id
     array_push($identifiersUnit, ("tiira.fi:" . $rowAssoc['Havainto id']));
-    array_push($notesUnit, "https://www.tiira.fi/selain/naytahavis.php?id=" . $rowAssoc['Havainto id']);
+//    array_push($notesUnit, "https://www.tiira.fi/selain/naytahavis.php?id=" . $rowAssoc['Havainto id']); // This link may change
   
     // Date begin and end
     $vihkoRow['Alku - Yleinen keruutapahtuma'] = formatDate($rowAssoc['Pvm1']);
@@ -72,7 +72,7 @@ function handleRow($row, $colNames) {
       else {
         // Handle case B by not including times, since one of them is incorrect
         array_push($keywordsDocument, "havainnon-aika-epäselvä");
-        array_push($notesUnit, ("havainnon alkuaika " . $rowAssoc['Kello_hav_1'] . " myöhemmin kuin loppuaika " . $rowAssoc['Kello_hav_2']));
+        array_push($notesGathering, ("havainnon alkuaika " . $rowAssoc['Kello_hav_1'] . " myöhemmin kuin loppuaika " . $rowAssoc['Kello_hav_2']));
       }
     }
     // If only start time is set
@@ -102,12 +102,13 @@ function handleRow($row, $colNames) {
     // Bird time, in notes field
     $timeBird = "";
     if (!empty($rowAssoc['Kello_lintu_1'])) {
-        $timeBird = "linnun havaintoaika: " . $rowAssoc['Kello_lintu_1'];
+        $timeBird = $rowAssoc['Kello_lintu_1'];
     }
     if (!empty($rowAssoc['Kello_lintu_2'])) {
-        $timeBird .= "-" . $rowAssoc['Kello_lintu_2'];
+        $timeBird .= " - " . $rowAssoc['Kello_lintu_2'];
     }
     if (!empty($timeBird)) {
+        $timeBird = "linnun havaintoaika: " . $timeBird;
         array_push($notesUnit, $timeBird);
         array_push($keywordsUnit, "linnulla-aika");
     }
@@ -290,10 +291,10 @@ function handleRow($row, $colNames) {
       $vihkoRow['Lisätiedot - Keruutapahtuma'] = implode(" / ", $notesGathering);
     }
     if (!empty($keywordsUnit)) {
-        $vihkoRow['Kokoelma/Avainsanat - Havainto'] = implode(";", $keywordsUnit);
+      $vihkoRow['Kokoelma/Avainsanat - Havainto'] = implode(";", $keywordsUnit);
     }
     if (!empty($notesUnit)) {
-        $vihkoRow['Lisätiedot - Havainto'] = implode(" / ", $notesUnit);
+      $vihkoRow['Lisätiedot - Havainto'] = implode(" / ", $notesUnit);
     }
     
     return $vihkoRow;

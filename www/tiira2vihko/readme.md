@@ -4,38 +4,35 @@
 Todo
 ----
 
-- Tarkista että salaukset menevät suunnitellusti
-- Mieti kannattaako tiira-linkki tallentaa, voi muuttua tiiran uudistuessa
-- Tee testihavainto kaikilla tiedoilla, erikoismerkeillä ($deg; etc) ja molemmilla lomakkeilla
-- testaa jos tyhjiä kenttiä ei täytetty tiira-exportin asetuksissa
-- päätä avainsanat engl. vs. suomi
-- tarkista tavuviiva sallittu avainsanoissa
 - Ryhmänimien (joutsenlaji yms.) mappaus, ml.
-- pieni & iso päiväpetolintu
-- vesilintu
-- HDR
-- pikkulintu
+  - pieni & iso päiväpetolintu
+  - vesilintu
+  - HDR
+  - pikkulintu
 
 
 Laji.fi muutoksia vaativia:
-- Siirrä linnun aika unit-päivään, kun sellaisen voi importoida
+- Siirrä linnun aika unit-päivään, sitten kun sellaisen voi importoida
 - PV-indeksin mappaus
-- Iän mappaus
-- Tila suuntakenttään
+- Ikäarvot ja iän mappaus
 
 
 Tulkinta
 --------
 
+Tiira-exportissa pitää valita että "tyhjät kentät täytetään", eli kannattaa käyttää oletusasetusta. (Jos tyhjiä ei täytetä, systeemi ohittaa kaikki alihavainnot, koska niissä ei ole koordinaatteja.)
+
 Käyttäjän vastuulla on että sekä itse havaintojen että muiden havainnoijien nimien tallennukseen on saatu lupa. Henkilönimiä ei poisteta tai salata.
+
+Summahavainnot (rivityyppi "SUMMA") jätetään pois.
 
 Koordinaatittomat havainnot jätetään pois. (Nämä saattavat olla lintuyhdistysten vanhoista arkistoista digitoituja havaintoja.)
 
 Tiirassa salatut havainnot karkeistetaan 10km tarkkuuteen. Jos tämä ei käyttäjälle riitä, hänen täytyy jättää salaisiksi halutut havainnot pois tallennustiedostosta.
 
-Rivityyppi SUMMA jätetään pois
-
 Sarakkeita "Päivitetty" ja "Epäsuora havainto" ei huomioida, koska näiden merkitys epäselvä ja vaikuttavat sisältävän aina saman arvon.
+
+Paikkaan liittyvät tiedot kirjataan gatheringiin. Havaintoon ja alihavaintoon (eli kaikkeen paitsi aikaan ja paikkaan) liittyvät tiedot kirjataan unitiin. Näin saman päivän havainnot menevät samaan dokumenttiin ja sen alla samasta paikasta kirjatut samaan gatheringiin. Näin dokumentteja muodostuu mahdollisimman vähän.
 
 Jos linnun paikka on annettu, käytetään sitä. Jos ei, käytetään havainnoijan paikkaa. Kumpaa käytetty kirjataan lisätietoihin ja avainsanoihin.
 
@@ -53,7 +50,7 @@ Koordinaattien tarkkuus mapattu metreiksi seuraavasti:
   - >5km  10000
   - tyhjä   2000
 
-Alkuperäinen tarkkuus kirjataan lisätietoihin. Jos tarkkuus on tyhjä, kirjataan tämä avainsanaksi,
+Alkuperäinen tarkkuus kirjataan gatheringin lisätietoihin. Jos tarkkuus on tyhjä, kirjataan tämä avainsanaksi,
 
 Epätarkoja päivämääriä ei hyväksitä. Jos päivä tai kuukausi on nolla, on käyttäjän muutettava tämä päivämääräväliksi. (Tiiran ja Laji.fi:n päivämäärälogiikka eroaa tässä: Tiirassa päivämääräväli tarkoittaa että lintu havaittu *koko* merkittynä aikana, Laji.fi:ssa että *joskus* merkittynä aikana.)
 

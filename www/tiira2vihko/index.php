@@ -6,6 +6,7 @@ require_once "export_data.php";
 $file = "data/2019.txt";
 $file = "data/havainnot.txt";
 $file = "data/120.txt";
+$file = "data/120eityhjia.txt";
 
 $vihkoRows = Array();
 $rowNumber = 0;
