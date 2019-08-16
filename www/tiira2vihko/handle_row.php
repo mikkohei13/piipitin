@@ -205,47 +205,10 @@ function handleRow($row, $colNames) {
     }
 
     // Plumage
-    $mapPlumage["ad"] = "ad (aikuinen)";
-    $mapPlumage["eijp"] = "eijp (muu kuin juhlapuku)";
-    $mapPlumage["imm"] = "imm (ei-sukukypsä)";
-    $mapPlumage["jp"] = "jp (juhlapuku)";
-    $mapPlumage["juv"] = "juv (1. täydellinen puku)";
-    $mapPlumage["n-puk"] = "n-puk (naaraspukuinen)";
-    $mapPlumage["pull"] = "pull (untuvapoikanen)";
-    $mapPlumage["subad"] = "subad (juv ja ad välinen puku)";
-    $mapPlumage["tp"] = "tp (talvipukuinen)";
-    $mapPlumage["vp"] = "vp (vaihtopukuinen)";
-    $mapPlumage["pep"] = "pep (peruspuku)"; // todo: add to schema
-    $mapPlumage["ss"] = "ss (sulkasatoinen)"; // todo: add to schema
-
-    if (!empty($rowAssoc['Puku'])) {
-        $vihkoRow['Linnun puku - Havainto'] = $mapPlumage[$rowAssoc['Puku']];
-    }
+    $vihkoRow['Linnun puku - Havainto'] = mapPlumage($rowAssoc['Puku']);
 
     // Age
-    $mapAge["+1kv"] = "+1kv (vanhempi kuin 1. kalenterivuosi)";
-    $mapAge["1kv"] = "1kv (1. kalenterivuosi)";
-    $mapAge["+2kv"] = "+2kv (vanhempi kuin 2. kalenterivuosi)";
-    $mapAge["2kv"] = "2kv (edellisenä vuonna syntynyt)";
-    $mapAge["+3kv"] = "+3kv";
-    $mapAge["3kv"] = "3kv";
-    $mapAge["+4kv"] = "+4kv";
-    $mapAge["4kv"] = "4kv";
-    $mapAge["+5kv"] = "+5kv";
-    $mapAge["5kv"] = "5kv";
-    $mapAge["+6kv"] = "+6kv";
-    $mapAge["6kv"] = "6kv";
-    $mapAge["+7kv"] = "+7kv";
-    $mapAge["7kv"] = "7kv";
-    $mapAge["+8kv"] = "+8kv";
-    $mapAge["8kv"] = "8kv";
-    $mapAge["fl"] = "fl (täysikasvuinen)";
-    $mapAge["pm"] = "pm (maastopoikanen)";
-    $mapAge["pp"] = "pp (pesäpoikanen";
-
-    if (!empty($rowAssoc['Ikä'])) {
-        $vihkoRow['Linnun ikä - Havainto'] = $mapAge[$rowAssoc['Ikä']];
-    }
+    $vihkoRow['Linnun ikä - Havainto'] = mapAge($rowAssoc['Ikä']);
 
     // Moving (status)
     // This handles status in different way than Vihko so far, by adding direction to moving field
@@ -306,6 +269,69 @@ function handleRow($row, $colNames) {
 //    { return !is_null($value) && $value !== ''; }
   }
 */
+  function mapAge($tiiraAge) {
+    if (!empty($tiiraAge)) {
+      $mapAge = Array();
+      $mapAge["+1kv"] = "+1kv (vanhempi kuin 1. kalenterivuosi)";
+      $mapAge["1kv"] = "1kv (1. kalenterivuosi)";
+      $mapAge["+2kv"] = "+2kv (vanhempi kuin 2. kalenterivuosi)";
+      $mapAge["2kv"] = "2kv (edellisenä vuonna syntynyt)";
+      $mapAge["+3kv"] = "+3kv";
+      $mapAge["3kv"] = "3kv";
+      $mapAge["+4kv"] = "+4kv";
+      $mapAge["4kv"] = "4kv";
+      $mapAge["+5kv"] = "+5kv";
+      $mapAge["5kv"] = "5kv";
+      $mapAge["+6kv"] = "+6kv";
+      $mapAge["6kv"] = "6kv";
+      $mapAge["+7kv"] = "+7kv";
+      $mapAge["7kv"] = "7kv";
+      $mapAge["+8kv"] = "+8kv";
+      $mapAge["8kv"] = "8kv";
+      $mapAge["fl"] = "fl (täysikasvuinen)";
+      $mapAge["pm"] = "pm (maastopoikanen)";
+      $mapAge["pp"] = "pp (pesäpoikanen)";  
+  
+      if (isset($mapAge[$tiiraAge])) {
+        return "$mapAge[$tiiraAge]";
+      }
+      else {
+        return $tiiraAge;
+      }
+    }
+    else {
+      return "";
+    }
+  }
+
+
+  function mapPlumage($tiiraPlumage) {
+    if (!empty($tiiraPlumage)) {
+
+      $mapPlumage["ad"] = "MY.birdPlumageAd"; // ad (aikuinen)";
+      $mapPlumage["eijp"] = "MY.birdPlumageEijp"; // eijp (muu kuin juhlapuku)";
+      $mapPlumage["imm"] = "MY.birdPlumageImm"; // imm (ei-sukukypsä)";
+      $mapPlumage["jp"] = "MY.birdPlumageJp"; // jp (juhlapuku)";
+      $mapPlumage["juv"] = "MY.birdPlumageJuv"; // juv (1. täydellinen puku)";
+      $mapPlumage["n-puk"] = "MY.birdPlumageNpuk"; // n-puk (naaraspukuinen)";
+      $mapPlumage["pull"] = "MY.birdPlumagePull"; // pull (untuvapoikanen)";
+      $mapPlumage["subad"] = "MY.birdPlumageSubad"; // subad (juv ja ad välinen puku)";
+      $mapPlumage["tp"] = "MY.birdPlumageTp"; // tp (talvipukuinen)";
+      $mapPlumage["vp"] = "MY.birdPlumageVp"; // vp (vaihtopukuinen)";
+      $mapPlumage["pep"] = "MY.birdPlumagePep"; // pep (peruspuku)"; // todo: add to schema
+      $mapPlumage["ss"] = "MY.birdPlumageSs"; // ss (sulkasatoinen)"; // todo: add to schema    
+      
+      if (isset($mapPlumage[$tiiraPlumage])) {
+        return "$mapPlumage[$tiiraPlumage]";
+      }
+      else {
+        return $tiiraPlumage;
+      }
+    }
+    else {
+      return "";
+    }
+  }
 
   function mapAtlasCode($tiiraCode) {
     if (!empty($tiiraCode)) {
