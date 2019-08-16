@@ -159,7 +159,7 @@ function handleRow($row, $colNames) {
     }
   
     // Atlas
-    $vihkoRow['Pesimisvarmuusindeksi - Havainto'] = $rowAssoc['Atlaskoodi'];
+    $vihkoRow['Pesimisvarmuusindeksi - Havainto'] = mapAtlasCode($rowAssoc['Atlaskoodi']);
   
     // Metadata
 //    array_push($notesUnit, "tallentanut Tiiraan: " . $rowAssoc['Tallentaja']); // Remove to protect personal data, while allowing to import own observations
@@ -306,6 +306,15 @@ function handleRow($row, $colNames) {
 //    { return !is_null($value) && $value !== ''; }
   }
 */
+
+  function mapAtlasCode($tiiraCode) {
+    if (!empty($tiiraCode)) {
+      return ("MY.atlasCodeEnum" . $tiiraCode);
+    }
+    else {
+      return "";
+    }
+  }
 
   function formatTime($time) {
     $pieces = explode(":", $time);
