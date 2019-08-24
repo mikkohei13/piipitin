@@ -25,13 +25,26 @@ print_r ($_FILES);
 
 $fileString = checkFileSecurity($_FILES);
 
-if (FALSE !== $fileString) {
-
-  // Handle file
-
-  echo $fileString;
+if (FALSE === $fileString) {
+  exit("<!--File did not pass validation-->");
 }
 
+if (FALSE === isTiiraFile(substr($fileString, 0, 50))) {
+  exit("Tiedosto ei ole Tiira-muodossa.");
+}
+
+// Handle file
+echo $fileString;
+
+
+function isTiiraFile($fileString) {
+  if (substr($fileString, 0, 50) == "Havainto id#Laji#Pvm1#Pvm2#Kello_hav_1#Kello_hav_2") {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
 
 /*
 Input: $_FILES
@@ -41,7 +54,7 @@ Returns:
 */
 function checkFileSecurity($filesArray) {
 
-  $fileSizeLimit = 10000000;
+  $fileSizeLimit = 10000000; // 10 MB
 
   try {
       
