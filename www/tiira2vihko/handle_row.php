@@ -308,18 +308,18 @@ function handleRow($row, $colNames) {
   function mapPlumage($tiiraPlumage) {
     if (!empty($tiiraPlumage)) {
 
-      $mapPlumage["ad"] = "MY.birdPlumageAd"; // ad (aikuinen)";
-      $mapPlumage["eijp"] = "MY.birdPlumageEijp"; // eijp (muu kuin juhlapuku)";
-      $mapPlumage["imm"] = "MY.birdPlumageImm"; // imm (ei-sukukypsä)";
-      $mapPlumage["jp"] = "MY.birdPlumageJp"; // jp (juhlapuku)";
-      $mapPlumage["juv"] = "MY.birdPlumageJuv"; // juv (1. täydellinen puku)";
-      $mapPlumage["n-puk"] = "MY.birdPlumageNpuk"; // n-puk (naaraspukuinen)";
-      $mapPlumage["pull"] = "MY.birdPlumagePull"; // pull (untuvapoikanen)";
-      $mapPlumage["subad"] = "MY.birdPlumageSubad"; // subad (juv ja ad välinen puku)";
-      $mapPlumage["tp"] = "MY.birdPlumageTp"; // tp (talvipukuinen)";
-      $mapPlumage["vp"] = "MY.birdPlumageVp"; // vp (vaihtopukuinen)";
-      $mapPlumage["pep"] = "MY.birdPlumagePep"; // pep (peruspuku)"; // todo: add to schema
-      $mapPlumage["ss"] = "MY.birdPlumageSs"; // ss (sulkasatoinen)"; // todo: add to schema    
+      $mapPlumage["ad"] = "MY.birdPlumageAd"; 
+      $mapPlumage["eijp"] = "MY.birdPlumageEijp"; 
+      $mapPlumage["imm"] = "MY.birdPlumageImm"; 
+      $mapPlumage["jp"] = "MY.birdPlumageJp"; 
+      $mapPlumage["juv"] = "MY.birdPlumageJuv"; 
+      $mapPlumage["n-puk"] = "MY.birdPlumageNpuk"; 
+      $mapPlumage["pull"] = "MY.birdPlumagePull"; 
+      $mapPlumage["subad"] = "MY.birdPlumageSubad"; 
+      $mapPlumage["tp"] = "MY.birdPlumageTp"; 
+      $mapPlumage["vp"] = "MY.birdPlumageVp"; 
+      $mapPlumage["pep"] = "MY.birdPlumagePep"; 
+      $mapPlumage["ss"] = "MY.birdPlumageSs"; 
       
       if (isset($mapPlumage[$tiiraPlumage])) {
         return "$mapPlumage[$tiiraPlumage]";
