@@ -1,6 +1,4 @@
 <?php
-header('Content-Type: text/plain; charset=utf-8');
-
 /*
 Array
 (
@@ -16,11 +14,16 @@ Array
 )
 */
 
-echo "<pre>";
+//require_once "conversion.php";
+require_once "handle_row.php";
+require_once "export_data.php";
 
-print_r ($_FILES);
 
-// TODO: Check that conforms to Tiira format. Separate function for this.
+if (debug()) {
+  echo "<pre>";
+  print_r ($_FILES);
+}
+
 // TODO: handle empty file
 
 $fileString = checkFileSecurity($_FILES);
@@ -34,7 +37,97 @@ if (FALSE === isTiiraFile(substr($fileString, 0, 50))) {
 }
 
 // Handle file
-echo $fileString;
+$vihkoRows = Array();
+//$rowNumber = 0;
+$skippedRowCount = 0;
+$exportedRowCount = 0;
+$skippedRowMessages = "";
+
+$fileArr = explode("\n", $fileString); // Todo: check how line endings are handled
+
+
+// Loops through rows
+foreach ($fileArr as $rowNumber => $rowString) {
+  $vihkoRow = NULL;
+  $row = explode("#", $rowString); // Each cell/column in its own array item
+
+  // Convert ISO-8859-1 to UTF-8
+  $row = array_map("utf8_encode", $row);
+
+  // Header row
+  if (0 == $rowNumber) {
+    $colNames = $row;
+  }
+  // Last empty row
+  elseif (1 == count($row)) {
+    // Do nothing
+  }
+  // Data row
+  else {
+//      $fieldCount = count($row);
+//      echo "$fieldCount fields\t"; // debug
+
+    $vihkoRow = handleRow($row, $colNames);
+
+    if (isset($vihkoRow['skipped']) && TRUE === $vihkoRow['skipped']) {
+      $skippedRowMessages .= $vihkoRow['row'] . " " . $vihkoRow['skippingReason'] . "\n";
+      $skippedRowCount++;
+    }
+    else {
+      $vihkoRows[] = $vihkoRow;
+      $exportedRowCount++;
+    }
+  }
+
+//  $rowNumber++;
+}
+
+$vihkoFilename = export_data($vihkoRows); // Saves to a file
+$vihkoString = file_get_contents($vihkoFilename); // Reads the file
+
+if (debug()) {
+  echo "\n" . $vihkoString;
+}
+else {
+  sendStringToBrowser($vihkoString, "vihko-import-(JX.519).csv"); // Sends to browser
+}
+
+
+
+
+//---------------------------------------------------------------------
+// FUNCTIONS
+
+/*
+function setColNames($row) {
+  $colNames = Array();
+
+  foreach ($row as $i => $colName) {
+    $colNames[$i] = $colName;
+  }
+
+//  print_r ($colNames); // debug
+  return $colNames;
+}
+*/
+
+function sendStringToBrowser($content, $filename) {
+  // https://stackoverflow.com/questions/10835628/how-to-send-a-string-as-file-to-the-browser-using-php
+
+  $length = strlen($content);
+
+  header('Content-Description: File Transfer');
+  header('Content-Type: text/plain; charset=utf-8');
+  header('Content-Disposition: attachment; filename=' . $filename);
+  header('Content-Transfer-Encoding: binary');
+  header('Content-Length: ' . $length);
+  header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+  header('Expires: 0');
+  header('Pragma: public');
+
+  echo $content;
+  return TRUE;
+}
 
 
 function isTiiraFile($fileString) {
@@ -112,8 +205,7 @@ function checkFileSecurity($filesArray) {
       }
       */
 
-      print_r ($filesArray);
-      return file_get_contents($filesArray['file']['tmp_name']); // ABBA miksi tämä ei toimi????? Palauttaa tyhjän tjsp.
+      return file_get_contents($filesArray['file']['tmp_name']);
   }
   catch (RuntimeException $e) {
       echo $e->getMessage();
@@ -121,3 +213,11 @@ function checkFileSecurity($filesArray) {
   }
 }
 
+function debug() {
+  if (isset($_GET['DEBUG'])) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}

@@ -1,9 +1,15 @@
+<?php
+$action = "test.php";
+if (isset($_GET['DEBUG'])) {
+  $action = $action . "?DEBUG";
+}
+?>
 <html>
   <head>
     <title>Muunna Tiira-havaintotaulukko Vihko-muotoon</title>
   </head>
   <body>
-  <form action="test.php" method="post" enctype="multipart/form-data">
+  <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
       Muunnettava Tiira-tiedosto:
       <input type="file" value="Valitse tiedosto" name="file" id="file">
       <p>
