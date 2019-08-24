@@ -82,8 +82,14 @@ foreach ($fileArr as $rowNumber => $rowString) {
 //  $rowNumber++;
 }
 
+// Option 1) Receive string
+$vihkoString = export_data($vihkoRows);
+
+/*
+// Option 2) Receive filename
 $vihkoFilename = export_data($vihkoRows); // Saves to a file
 $vihkoString = file_get_contents($vihkoFilename); // Reads the file
+*/
 
 if (debug()) {
   echo "\n" . $vihkoString;

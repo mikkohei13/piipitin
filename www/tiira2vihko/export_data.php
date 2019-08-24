@@ -41,10 +41,17 @@ function export_data($vihkoRows) {
         $fileString .= "\n";
     }
 
+    // Todo: Add BOM here
+
+    // Option 1) Return string
+    return ("\xEF\xBB\xBF".$fileString);
+/*
+    // Option 2) Save to file, return filename
     $exportFilename = "data/tiira-export-" . date("His") . "-(JX.519).csv";
     file_put_contents($exportFilename, ("\xEF\xBB\xBF".$fileString)); // Add BOM
 
     return $exportFilename;
+*/
 }
 
 function exportCell($cell) {

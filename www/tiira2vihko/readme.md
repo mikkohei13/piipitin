@@ -3,7 +3,9 @@
 
 Todo
 ----
-
+- Automated testing?
+- Refactor filenames, function organization, varibale names
+- Älä tallenna levylle
 - Ryhmänimien (joutsenlaji yms.) mappaus, ml.
   - pieni & iso päiväpetolintu
   - vesilintu
@@ -13,8 +15,7 @@ Todo
 
 Laji.fi muutoksia vaativia:
 - Siirrä linnun aika unit-päivään, sitten kun sellaisen voi importoida
-- PV-indeksin mappaus
-- Ikäarvot ja iän mappaus
+- Uudet ikäarvot
 
 
 Tulkinta
