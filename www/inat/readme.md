@@ -228,17 +228,63 @@ num_identification_agreements
 num_identification_disagreements
 captive_cultivated
 
+## Pushing logic
 
-## Translations to fix
+FRESH PUSH
+- Fetch obs from API, with params (Finland, CC-licensed, wild) and sorted by id ascending
+- Foreach obs
+  - Calculate hash
+  - Convert to DW format
+  - Push to DW
+  - Push to db (id, hash, timestamp), making an insert or update as needed
 
-harrastelija
-mies
-nainen
-alaosasto - tarkista taxon rankit
-...käyttää muilla verkko...
-NN suositteli käyttäjän sinä an havainto:ta
-NN lisäsi määrittäjä
-NN lisäsi suositusn
-Käykäämme läpi tämän sivuston pääpiirteet.
-NN lisäsi määrittäjä kohteeseen an havainto, jonka luonut sinä
-kukinta | fruiting | orastava
+DAILY UPDATE
+- Fetch obs updated since update timg read from file
+- Foreach obs as above
+- Save update time to file
+
+MONTHLY UPDATE
+* This can be run monthly or as needed
+* Purpose is to handle:
+  * Deletions
+  * Changed licenses
+  * Changed quality_metrics
+
+- Fetch obs from API
+- Foreach obs
+  - Calculate hash
+  - Check if hash found in db
+    - If found, do nothing, since DW is up to date
+    - If not found
+      - Convert to DW format
+      - Push to DW
+  - Push to db (monthlyUpdate = 1), to mark that has been handled
+
+MONTHLY DELETION
+- Foreach in database
+- If monthlyUpdate != 1
+  - Delete from DW
+  - Delete from database (to prevent unneeded deletions later)
+- Set monthlyupdate = NULL for all (so that they will be checked for deletion next time)
+
+
+How to handle problems during the process?
+
+FRESH
+- If fails, stop the process
+- Restart manually, by giving the largest pushed id (this can be found rom the database), or simply by restarting the process
+
+DAILY
+- If fails, stop the process, without saving the updated time to file
+- Next day, start over, thus handling n+1 days. This means that some of the observations will be updated twice, but this is unavoidable, since we cannot sort API results by modified date.
+
+MONTHLY UPDATE
+- If fails, stop the process
+- Restart manually, from the beginning. We cannot start from the last pushed id, sincebecause then we would skip earlier id's, even if they have been updated.
+
+MONTHLY DELETION
+- If fails, stop the process
+- Restart manually, from the beginning
+
+
+
