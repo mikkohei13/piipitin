@@ -3,9 +3,10 @@
 
 Todo
 ----
+
+- Logging (time, ip, number of rows exported, input filename)
 - Automated testing?
 - Refactor filenames, function organization, varibale names
-- Älä tallenna levylle
 - Ryhmänimien (joutsenlaji yms.) mappaus, ml.
   - pieni & iso päiväpetolintu
   - vesilintu
