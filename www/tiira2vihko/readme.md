@@ -1,8 +1,7 @@
 
 
 
-Todo
-----
+# Todo
 
 - Logging (time, ip, number of rows exported, input filename)
 - Automated testing?
@@ -19,8 +18,7 @@ Laji.fi muutoksia vaativia:
 - Uudet ikäarvot
 
 
-Tulkinta
---------
+# Tulkinta
 
 Tiira-exportissa pitää valita että "tyhjät kentät täytetään", eli kannattaa käyttää oletusasetusta. (Jos tyhjiä ei täytetä, systeemi ohittaa kaikki alihavainnot, koska niissä ei ole koordinaatteja.)
 
@@ -30,7 +28,7 @@ Summahavainnot (rivityyppi "SUMMA") jätetään pois.
 
 Koordinaatittomat havainnot jätetään pois. (Nämä saattavat olla lintuyhdistysten vanhoista arkistoista digitoituja havaintoja.)
 
-Tiirassa salatut havainnot karkeistetaan 10km tarkkuuteen. Jos tämä ei käyttäjälle riitä, hänen täytyy jättää salaisiksi halutut havainnot pois tallennustiedostosta.
+Havainnot, jotka on salattu Tiirassa, karkeistetaan 10km tarkkuuteen. Jos tämä ei käyttäjälle riitä, hänen täytyy jättää salaisiksi halutut havainnot pois tallennustiedostosta.
 
 Sarakkeita "Päivitetty" ja "Epäsuora havainto" ei huomioida, koska näiden merkitys epäselvä ja vaikuttavat sisältävän aina saman arvon.
 
@@ -54,12 +52,10 @@ Koordinaattien tarkkuus mapattu metreiksi seuraavasti:
 
 Alkuperäinen tarkkuus kirjataan gatheringin lisätietoihin. Jos tarkkuus on tyhjä, kirjataan tämä avainsanaksi,
 
-Epätarkoja päivämääriä ei hyväksitä. Jos päivä tai kuukausi on nolla, on käyttäjän muutettava tämä päivämääräväliksi. (Tiiran ja Laji.fi:n päivämäärälogiikka eroaa tässä: Tiirassa päivämääräväli tarkoittaa että lintu havaittu *koko* merkittynä aikana, Laji.fi:ssa että *joskus* merkittynä aikana.)
+Epätarkoja päivämääriä ei hyväksytä. Jos päivä tai kuukausi on nolla, on käyttäjän muutettava tämä päivämääräväliksi. (Tiiran ja Laji.fi:n päivämäärälogiikka eroaa tässä: Tiirassa päivämääräväli tarkoittaa että lintu havaittu *koko* merkittynä aikana, Laji.fi:ssa että *joskus* merkittynä aikana.)
 
 
-------
-
-Laji.fi
+# Laji.fi parannusajatuksia
 
 Tiedoston datasta ei löytynyt havaintoja, jotka olisi voitu tallentaa. 
 -> 
