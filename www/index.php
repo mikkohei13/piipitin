@@ -1,6 +1,6 @@
-<pre>
 <?php
 /*
+<pre>
 Terms:
 - document: document-level data from api
 - gathering: gathering-level data from api

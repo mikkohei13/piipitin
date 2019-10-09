@@ -45,7 +45,6 @@ function buildListQuery($countryIdQname = "") {
         "gathering.municipality",
         "gathering.team",
         "unit.linkings.taxon.id",
-        "unit.linkings.taxon.qname",
         "unit.linkings.taxon.finnish",
         "unit.linkings.taxon.scientificName",
         "unit.linkings.taxon.vernacularName",

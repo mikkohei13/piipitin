@@ -4,7 +4,7 @@ Tools for sending data from FinBIF systems to mobile devices
 ## Setup
 
 - `git clone https://github.com/mikkohei13/piipitin.git`
-- Set up credentials to env/.env
+- Set up credentials to www/config/env.php
 - `docker-compose up --build`
 
 ## Usage examples
