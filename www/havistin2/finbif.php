@@ -23,7 +23,7 @@ class finbif
 
     $dataArr = $this->getPages($url, 1, 10);
     if (FALSE !== $dataArr) {
-      print_r($dataArr);
+      return $dataArr;
     }
     else {
       echo "Error getting data form API, please check your request.";
@@ -31,11 +31,48 @@ class finbif
     
   }
 
+  // Returns string
+  public function personName($personId) {
+
+    // If not person id
+    // Move to somewhere?
+    if (0 !== strpos($personId, "MA.")) {
+      return $personId;
+    }
+
+    $url = "https://api.laji.fi/v0/person/by-id/" . $personId . "?&access_token=" . $this->apiToken;
+    $responseArr = $this->getFromApi($url, "person-" . $personId);
+    $name = $responseArr['fullName'];
+    return $name;
+  }
+
+  // Returns array
+  public function taxon($taxonId) {
+
+    $url = "https://api.laji.fi/v0/taxa/" . $taxonId . "?lang=fi&langFallback=true&maxLevel=0&selectedFields=scientificName%2CscientificNameAuthorship%2CtaxonRank%2CvernacularName%2CtaxonomicOrder%2CredListStatusesInFinland%2Cparent&includeHidden=false&includeMedia=false&includeDescriptions=false&includeRedListEvaluations=false&sortOrder=taxonomic&access_token=" . $this->apiToken;
+
+    $arr = $this->getFromApi($url, "taxon-" . $taxonId);
+
+    // 2019 red list status
+    foreach ($arr['redListStatusesInFinland'] as $nro => $list) {
+      if (2019 === $list['year']) {
+        $arr['redList2019'] = str_replace("MX.iucn", "", $list['status']);
+        break;
+      }
+    }
+
+    return $arr;
+  }
+
+  // Generic functions
+
   private function getPages($baseUrl, $firstPage, $pageSize) {
     $page = $firstPage;
     $dataArr = Array();
 
-    while ($page < 1000) {
+    $pagesLimit = 1; // debug
+
+    while ($page <= $pagesLimit) {
       log2("NOTICE", "Handling page $page", "logs/havistin.log");
 
       $pagedUrl = $baseUrl . "&pageSize=$pageSize&page=$page";
@@ -54,19 +91,39 @@ class finbif
     return $dataArr;
   }
 
-  private function getFromApi($url) {
-    log2("NOTICE", "GET $url", "logs/havistin.log");
+  private function getFromApi($url, $cache = FALSE) {
+    // No-cache
+    if (FALSE == $cache) {
+//      log2("D", "No-cache: $url", "logs/havistin.log");
 
-    $response = file_get_contents($url);
-      if (FALSE == $response) {
+      $response = file_get_contents($url);
+    }
+    // Cache
+    // Use $cache as a base for hashed filename
+    else {
+      $cacheFilename = "logs/" . sha1($cache) . ".json"; // todo: cache folder
+
+      if (file_exists($cacheFilename)) { // && file age not above limit
+//        log2("D", "Read from cache $cache, url: $url", "logs/havistin.log");
+  
+        $response = file_get_contents($cacheFilename);
+      }
+      else {
+//        log2("D", "Write to cache $cache, url: $url", "logs/havistin.log");
+  
+        $response = file_get_contents($url);
+        file_put_contents($cacheFilename, $response);
+      }
+    }
+
+    if (FALSE == $response) {
+      log2("ERROR", "Error getting data from API or cache", "logs/havistin.log");
       return FALSE;
     }
-    else {
-      $arr = json_decode($response, TRUE);
-      return $arr;
-    }
 
-  }
+    $arr = json_decode($response, TRUE);
+    return $arr;
+}
 
   public function test() {
     $url = "https://api.laji.fi/v0/person/" . $this->personToken . "/profile?access_token=" . $this->apiToken;
