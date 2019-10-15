@@ -54,11 +54,19 @@ class finbif
     $arr = $this->getFromApi($url, "taxon-" . $taxonId);
 
     // 2019 red list status
-    foreach ($arr['redListStatusesInFinland'] as $nro => $list) {
-      if (2019 === $list['year']) {
-        $arr['redList2019'] = str_replace("MX.iucn", "", $list['status']);
-        break;
+    if ("MX.species" == $arr['taxonRank'] && isset($arr['redListStatusesInFinland'])) {
+      foreach ($arr['redListStatusesInFinland'] as $nro => $list) {
+        if (2019 === $list['year']) {
+          $arr['redList2019'] = str_replace("MX.iucn", "", $list['status']);
+          break;
+        }
+        else {
+          $arr['redList2019'] = "Not included in 2019";
+        }
       }
+    }
+    else {
+      $arr['redList2019'] = "";
     }
 
     return $arr;
@@ -70,7 +78,8 @@ class finbif
     $page = $firstPage;
     $dataArr = Array();
 
-    $pagesLimit = 1; // debug
+    $pagesLimit = 250; // debug
+    $sleepSecondsBetweenPages = 3;
 
     while ($page <= $pagesLimit) {
       log2("NOTICE", "Handling page $page", "logs/havistin.log");
@@ -79,14 +88,17 @@ class finbif
       $responseArr = $this->getFromApi($pagedUrl);
       $dataArr = array_merge($dataArr, $responseArr['results']);
 
+      $page++;
+
       // Last page
       if (0 == $responseArr['total'] || $responseArr['currentPage'] >= $responseArr['lastPage']) {
         break;
       }
 
-      $page++;
+      sleep($sleepSecondsBetweenPages);
     }
-    log2("NOTICE", "Last page was $page", "logs/havistin.log");
+
+    log2("NOTICE", "Last page was " . ($page-1), "logs/havistin.log");
 
     return $dataArr;
   }
@@ -94,7 +106,7 @@ class finbif
   private function getFromApi($url, $cache = FALSE) {
     // No-cache
     if (FALSE == $cache) {
-//      log2("D", "No-cache: $url", "logs/havistin.log");
+      log2("D", "getFromApi no-cache: $url", "logs/havistin.log");
 
       $response = file_get_contents($url);
     }
@@ -104,12 +116,12 @@ class finbif
       $cacheFilename = "logs/" . sha1($cache) . ".json"; // todo: cache folder
 
       if (file_exists($cacheFilename)) { // && file age not above limit
-//        log2("D", "Read from cache $cache, url: $url", "logs/havistin.log");
+        log2("D", "getFromApi read from cache $cache, url: $url", "logs/havistin.log");
   
         $response = file_get_contents($cacheFilename);
       }
       else {
-//        log2("D", "Write to cache $cache, url: $url", "logs/havistin.log");
+        log2("D", "getFromApi write to cache $cache, url: $url", "logs/havistin.log");
   
         $response = file_get_contents($url);
         file_put_contents($cacheFilename, $response);
