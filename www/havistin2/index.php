@@ -3,6 +3,7 @@
 /*
 Todo:
 - todo's in files 
+- producton logging
 */
 
 require_once "log2_SLAVE.php";
@@ -11,13 +12,13 @@ require_once "_secrets.php";
 
 log2("START", "-------------------------------------------------------", "logs/havistin.log");
 
-$personToken = $_GET['personToken'];
+$personToken = $_GET['personToken']; // todo: security
 
 $fin = new finbif(API_TOKEN, $personToken);
 
 //$fin->test();
 
-$myDocuments = $fin->myDocuments("2018");
+$myDocuments = $fin->myDocuments("2019");
 
 if ("json" == $_GET['format']) {
   echoAsJson($myDocuments);

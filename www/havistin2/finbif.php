@@ -16,6 +16,13 @@ class finbif
     $this->personToken = $personToken;
   }
 
+  // Returns array
+  public function myDocumentsByYear() {
+    $url = "https://api.laji.fi/v0/documents/count/byYear?personToken=" . $this->personToken . "&access_token=" . $this->apiToken;
+
+    return $this->getFromApi($url);
+  }
+    
   public function myDocuments($year) {
     // todo: year validation 1000-current
 
@@ -78,7 +85,7 @@ class finbif
     $page = $firstPage;
     $dataArr = Array();
 
-    $pagesLimit = 250; // debug
+    $pagesLimit = 1; // debug
     $sleepSecondsBetweenPages = 3;
 
     while ($page <= $pagesLimit) {
