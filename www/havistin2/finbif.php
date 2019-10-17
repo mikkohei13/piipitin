@@ -38,6 +38,12 @@ class finbif
     
   }
 
+  // Returns array
+  public function personByToken($personToken) {
+    $url = "https://api.laji.fi/v0/person/" . $personToken . "?&access_token=" . $this->apiToken;
+    return $this->getFromApi($url);
+  }
+
   // Returns string
   public function personName($personId) {
 
@@ -113,9 +119,9 @@ class finbif
   private function getFromApi($url, $cache = FALSE) {
     // No-cache
     if (FALSE == $cache) {
-      log2("D", "getFromApi no-cache: $url", "logs/havistin.log");
+//      log2("D", "getFromApi no-cache: $url", "logs/havistin.log");
 
-      $response = file_get_contents($url);
+      $response = $this->getByCurl($url);
     }
     // Cache
     // Use $cache as a base for hashed filename
@@ -123,14 +129,14 @@ class finbif
       $cacheFilename = "logs/" . sha1($cache) . ".json"; // todo: cache folder
 
       if (file_exists($cacheFilename)) { // && file age not above limit
-        log2("D", "getFromApi read from cache $cache, url: $url", "logs/havistin.log");
+//        log2("D", "getFromApi read from cache $cache, url: $url", "logs/havistin.log");
   
         $response = file_get_contents($cacheFilename);
       }
       else {
         log2("D", "getFromApi write to cache $cache, url: $url", "logs/havistin.log");
   
-        $response = file_get_contents($url);
+        $response = $this->getByCurl($url);
         file_put_contents($cacheFilename, $response);
       }
     }
@@ -142,7 +148,31 @@ class finbif
 
     $arr = json_decode($response, TRUE);
     return $arr;
-}
+  }
+
+  private function getByCurl($url) {
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    $curlInfo = curl_getinfo($ch);
+    curl_close($ch);
+  
+    //  print_r ($curlInfo); // debug
+
+    // todo: move error handling away from this class
+    if (200 != $curlInfo['http_code']) {
+      echo "Kirjautuminen vanhentunut tai muu virhe - kokeile kirjautua uudelleen <br><br>"; // Or some other error, don't show to user
+      log2("ERROR", "API responded " . $curlInfo['http_code'] . " / " . $response, "logs/havistin.log");
+    }
+    else {
+      log2("NOTICE", "API responded " . $curlInfo['http_code'], "logs/havistin.log");
+    }
+
+    return $response;
+    
+  }
 
   public function test() {
     $url = "https://api.laji.fi/v0/person/" . $this->personToken . "/profile?access_token=" . $this->apiToken;
