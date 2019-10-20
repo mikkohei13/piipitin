@@ -22,13 +22,14 @@ if ("json" == $format) {
   echoAsJson($myDocuments);
 }
 elseif("tsv" == $format) {
-  documentsToTabular($myDocuments, $year);
+  documentsToTabular($myDocuments, $fin, $year);
 }
 else {
   log2("ERROR", "Unknown format, check the params", "logs/havistin.log");
 }
 
-// todo: move to helpers??
+// -----------------------------------------------------------------
+// Formatters
 
 function echoAsJson($arr) {
   log2("NOTICE", "Generating json", "logs/havistin.log");
@@ -46,11 +47,10 @@ function echoAsText($arr) {
   echo "</p>";
 }
 
-function documentsToTabular($documents, $key) {
+function documentsToTabular($documents, $fin, $key) {
   log2("NOTICE", "Generating tabular", "logs/havistin.log");
 
   $filename = "vihko-data-" . $key . "-" . date("Ymd-His") . ".csv";
-  global $fin; // todo: don't use globals
   $unitCount = 0;
 
   error_reporting(E_ALL ^ E_NOTICE); // todo: scope of this?
@@ -133,8 +133,6 @@ function documentsToTabular($documents, $key) {
         echo joinIfExists($arrSeparator, $uni['additionalIDs']) . $s;
         echo joinIfExists($arrSeparator, $uni['keywords']) . $s;
         
-        // todo: images
-
         // Document
         echo $fin->personName($doc['creator']) . $s;
         echo $doc['dateCreated'] . $s;
@@ -176,8 +174,8 @@ function documentsToTabular($documents, $key) {
   log2("NOTICE", "Handled " . $unitCount . " units", "logs/havistin.log");
 }
 
+// -----------------------------------------------------------------
 // Helpers
-// todo: move somewhere?
 
 function echoTabularHeader($s) {
 

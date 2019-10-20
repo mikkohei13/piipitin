@@ -91,7 +91,7 @@ class finbif
     $page = $firstPage;
     $dataArr = Array();
 
-    $pagesLimit = 1; // debug
+    $pagesLimit = 100; // debug
     $sleepSecondsBetweenPages = 3;
 
     while ($page <= $pagesLimit) {
@@ -134,7 +134,7 @@ class finbif
         $response = file_get_contents($cacheFilename);
       }
       else {
-        log2("D", "getFromApi write to cache $cache, url: $url", "logs/havistin.log");
+//        log2("D", "getFromApi write to cache $cache, url: $url", "logs/havistin.log");
   
         $response = $this->getByCurl($url);
         file_put_contents($cacheFilename, $response);

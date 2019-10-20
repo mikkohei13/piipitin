@@ -2,10 +2,18 @@
 
 /*
 Todo:
+- Description
+- Clarify & test col names
 - Login system
 - todo's in files 
 - producton logging
+
+Todo later:
+- Organize classess, functions, content, templates
+- Logout with DELETE person token
 - Getting taxon information about Hatikka observations
+- Log2: make a class, set debug vs. production mode
+- Images
 */
 
 require_once "log2_SLAVE.php";

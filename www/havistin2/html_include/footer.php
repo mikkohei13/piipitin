@@ -1,6 +1,6 @@
 
     <hr>
-    <a href="logout.php">Kirjaudu ulos</a>
+    <!--<a href="logout.php">Kirjaudu ulos</a>-->
   </body>
 </html>
 
