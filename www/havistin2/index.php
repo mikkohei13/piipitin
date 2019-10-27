@@ -25,24 +25,21 @@ session_start();
 
 if (isset($_GET['personToken'])) {
   if (ctype_alnum($_GET['personToken'])) {
-    $_SESSION['personToken'] = $personToken = $_GET['personToken'];
+    $personToken = $_GET['personToken'];
   }
   else {
-    log2("ERROR", "Invalid personToken", "logs/havistin.log");
+    log2("ERROR", "Invalid personToken", LOG_DIR."/havistin.log");
   }
 }
-elseif (isset($_SESSION['personToken'])) {
-  $personToken = $_SESSION['personToken'];
-}
 else {
-  log2("ERROR", "No personToken given", "logs/havistin.log");
+  log2("ERROR", "No personToken given", LOG_DIR."/havistin.log");
 }
 
 $fin = new finbif(API_TOKEN, $personToken);
 
 $me = $fin->personByToken($personToken);
 
-log2("START", "Load index by user " . $me['id'], "logs/havistin.log");
+log2("START", "Load index by user " . $me['id'], LOG_DIR."/havistin.log");
 
 
 // -----------------------------------------------------------------
@@ -54,8 +51,8 @@ foreach ($myDocumentsByYear as $nro => $arr) {
   $htmlTableRows .= "<tr>
     <td>" . $arr['year'] . "</td>
     <td>" . $arr['count'] . "</td>
-    <td><a href='mydocuments.php?year=" . $arr['year'] . "&format=tsv'>TSV</td>
-    <td><a href='mydocuments.php?year=" . $arr['year'] . "&format=json'>JSON</td>
+    <td><a href='mydocuments.php?year=" . $arr['year'] . "&format=tsv&personToken=$personToken'>TSV</td>
+    <td><a href='mydocuments.php?year=" . $arr['year'] . "&format=json&personToken=$personToken'>JSON</td>
   </tr>";
 }
 

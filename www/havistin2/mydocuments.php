@@ -4,7 +4,7 @@ require_once "log2_SLAVE.php";
 require_once "finbif.php";
 require_once "_secrets.php";
 
-log2("START", "Start mydocuments", "logs/havistin.log");
+log2("START", "Start mydocuments", LOG_DIR."/havistin.log");
 
 session_start();
 $personToken = $_SESSION['personToken'];
@@ -25,21 +25,21 @@ elseif("tsv" == $format) {
   documentsToTabular($myDocuments, $fin, $year);
 }
 else {
-  log2("ERROR", "Unknown format, check the params", "logs/havistin.log");
+  log2("ERROR", "Unknown format, check the params", LOG_DIR."/havistin.log");
 }
 
 // -----------------------------------------------------------------
 // Formatters
 
 function echoAsJson($arr) {
-  log2("NOTICE", "Generating json", "logs/havistin.log");
+  log2("NOTICE", "Generating json", LOG_DIR."/havistin.log");
 
   header('Content-Type: application/json');
   echo json_encode($arr);
 }
 
 function echoAsText($arr) {
-  log2("NOTICE", "Generating text (debug)", "logs/havistin.log");
+  log2("NOTICE", "Generating text (debug)", LOG_DIR."/havistin.log");
 
   header('Content-Type: text/plain');
   echo "<pre>";
@@ -48,7 +48,7 @@ function echoAsText($arr) {
 }
 
 function documentsToTabular($documents, $fin, $key) {
-  log2("NOTICE", "Generating tabular", "logs/havistin.log");
+  log2("NOTICE", "Generating tabular", LOG_DIR."/havistin.log");
 
   $filename = "vihko-data-" . $key . "-" . date("Ymd-His") . ".csv";
   $unitCount = 0;
@@ -171,7 +171,7 @@ function documentsToTabular($documents, $fin, $key) {
       }
     }
   }
-  log2("NOTICE", "Handled " . $unitCount . " units", "logs/havistin.log");
+  log2("NOTICE", "Handled " . $unitCount . " units", LOG_DIR."/havistin.log");
 }
 
 // -----------------------------------------------------------------
@@ -259,6 +259,6 @@ function safeAlnum($unsafeString) {
     return $unsafeString;
   }
   else {
-    log2("ERROR", "Invalid alphanumeric value", "logs/havistin.log");
+    log2("ERROR", "Invalid alphanumeric value", LOG_DIR."/havistin.log");
   }
 }

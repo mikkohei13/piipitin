@@ -95,7 +95,7 @@ class finbif
     $sleepSecondsBetweenPages = 3;
 
     while ($page <= $pagesLimit) {
-      log2("NOTICE", "Handling page $page", "logs/havistin.log");
+      log2("NOTICE", "Handling page $page", LOG_DIR."/havistin.log");
 
       $pagedUrl = $baseUrl . "&pageSize=$pageSize&page=$page";
       $responseArr = $this->getFromApi($pagedUrl);
@@ -111,7 +111,7 @@ class finbif
       sleep($sleepSecondsBetweenPages);
     }
 
-    log2("NOTICE", "Last page was " . ($page-1), "logs/havistin.log");
+    log2("NOTICE", "Last page was " . ($page-1), LOG_DIR."/havistin.log");
 
     return $dataArr;
   }
@@ -119,22 +119,22 @@ class finbif
   private function getFromApi($url, $cache = FALSE) {
     // No-cache
     if (FALSE == $cache) {
-//      log2("D", "getFromApi no-cache: $url", "logs/havistin.log");
+//      log2("D", "getFromApi no-cache: $url", LOG_DIR."/havistin.log");
 
       $response = $this->getByCurl($url);
     }
     // Cache
     // Use $cache as a base for hashed filename
     else {
-      $cacheFilename = "logs/" . sha1($cache) . ".json"; // todo: cache folder
+      $cacheFilename = LOG_DIR."/" . sha1($cache) . ".json"; // todo: cache folder
 
       if (file_exists($cacheFilename)) { // && file age not above limit
-//        log2("D", "getFromApi read from cache $cache, url: $url", "logs/havistin.log");
+//        log2("D", "getFromApi read from cache $cache, url: $url", LOG_DIR."/havistin.log");
   
         $response = file_get_contents($cacheFilename);
       }
       else {
-//        log2("D", "getFromApi write to cache $cache, url: $url", "logs/havistin.log");
+//        log2("D", "getFromApi write to cache $cache, url: $url", LOG_DIR."/havistin.log");
   
         $response = $this->getByCurl($url);
         file_put_contents($cacheFilename, $response);
@@ -142,7 +142,7 @@ class finbif
     }
 
     if (FALSE == $response) {
-      log2("ERROR", "Error getting data from API or cache", "logs/havistin.log");
+      log2("ERROR", "Error getting data from API or cache", LOG_DIR."/havistin.log");
       return FALSE;
     }
 
@@ -164,10 +164,10 @@ class finbif
     // todo: move error handling away from this class
     if (200 != $curlInfo['http_code']) {
       echo "Kirjautuminen vanhentunut tai muu virhe - kokeile kirjautua uudelleen <br><br>"; // Or some other error, don't show to user
-      log2("ERROR", "API responded " . $curlInfo['http_code'] . " / " . $response, "logs/havistin.log");
+      log2("ERROR", "API responded " . $curlInfo['http_code'] . " / " . $response, LOG_DIR."/havistin.log");
     }
     else {
-      log2("NOTICE", "API responded " . $curlInfo['http_code'], "logs/havistin.log");
+      log2("NOTICE", "API responded " . $curlInfo['http_code'], LOG_DIR."/havistin.log");
     }
 
     return $response;
