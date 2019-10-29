@@ -1,4 +1,5 @@
 
 _secrets.php
 logs*
+auth/*
 # log2_SLAVE.php
