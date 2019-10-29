@@ -151,6 +151,7 @@ class finbif
   }
 
   private function getByCurl($url) {
+    log2("NOTICE", "GET " . $url, LOG_DIR."/havistin.log");
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -162,12 +163,16 @@ class finbif
     //  print_r ($curlInfo); // debug
 
     // todo: move error handling away from this class
-    if (200 != $curlInfo['http_code']) {
-      echo "Kirjautuminen vanhentunut tai muu virhe - kokeile kirjautua uudelleen <br><br>"; // Or some other error, don't show to user
+    if (200 == $curlInfo['http_code']) {
+      log2("NOTICE", "API responded " . $curlInfo['http_code'], LOG_DIR."/havistin.log");
+    }
+    elseif (400 == $curlInfo['http_code']) {
+      echo "Kirjautuminen vanhentunut - Ole hyvä ja <a href='login/'>kirjaudu uudelleen</a><br><br>"; // Or some other error, don't show to user
       log2("ERROR", "API responded " . $curlInfo['http_code'] . " / " . $response, LOG_DIR."/havistin.log");
     }
     else {
-      log2("NOTICE", "API responded " . $curlInfo['http_code'], LOG_DIR."/havistin.log");
+      echo "Virhe - Kokeile <a href='login/'>kirjautua uudelleen</a><br><br>";
+      log2("ERROR", "API responded " . $curlInfo['http_code'] . " / " . $response, LOG_DIR."/havistin.log");
     }
 
     return $response;

@@ -6,8 +6,17 @@ require_once "_secrets.php";
 
 log2("START", "Start mydocuments", LOG_DIR."/havistin.log");
 
-session_start();
-$personToken = $_SESSION['personToken'];
+if (isset($_GET['personToken'])) {
+  if (ctype_alnum($_GET['personToken'])) {
+    $personToken = $_GET['personToken'];
+  }
+  else {
+    log2("ERROR", "Invalid personToken", LOG_DIR."/havistin.log");
+  }
+}
+else {
+  log2("ERROR", "No personToken given", LOG_DIR."/havistin.log");
+}
 
 $format = safeAlnum($_GET['format']);
 $year = safeAlnum($_GET['year']);
@@ -19,7 +28,7 @@ $fin = new finbif(API_TOKEN, $personToken);
 $myDocuments = $fin->myDocuments($year);
 
 if ("json" == $format) {
-  echoAsJson($myDocuments);
+  echoAsJson($myDocuments, $year);
 }
 elseif("tsv" == $format) {
   documentsToTabular($myDocuments, $fin, $year);
@@ -31,10 +40,16 @@ else {
 // -----------------------------------------------------------------
 // Formatters
 
-function echoAsJson($arr) {
+function echoAsJson($arr, $key) {
   log2("NOTICE", "Generating json", LOG_DIR."/havistin.log");
 
+  $filename = "vihko-data-" . $key . "-" . date("Ymd-His") . ".json";
+
   header('Content-Type: application/json');
+  header("Content-Disposition: attachment; filename=" . $filename);
+  header("Pragma: no-cache");
+  header("Expires: 0");
+
   echo json_encode($arr);
 }
 
