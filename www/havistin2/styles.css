@@ -3,3 +3,12 @@ body {
   font-family: "Open sans", Arial, Helvetica, sans-serif;
   background-color: #f1f1ee;
 }
+
+table {
+  font-size: 160%;
+}
+
+.observed {
+  color: #999;
+  display: none;
+}

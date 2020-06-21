@@ -40,6 +40,11 @@ log2("START", "Load index by user " . $me['id'], LOG_DIR."/havistin.log");
 
 // -----------------------------------------------------------------
 
+$data = $fin->allSpecies();
+//print_r ($data);
+
+$fin->compareTaxa();
+
 ?>
 
 <h1>Havistin v0.1</h1>
@@ -58,6 +63,7 @@ Tallennusformaatteja on kaksi:
 
 // -----------------------------------------------------------------
 
+/*
 $myDocumentsByYear = $fin->myDocumentsByYear();
 
 $htmlTableRows = "";
@@ -69,6 +75,8 @@ foreach ($myDocumentsByYear as $nro => $arr) {
     <td><a href='mydocuments.php?year=" . $arr['year'] . "&format=json&personToken=$personToken'>JSON</td>
   </tr>";
 }
+
+*/
 
 // -----------------------------------------------------------------
 
@@ -84,6 +92,7 @@ echo $htmlTableRows;
 </table>
 
 <?php
+
 // -----------------------------------------------------------------
 
 require_once "html_include/footer.php";

@@ -1,6 +1,8 @@
 # Piipitin
 Tools for sending data from FinBIF systems to mobile devices
 
+Private notes: https://docs.google.com/document/d/1nnCapWK9YgSQ7HqF-xhcXrfenqd0X0rueBA-zD2SjQo/edit
+
 ## Setup
 
 - `git clone https://github.com/mikkohei13/piipitin.git`
@@ -9,7 +11,11 @@ Tools for sending data from FinBIF systems to mobile devices
 
 ## Usage examples
 
-For production, ping localhost once every 10 minutes:
+Loging in
+- Login at https://www.biomi.org/havistin/login/
+- Copy the token to http://localhost:90/havistin2/?personToken=TOKEN
+
+Sending messages about new or rare observations, ping localhost once every 10 minutes:
 
   watch -n600 curl localhost:90?mode=documents
   watch -n600 curl localhost:90/?mode=rarities

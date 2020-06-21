@@ -16,6 +16,90 @@ class finbif
     $this->personToken = $personToken;
   }
 
+  public function mySpecies() {
+    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
+    
+    return $this->getFromApi($url);
+  }
+
+  public function allSpecies() {
+
+    $lat = 60.18;
+    $lon = 24.70;
+    $latMin = $lat - 0.5;
+    $latMax = $lat + 0.5;
+    $lonMin = $lon - 1;
+    $lonMax = $lon + 1;
+    $coordinatesParam = "&coordinates=" . $latMin . "%3A" . $latMax . "%3A" . $lonMin . "%3A" . $lonMax . "%3AWGS84%3A1";
+
+    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&time=-60%2F0&individualCountMin=1" . $coordinatesParam . "&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
+    
+    return $this->getFromApi($url);
+  }
+
+  public function debug($arr) {
+    echo "<pre>";
+    print_r ($arr);
+    echo "</pre>";
+  }
+
+  public function emptyWhenMissing($string = "") {
+    return $string;
+  }
+
+  public function getTaxonName($taxonId) {
+    $taxonId = str_replace("http://tun.fi/", "", $taxonId);
+    $url = "https://api.laji.fi/v0/taxa/" . $taxonId . "?lang=fi&langFallback=true&maxLevel=0&includeHidden=false&includeMedia=false&includeDescriptions=false&includeRedListEvaluations=false&sortOrder=taxonomic&access_token=" . $this->apiToken;
+    $data = $this->getFromApi($url, "taxon-" . $taxonId);
+
+    $taxonName = $this->emptyWhenMissing(@$data['vernacularName']) . " (<em>" . $data['scientificName'] . "</em>)";
+    return $taxonName;
+  }
+
+  public function compareTaxa() {
+    $set = $this->allSpecies();
+    $subset = $this->mySpecies();
+
+//    $this->debug($subset);
+
+    $subsetArr = Array();
+    foreach($subset['results'] as $nro => $taxonArr) {
+      $subsetArr[$taxonArr['aggregateBy']['unit.linkings.originalTaxon.id']] = true;
+    }
+
+//    $this->debug($subsetArr);
+
+    $i = 1;
+    echo "<table>";
+    foreach($set['results'] as $nro => $taxon) {
+      $taxonId = $taxon['aggregateBy']['unit.linkings.originalTaxon.id'];
+      $taxonName = $this->getTaxonName($taxonId);
+
+      $class = "non-observed";
+      if (isset($subsetArr[$taxonId])) {
+        $class = "observed";
+      }
+//      print_r ($taxon);
+
+      echo "<tr class=\"$class\">";
+      echo "<td>";
+      echo $i;
+      echo "</td><td>";
+      echo $taxonName;
+      echo "</td><td>";
+      echo $taxonId;
+      echo "</td><td>";
+
+      echo $taxon['count'];
+      echo "</td>";
+      echo "</tr>\n";
+
+      $i++;
+    }
+    echo "</table>";
+
+  }
+
   // Returns array
   public function myDocumentsByYear() {
     $url = "https://api.laji.fi/v0/documents/count/byYear?personToken=" . $this->personToken . "&access_token=" . $this->apiToken;
