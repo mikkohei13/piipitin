@@ -17,6 +17,7 @@ Todo later:
 require_once "log2_SLAVE.php";
 require_once "finbif.php";
 require_once "_secrets.php";
+
 require_once "html_include/header.php";
 
 // todo: move to function, use also on mydocuments.php
@@ -32,64 +33,32 @@ else {
   log2("ERROR", "No personToken given", LOG_DIR."/havistin.log");
 }
 
+
 $fin = new finbif(API_TOKEN, $personToken);
 
 $me = $fin->personByToken($personToken);
 
 log2("START", "Load index by user " . $me['id'], LOG_DIR."/havistin.log");
 
-// -----------------------------------------------------------------
-
-$data = $fin->allSpecies();
-//print_r ($data);
-
-$fin->compareTaxa();
-
-?>
-
-<h1>Havistin v0.1</h1>
-
-<p>
-Havistimen avulla voit tallentaa tiedostoksi (eli exportata) omat havaintosi (ne, joissa olet havainnoijana) Lajitietokeskuksen Vihko-havaintopalvelusta.
-Tallennusformaatteja on kaksi:
-</p>
-<ul>
-  <li>TSV (tab separated values) -taulukkotiedosto, jossa on mukana "tärkeimmät" sarakkeet. Tämän voi avata esim. Excelillä tai Open/Libre Officella.</li>
-  <li>JSON-tiedosto, jossa on mukana kaikki Vihkoon tallennettu tieto alkuperäisessä muodossaan. Suuri osa tiedoista esitetään tunnisteina (esim. taksonin tunniste, henkilön tunniste). JSON on yleinen tiedostoformaatti rakenteiselle datalle, ja sitä voi käsitellä yleisillä ohjelmontityökaluilla.</li>
-</ul>
-
-
-<?php
+echo "<h1>Havistin v0.1</h1>";
 
 // -----------------------------------------------------------------
 
-/*
-$myDocumentsByYear = $fin->myDocumentsByYear();
-
-$htmlTableRows = "";
-foreach ($myDocumentsByYear as $nro => $arr) {
-  $htmlTableRows .= "<tr>
-    <td>" . $arr['year'] . "</td>
-    <td>" . $arr['count'] . "</td>
-    <td><a href='mydocuments.php?year=" . $arr['year'] . "&format=tsv&personToken=$personToken'>TSV</td>
-    <td><a href='mydocuments.php?year=" . $arr['year'] . "&format=json&personToken=$personToken'>JSON</td>
-  </tr>";
+if (@$_GET['mode'] == "missions") {
+  require_once "mode_missions.php";
+}
+elseif (@$_GET['mode'] == "download") {
+  require_once "mode_download.php";
+}
+else {
+  echo "
+    <p><a href=\"./?mode=download&personToken=$personToken\">Lataa omat havainnot</a></p>
+    <p><a href=\"./?mode=missions&personToken=$personToken\">Oma puutelista</a></p>
+  ";
 }
 
-*/
-
-// -----------------------------------------------------------------
-
 ?>
 
-<table>
-<tr><td>Vuosi</td><td>Havaintoeriä</td></tr>
-
-<?php 
-echo $htmlTableRows;
-?>
-
-</table>
 
 <?php
 

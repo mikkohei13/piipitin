@@ -56,50 +56,6 @@ class finbif
     return $taxonName;
   }
 
-  public function compareTaxa() {
-    $set = $this->allSpecies();
-    $subset = $this->mySpecies();
-
-//    $this->debug($subset);
-
-    $subsetArr = Array();
-    foreach($subset['results'] as $nro => $taxonArr) {
-      $subsetArr[$taxonArr['aggregateBy']['unit.linkings.originalTaxon.id']] = true;
-    }
-
-//    $this->debug($subsetArr);
-
-    $i = 1;
-    echo "<table>";
-    foreach($set['results'] as $nro => $taxon) {
-      $taxonId = $taxon['aggregateBy']['unit.linkings.originalTaxon.id'];
-      $taxonName = $this->getTaxonName($taxonId);
-
-      $class = "non-observed";
-      if (isset($subsetArr[$taxonId])) {
-        $class = "observed";
-      }
-//      print_r ($taxon);
-
-      echo "<tr class=\"$class\">";
-      echo "<td>";
-      echo $i;
-      echo "</td><td>";
-      echo $taxonName;
-      echo "</td><td>";
-      echo $taxonId;
-      echo "</td><td>";
-
-      echo $taxon['count'];
-      echo "</td>";
-      echo "</tr>\n";
-
-      $i++;
-    }
-    echo "</table>";
-
-  }
-
   // Returns array
   public function myDocumentsByYear() {
     $url = "https://api.laji.fi/v0/documents/count/byYear?personToken=" . $this->personToken . "&access_token=" . $this->apiToken;
