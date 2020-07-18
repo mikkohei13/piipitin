@@ -10,7 +10,8 @@ $subset = $fin->mySpecies();
 
 $subsetArr = Array();
 foreach($subset['results'] as $nro => $taxonArr) {
-  $subsetArr[$taxonArr['aggregateBy']['unit.linkings.originalTaxon.id']] = true;
+  $key = key($taxonArr['aggregateBy']);
+  $subsetArr[$taxonArr['aggregateBy'][$key]] = true;
 }
 
 //    $fin->debug($subsetArr);
@@ -18,7 +19,8 @@ foreach($subset['results'] as $nro => $taxonArr) {
 $i = 1;
 echo "<table>";
 foreach($set['results'] as $nro => $taxon) {
-  $taxonId = $taxon['aggregateBy']['unit.linkings.originalTaxon.id'];
+  $key = key($taxon['aggregateBy']);
+  $taxonId = $taxon['aggregateBy'][$key];
   $taxonName = $fin->getTaxonName($taxonId);
 
   $class = "non-observed";

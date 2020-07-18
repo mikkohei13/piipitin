@@ -17,7 +17,15 @@ class finbif
   }
 
   public function mySpecies() {
+
+
+
+
     $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
+
+    // order
+//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.taxon.familyId&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
+
     
     return $this->getFromApi($url);
   }
@@ -32,8 +40,19 @@ class finbif
     $lonMax = $lon + 1;
     $coordinatesParam = "&coordinates=" . $latMin . "%3A" . $latMax . "%3A" . $lonMin . "%3A" . $lonMax . "%3AWGS84%3A1";
 
+    // TODO: pagesize as param
+
+    // current day ... -60
     $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&time=-60%2F0&individualCountMin=1" . $coordinatesParam . "&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
-    
+
+    // day number +- 30 days 
+    // TODO: remove hardcoded dayOfYear, handle overlapping years
+    // Limit to last 10-20 years
+//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&dayOfYear=143%2F203&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
+
+    // order
+//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.taxon.familyId&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&yearMonth=2000%2F2020&dayOfYear=143%2F203&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
+
     return $this->getFromApi($url);
   }
 
@@ -212,7 +231,8 @@ class finbif
     }
     else {
       echo "Virhe - Kokeile <a href='login/'>kirjautua uudelleen</a><br><br>";
-      log2("ERROR", "API responded " . $curlInfo['http_code'] . " / " . $response, LOG_DIR."/havistin.log");
+      print_r ($curlInfo); // DEBUG
+      log2("ERROR", "API at $url responded " . $curlInfo['http_code'] . " / " . $response, LOG_DIR."/havistin.log");
     }
 
     return $response;
