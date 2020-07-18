@@ -6,17 +6,7 @@ require_once "_secrets.php";
 
 log2("START", "Start mydocuments", LOG_DIR."/havistin.log");
 
-if (isset($_GET['personToken'])) {
-  if (ctype_alnum($_GET['personToken'])) {
-    $personToken = $_GET['personToken'];
-  }
-  else {
-    log2("ERROR", "Invalid personToken", LOG_DIR."/havistin.log");
-  }
-}
-else {
-  log2("ERROR", "No personToken given", LOG_DIR."/havistin.log");
-}
+require_once "helpers.php";
 
 $format = safeAlnum($_GET['format']);
 $year = safeAlnum($_GET['year']);

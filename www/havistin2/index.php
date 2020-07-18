@@ -19,20 +19,7 @@ require_once "finbif.php";
 require_once "_secrets.php";
 
 require_once "html_include/header.php";
-
-// todo: move to function, use also on mydocuments.php
-if (isset($_GET['personToken'])) {
-  if (ctype_alnum($_GET['personToken'])) {
-    $personToken = $_GET['personToken'];
-  }
-  else {
-    log2("ERROR", "Invalid personToken", LOG_DIR."/havistin.log");
-  }
-}
-else {
-  log2("ERROR", "No personToken given", LOG_DIR."/havistin.log");
-}
-
+require_once "helpers.php";
 
 $fin = new finbif(API_TOKEN, $personToken);
 
@@ -44,12 +31,15 @@ echo "<h1>Havistin v0.1</h1>";
 
 // -----------------------------------------------------------------
 
+// Subpages
 if (@$_GET['mode'] == "missions") {
   require_once "mode_missions.php";
 }
 elseif (@$_GET['mode'] == "download") {
   require_once "mode_download.php";
 }
+
+// Main page
 else {
   echo "
     <p><a href=\"./?mode=download&personToken=$personToken\">Lataa omat havainnot</a></p>

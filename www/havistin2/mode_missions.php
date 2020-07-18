@@ -3,19 +3,31 @@
 
 // TODO: filter out nonwilds
 
-$set = $fin->allSpecies();
-$subset = $fin->mySpecies();
+// Get data
+$aggregateRank = getAggregateRank();
 
-//    $fin->debug($subset);
+$set = $fin->allSpecies($aggregateRank);
+$subset = $fin->mySpecies($aggregateRank);
 
+// $fin->debug($subset); // debug
+
+// Create array of my species
+/*
+Array format:
+  Array
+  (
+      [http://tun.fi/MX.70582] => 1
+  ...
+*/
 $subsetArr = Array();
 foreach($subset['results'] as $nro => $taxonArr) {
   $key = key($taxonArr['aggregateBy']);
   $subsetArr[$taxonArr['aggregateBy'][$key]] = true;
 }
 
-//    $fin->debug($subsetArr);
+// $fin->debug($subsetArr); // debug
 
+// Print out a table of all observations
 $i = 1;
 echo "<table>";
 foreach($set['results'] as $nro => $taxon) {
@@ -45,6 +57,5 @@ foreach($set['results'] as $nro => $taxon) {
   $i++;
 }
 echo "</table>";
-
 
 

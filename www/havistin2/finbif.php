@@ -16,21 +16,20 @@ class finbif
     $this->personToken = $personToken;
   }
 
-  public function mySpecies() {
+  public function mySpecies($rank) {
 
 
 
 
-    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
+//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
 
-    // order
-//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.taxon.familyId&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
+    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=" . $rank . "&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
 
     
     return $this->getFromApi($url);
   }
 
-  public function allSpecies() {
+  public function allSpecies($rank) {
 
     $lat = 60.18;
     $lon = 24.70;
@@ -43,15 +42,15 @@ class finbif
     // TODO: pagesize as param
 
     // current day ... -60
-    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&time=-60%2F0&individualCountMin=1" . $coordinatesParam . "&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
+//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&time=-60%2F0&individualCountMin=1" . $coordinatesParam . "&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
 
     // day number +- 30 days 
     // TODO: remove hardcoded dayOfYear, handle overlapping years
     // Limit to last 10-20 years
 //    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&dayOfYear=143%2F203&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
 
-    // order
-//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.taxon.familyId&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&yearMonth=2000%2F2020&dayOfYear=143%2F203&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
+// hardcoded day
+    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=" . $rank . "&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&yearMonth=2000%2F2020&dayOfYear=143%2F203&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
 
     return $this->getFromApi($url);
   }
