@@ -8,19 +8,36 @@
   - Logging (time, number of rows)
   - Refactor filenames, function organization, varibale names
 
-# Tulkinta
+# Käyttö
+
+Palvelu on tarkoitettu ainoastaan *omien havaintojen* muuntamiseen. 
+
+## Havaintojen haku Tiirasta
+
+Tiiran omissa asetuksissa kannattaa valita koordinaatit näytettäväksi wgs84-muodossa.
 
 Tiira-exportissa pitää valita että "tyhjät kentät täytetään", eli kannattaa käyttää oletusasetusta. (Jos tyhjiä ei täytetä, systeemi ohittaa kaikki alihavainnot, koska niissä ei ole koordinaatteja.)
 
-Käyttäjän vastuulla on että sekä itse havaintojen että muiden havainnoijien nimien tallennukseen on saatu lupa. Henkilönimiä ei poisteta tai salata.
+## Havaintojen tallennus Vihkoon
 
-Summahavainnot (rivityyppi "SUMMA") jätetään muunnetusta tiedostosta pois.
+Tallennus tapahtuu osoitteessa https://laji.fi/vihko/tools/import
 
-Koordinaatittomat havainnot jätetään pois. (Nämä saattavat olla lintuyhdistysten vanhoista arkistoista digitoituja havaintoja.)
+Jotta havainnot kirjautuisivat omiksi havainnoiksesi, henkilönimien linkitysvaiheessa valitse pudotusvalikosta oma nimesi, eikä "Arvo sellaisenaan" (joka kirjaisi havainnoijaksi vain nimesi, ei käyttäjätunnustasi).
+
+Käyttäjän vastuulla on että muiden havainnoijien nimien tallennukseen on saatu heiltä lupa. Henkilönimiä ei poisteta tai salata.
+
+Tiirassa käytetään lajia ylemmille taksoneille nimiä, joita Laji.fi ei vielä tunne. Nämä pitää linkittää tallennusvaiheessa tunnettuihin nimiin (esim. "harmaahanhilaji" > "harmaahanhet" tai "rastaslaji (Turdus)" -> "Turdus"). Vaihtoehtoisesti voi jättää linkityksen tekemättä, jolloin havainnot kyllä tallennetaan, mutta niitä on vaikeanmpi hakea ennen kuin ko. nimet lisätään Laji.fi:n nimistöön.
+
+## Huomioita muunnoksesta
+
+Tiiran havainto-id lisätään havainnon muihin tunnisteisiin. Tämän avulla duplikaatteja voi myöhemmin liittää toisiinsa, mikäli Tiiran havainnot tuodaan Laji.fi:hin myös muuta kautta.
+
+Muunetusta tiedostosta jätetään pois:
+- Summahavainnot (rivityyppi "SUMMA").
+- Koordinaatittomat havainnot. (Nämä saattavat olla lintuyhdistysten vanhoista arkistoista digitoituja havaintoja.)
+- Sarakkeet "Päivitetty" ja "Epäsuora havainto", koska näiden merkitys epäselvä ja vaikuttavat sisältävän aina saman arvon.
 
 Havainnot, jotka on salattu Tiirassa, karkeistetaan 10km tarkkuuteen. Jos tämä ei käyttäjälle riitä, hänen täytyy jättää salaisiksi halutut havainnot pois tallennustiedostosta.
-
-Sarakkeita "Päivitetty" ja "Epäsuora havainto" ei huomioida, koska näiden merkitys epäselvä ja vaikuttavat sisältävän aina saman arvon.
 
 Paikkaan liittyvät tiedot kirjataan keruutapahtumaan (gathering). Havaintoon ja alihavaintoon (eli kaikkeen paitsi aikaan ja paikkaan) liittyvät tiedot kirjataan havaintoon (unitiin). Näin saman päivän havainnot menevät samaan havaintoerään (dokumenttiin) ja sen alla samasta paikasta kirjatut samaan keruutapahtumaan. Näin havaintoeriä muodostuu mahdollisimman vähän.
 
