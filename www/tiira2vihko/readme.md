@@ -14,7 +14,7 @@ Palvelu on tarkoitettu ainoastaan *omien havaintojen* muuntamiseen.
 
 ## Havaintojen haku Tiirasta
 
-Tiiran omissa asetuksissa kannattaa valita koordinaatit näytettäväksi wgs84-muodossa.
+Tiiran omissa asetuksissa pitää valita koordinaatit näytettäväksi wgs84-muodossa.
 
 Tiira-exportissa pitää valita että "tyhjät kentät täytetään", eli kannattaa käyttää oletusasetusta. (Jos tyhjiä ei täytetä, systeemi ohittaa kaikki alihavainnot, koska niissä ei ole koordinaatteja.)
 
