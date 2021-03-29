@@ -213,6 +213,9 @@ function handleRow($row, $colNames) {
     // Moving (status)
     // This handles status in different way than Vihko so far, by adding direction to moving field
     $vihkoRow['Linnun tila - Havainto'] = str_replace(",", ";", $rowAssoc['Tila']);
+
+    // Add status also to count field
+    $vihkoRow['Määrä - Havainto'] = $vihkoRow['Määrä - Havainto'] . str_replace(",", " ", $rowAssoc['Tila']);
     
     // Flock id (This seems to be unique ID in Tiira, so put it into id field.)
     if (!empty($rowAssoc['Parvi'])) {
