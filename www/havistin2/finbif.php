@@ -11,33 +11,51 @@ class finbif
   private $apiToken = NULL;
   private $personToken = NULL;
 
-  public function __construct($apiToken, $personToken) {
+  public function __construct($apiToken, $personToken = FALSE) {
     $this->apiToken = $apiToken;
     $this->personToken = $personToken;
   }
 
-  public function mySpecies($rank) {
-
-
-
+  public function mySpecies($rank, $taxonId) {
 
 //    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
 
-    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=" . $rank . "&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&time=2020&individualCountMin=1&qualityIssues=NO_ISSUES&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
+    // &time=2020
+
+    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=" . $rank . "&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=1000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&individualCountMin=1&qualityIssues=NO_ISSUES&taxonId=" . $taxonId . "&observerPersonToken=" . $this->personToken . "&access_token=" . $this->apiToken;
 
     
     return $this->getFromApi($url);
   }
 
-  public function allSpecies($rank) {
+  public function allSpecies($rank, $taxonId, $latDelta = 0.5, $lonDelta = 1, $limitSeason = true) {
 
-    $lat = 60.18;
-    $lon = 24.70;
-    $latMin = $lat - 0.5;
-    $latMax = $lat + 0.5;
-    $lonMin = $lon - 1;
-    $lonMax = $lon + 1;
+    $lat = getLat();
+    $lon = getLon();
+    $latMin = $lat - $latDelta;
+    $latMax = $lat + $latDelta;
+    $lonMin = $lon - $lonDelta;
+    $lonMax = $lon + $lonDelta;
     $coordinatesParam = "&coordinates=" . $latMin . "%3A" . $latMax . "%3A" . $lonMin . "%3A" . $lonMax . "%3AWGS84%3A1";
+
+
+    if ($limitSeason) {
+      $today = date("z");
+      //    $today = 30; // debug
+  
+      $start = $today - 60;
+      if ($start < 0) {
+        $start = 0;
+      }
+      $end = $today + 60;
+      if ($end > 365) {
+        $end = 365;
+      }
+      $dayOfYearParam = "&dayOfYear=" . $start . "%2F" . $end;
+    }
+    else {
+      $dayOfYearParam = "";
+    }
 
     // TODO: pagesize as param
 
@@ -47,10 +65,9 @@ class finbif
     // day number +- 30 days 
     // TODO: remove hardcoded dayOfYear, handle overlapping years
     // Limit to last 10-20 years
-//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&dayOfYear=143%2F203&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
+//    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=unit.linkings.originalTaxon.id&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&taxonRankId=MX.species&countryId=ML.206&dayOfYear=143%2F203&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN,WILD&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
 
-// hardcoded day
-    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=" . $rank . "&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&yearMonth=2000%2F2020&dayOfYear=143%2F203&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN&qualityIssues=NO_ISSUES&access_token=" . $this->apiToken;
+    $url = "https://api.laji.fi/v0/warehouse/query/unit/aggregate?aggregateBy=" . $rank . "&geoJSON=false&onlyCount=true&pairCounts=false&excludeNulls=true&pessimisticDateRangeHandling=false&pageSize=2000&page=1&cache=false&useIdentificationAnnotations=true&includeSubTaxa=true&includeNonValidTaxa=true&countryId=ML.206&yearMonth=2000%2F2021" . $dayOfYearParam . "&individualCountMin=1" . $coordinatesParam . "&wild=WILD_UNKNOWN,WILD&qualityIssues=NO_ISSUES&taxonId=" . $taxonId . "&access_token=" . $this->apiToken;
 
     return $this->getFromApi($url);
   }

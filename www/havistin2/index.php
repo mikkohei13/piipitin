@@ -21,21 +21,29 @@ require_once "_secrets.php";
 require_once "html_include/header.php";
 require_once "helpers.php";
 
-$fin = new finbif(API_TOKEN, $personToken);
-
-$me = $fin->personByToken($personToken);
-
-log2("START", "Load index by user " . $me['id'], LOG_DIR."/havistin.log");
-
 echo "<h1>Havistin v0.1</h1>";
 
 // -----------------------------------------------------------------
 
 // Subpages
 if (@$_GET['mode'] == "missions") {
+  $personToken = checkPersonToken();
+  $fin = new finbif(API_TOKEN, $personToken);
+  $me = $fin->personByToken($personToken);
+  log2("START", "Load index by user " . $me['id'], LOG_DIR."/havistin.log");
+  
   require_once "mode_missions.php";
 }
+if (@$_GET['mode'] == "absence") {
+  $fin = new finbif(API_TOKEN, false);
+  require_once "mode_absence.php";
+}
 elseif (@$_GET['mode'] == "download") {
+  $personToken = checkPersonToken();
+  $fin = new finbif(API_TOKEN, $personToken);
+  $me = $fin->personByToken($personToken);
+  log2("START", "Load index by user " . $me['id'], LOG_DIR."/havistin.log");
+  
   require_once "mode_download.php";
 }
 

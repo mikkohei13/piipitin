@@ -10,5 +10,5 @@ table {
 
 .observed {
   color: #999;
-  display: none;
+  text-decoration: line-through;
 }

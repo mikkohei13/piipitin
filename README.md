@@ -11,7 +11,7 @@ Private notes: https://docs.google.com/document/d/1nnCapWK9YgSQ7HqF-xhcXrfenqd0X
 
 ## Usage examples
 
-Loging in
+Logging in on localhost
 - Login at https://www.biomi.org/havistin/login/
 - Copy the token to http://localhost:90/havistin2/?personToken=TOKEN
 
@@ -25,9 +25,13 @@ For debug:
   http://localhost:90/?mode=documents&debug=http://tun.fi/JX.987888
   http://localhost:90/?mode=rarities&debug=http://tun.fi/JX.988066
 
-##
+List of taxa I have not seen
 
-Top havainnoijat ja määrittäjät
+Need to add rank, lat, lon & taxonId manually:
+
+  http://localhost:90/havistin2/?mode=missions&rank=species&lat=60.1800&lon=24.6751&taxonId=MX.229577&personToken=
+
+## Top havainnoijat ja määrittäjät
 
 Havainnoija-aggregointi
 - havaittu tänä vuonna Suomessa lajitasolla, Vihkossa?
