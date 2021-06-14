@@ -1,6 +1,6 @@
 <h2>Paikan puutelista</h2>
 
-<p>Havainnot annetuista koordinaateista +- 1 aste leveyspiiriä, +- 0,5 astetta pituuspiiriä (Etelä-Suomessa n. 100x100 km2, Pohjois-Suomessa n. 80x100 km2), vuodesta 2000 alkaen. Ne lajit, jotka on havaittu *kokonaan* annettujen koordinaattien sisällä +- 0,25 astetta leveyspiiriä, +- 0,125 astetta pituuspiiriä (vastaavasti n. 30x30 km2 ja 20x30 km2) on yliviivattu. (Karkeistetut ja sensitiiviset havainnot eivät näy tilastossa oikein.)</p>
+<p>Havaintojen määrä annetuista koordinaateista +- 1 aste leveyspiiriä, +- 0,5 astetta pituuspiiriä (Etelä-Suomessa n. 100x100 km2, Pohjois-Suomessa n. 80x100 km2), vuodesta 2000 alkaen. Ne lajit, jotka on havaittu *kokonaan* annettujen koordinaattien sisällä +- 0,25 astetta leveyspiiriä, +- 0,125 astetta pituuspiiriä (vastaavasti n. 30x30 km2 ja 20x30 km2) on yliviivattu. (Karkeistetut ja sensitiiviset havainnot eivät näy tilastossa oikein.)</p>
 
 <?php
 
@@ -44,16 +44,18 @@ foreach($set['results'] as $nro => $taxon) {
 //      print_r ($taxon);
 
   echo "<tr class=\"$class\">";
-  echo "<td>";
+  echo "<td class=\"i\">";
+  if ("non-observed" == $class) {
+    echo "&diams;";
+  }
+  echo "</td><td>";
   echo $i;
   echo "</td><td>";
-  echo $taxonName;
-  echo "</td><td>";
-  echo $taxonId;
+  echo "<a href=\"$taxonId\">$taxonName</a>";
   echo "</td><td>";
 
   echo $taxon['count'];
-  echo " havaintoa</td>";
+  echo "</td>";
   echo "</tr>\n";
 
   $i++;

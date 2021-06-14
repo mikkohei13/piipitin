@@ -4,11 +4,23 @@ body {
   background-color: #f1f1ee;
 }
 
+/*
 table {
   font-size: 160%;
 }
+*/
 
-.observed {
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+.observed, .observed a {
   color: #999;
   text-decoration: line-through;
+}
+
+.i {
+  font-weight: bold;
 }
