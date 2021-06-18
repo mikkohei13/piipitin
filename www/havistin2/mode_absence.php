@@ -1,6 +1,7 @@
 <h2>Paikan puutelista</h2>
 
-<p>Havaintojen määrä annetuista koordinaateista +- 1 aste leveyspiiriä, +- 0,5 astetta pituuspiiriä (Etelä-Suomessa n. 100x100 km2, Pohjois-Suomessa n. 80x100 km2), vuodesta 2000 alkaen. Ne lajit, jotka on havaittu *kokonaan* annettujen koordinaattien sisällä +- 0,25 astetta leveyspiiriä, +- 0,125 astetta pituuspiiriä (vastaavasti n. 30x30 km2 ja 20x30 km2) on yliviivattu. (Karkeistetut ja sensitiiviset havainnot eivät näy tilastossa oikein.)</p>
+<p>Havaintojen määrä annetuista koordinaateista +- 1 aste leveyspiiriä, +- 0,5 astetta pituuspiiriä (Etelä-Suomessa n. 100x100 km2, Pohjois-Suomessa n. 80x100 km2), vuodesta 2000 alkaen. Ne lajit, jotka on havaittu *kokonaan* annettujen koordinaattien sisällä +- 0,25 astetta leveyspiiriä, +- 0,125 astetta pituuspiiriä (vastaavasti n. 30x30 km2 ja 20x30 km2) on yliviivattu.</p>
+<p>Huom: Karkeistetut ja sensitiiviset havainnot eivät näy tilastossa oikein. Se ei myöskään toimi oikein, jos haettu taksoni sisältää haetulta alueelta yli 10.000 lajia - älä siis hae puutelistaa esim. kaikista eläimistä kerralla!</p>
 
 <?php
 
@@ -8,8 +9,15 @@
 $aggregateRank = getAggregateRank();
 $taxonId = getTaxonId();
 
-$set = $fin->allSpecies($aggregateRank, $taxonId, 0.5, 1, false);
-$subset = $fin->allSpecies($aggregateRank, $taxonId, 0.125, 0.25, false);
+$multiplier = getMultiplier();
+
+$baseSetLatDelta = 0.5;
+$baseSetLonDelta = 1;
+$baseSubsetLatDelta = 0.125;
+$baseSubsetLonDelta = 0.25;
+
+$set = $fin->allSpecies($aggregateRank, $taxonId, $baseSetLatDelta * $multiplier, $baseSetLonDelta * $multiplier, false);
+$subset = $fin->allSpecies($aggregateRank, $taxonId, $baseSubsetLatDelta * $multiplier, $baseSubsetLonDelta * $multiplier, false);
 
 // $fin->debug($subset); // debug
 

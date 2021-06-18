@@ -62,3 +62,11 @@ function getTaxonId() {
   $taxonId = str_replace("MX.", "", $taxonId);
   return "MX." . intval($taxonId);
 }
+
+function getMultiplier() {
+  if (!isset($_GET['multiplier'])) {
+    return 1;
+  }
+  $multiplier = floatval($_GET['multiplier']);
+  return $multiplier;
+}
