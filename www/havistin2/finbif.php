@@ -82,12 +82,18 @@ class finbif
     return $string;
   }
 
-  public function getTaxonName($taxonId) {
+  public function getTaxonName($taxonId, $vernacularFirst = TRUE) {
     $taxonId = str_replace("http://tun.fi/", "", $taxonId);
     $url = "https://api.laji.fi/v0/taxa/" . $taxonId . "?lang=fi&langFallback=true&maxLevel=0&includeHidden=false&includeMedia=false&includeDescriptions=false&includeRedListEvaluations=false&sortOrder=taxonomic&access_token=" . $this->apiToken;
     $data = $this->getFromApi($url, "taxon-" . $taxonId);
 
-    $taxonName = $this->emptyWhenMissing(@$data['vernacularName']) . " (<em>" . $data['scientificName'] . "</em>)";
+    if ($vernacularFirst) {
+      $taxonName = $this->emptyWhenMissing(@$data['vernacularName']) . " (<em>" . $data['scientificName'] . "</em>)";
+    }
+    else {
+      // ABBA
+      $taxonName = $this->emptyWhenMissing(@$data['vernacularName']) . " (<em>" . $data['scientificName'] . "</em>)";
+    }
     return $taxonName;
   }
 

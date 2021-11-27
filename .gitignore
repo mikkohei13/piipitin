@@ -4,6 +4,7 @@
 */logs/*
 www/names/data/*
 www/tiira2vihko/data/*
+www/havistin2/process/*
 
 www/config/env.php
 www/config/php.prod.ini
