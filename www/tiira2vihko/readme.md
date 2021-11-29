@@ -1,19 +1,19 @@
 
 
-Tämä sovellus (tiira2vihko) muuntaa Tiira-lintutietopalvelusta (tiira.fi) saatavan havaintotaulukon muotoon, jonka voi tallentaa Vihko-havaintojärjestelmään (laji.fi/vihko). Se siis auttaa omien lintuhavaintojen kopiointia Tiirasta Vihkoon.
+Tämä sovellus (tiira2vihko) muuntaa Tiira-lintutietopalvelusta (tiira.fi) saatavan havaintotaulukon muotoon, jonka voi tallentaa Vihko-havaintojärjestelmään (laji.fi/vihko). Se siis auttaa omien lintuhavaintojen kopioinnissa Tiirasta Vihkoon.
 
 Sovellus on täysin epävirallinen ja omaan henkilökohtaiseen käyttööni tekemä, mutta muutkin sitä saavat käyttää. 
-Sovellus on tarkoitettu ainoastaan *omien havaintojen* muuntamiseen.
+Sovellus on tarkoitettu ainoastaan **omien havaintojen** muuntamiseen.
 
 Lue tämä ohje läpi ennen havaintojesi kopioimista, niin ymmärrät miten siirto tapahtuu. Olet itse vastuussa että siirrät havaintosi oikein. Ohje on ajantasainen 11/2021.
 
-Käyttäjän on itse huolehdittava että hän hakee havainnot Tiirasta oikeassa muodossa (ohjeita alla), ja että havainnoissa mahdollisesti olevien muiden havainnoijien nimien tallennukseen on saatu heiltä lupa.
+Huolehdi itse, että haet havainnot Tiirasta oikeassa muodossa (ohjeita alla), ja että havainnoissa mahdollisesti olevien muiden havainnoijien nimien tallennukseen on saatu heiltä lupa.
 
-Huomioi, että kun havainnot on kerran viety Vihkoon, kaikki korjaukset niihin pitää tehdä Vihkossa. Samoja havaintoja ei pidä viedä uudelleen Tiirasta Vihkoon, tällöin muodostuu kaksoiskappaleita. Pidä itse kirjaa mitä olet jo kopioinut ja mitä et.
+Huomioi, että kun olet vienyt havainnot kerran Vihkoon, kaikki korjaukset niihin pitää tehdä Vihkossa. Samoja havaintoja ei pidä viedä uudelleen Tiirasta Vihkoon, tällöin muodostuu kaksoiskappaleita. Pidä itse kirjaa mitä olet jo vienyt ja mitä et.
 
 ## Havaintojen haku Tiirasta
 
-Valitse Tiiran omissa asetuksissa että koordinaatit näytetään wgs84-muodossa.
+Valitse Tiiran omissa asetuksissa että koordinaattien tyyppi on **astekoordinaattit**.
 
 Hae haluamasi havainnot ja lataa havainnot csv:na.
 
