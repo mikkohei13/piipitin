@@ -49,7 +49,9 @@ Voit etsiä havaintoja Laji.fi:ssa valitsemalla omat havaintosi ja käyttämäll
 
 ## Huomioita muunnoksesta
 
-Tiiran havainto-id lisätään havainnon muihin tunnisteisiin. Tämän avulla duplikaatteja voi helpommin myöhemmin liittää toisiinsa, mikäli Tiiran havainnot tuodaan Vihkoon tai Laji.fi:hin myös muuta kautta.
+Jokaisesta alihavainnosta tehdään oma havaintonsa.
+
+Tiiran tunniste (id) lisätään havainnon muihin tunnisteisiin. Tämän avulla duplikaatteja voi myöhemmin yrittää liittää toisiinsa, mikäli Tiiran havainnot tuodaan Vihkoon tai Laji.fi:hin myös muuta kautta. (Joskin tämä voi olla hankalaa, sillä Tiiran havaintotiedosto ei sisällä alihavainnon tunnistetta.)
 
 Muunnetusta tiedostosta jätetään pois:
 - Summahavainnot (rivityyppi "SUMMA").
