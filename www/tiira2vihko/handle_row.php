@@ -159,7 +159,7 @@ function handleRow($row, $colNames) {
     }
   
     // Atlas
-    $vihkoRow['Pesimisvarmuusindeksi - Havainto'] = mapAtlasCode($rowAssoc['Atlaskoodi']);
+    $vihkoRow['Pesimävarmuusindeksi - Havainto'] = mapAtlasCode($rowAssoc['Atlaskoodi']);
   
     // Metadata
 //    array_push($notesUnit, "tallentanut Tiiraan: " . $rowAssoc['Tallentaja']); // Remove to protect personal data, while allowing to import own observations
