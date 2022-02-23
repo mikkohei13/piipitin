@@ -7,6 +7,8 @@ Private notes: https://docs.google.com/document/d/1nnCapWK9YgSQ7HqF-xhcXrfenqd0X
 
 - `git clone https://github.com/mikkohei13/piipitin.git`
 - Set up credentials to www/config/env.php
+- create directory `./www/logs`
+- `chmod a+w ./www/logs`
 - `docker-compose up --build`
 
 ## Usage examples
