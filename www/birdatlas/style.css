@@ -1,0 +1,15 @@
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.apilink {
+    float: right;
+    border: 1px solid blue;
+    padding: 4px;
+    background-color: #ddf;
+}
+
+p {
+    margin-right: 1em;   
+}

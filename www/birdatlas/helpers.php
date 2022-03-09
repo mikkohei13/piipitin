@@ -10,6 +10,11 @@ function getDataFromLajifi($url) {
     return $responseJSON;
 }
 
+function getApiLink($url) {
+    $html ="<a href=\"" . $url . LAJIFI_TOKEN . "\" class=\"apilink\">API</a>";
+    return $html;
+}
+
 function getCollectionName($id) {
     if ("http://tun.fi/HR.4412" == $id) {
         return "Tiira";
